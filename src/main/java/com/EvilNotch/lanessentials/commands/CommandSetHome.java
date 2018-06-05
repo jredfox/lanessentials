@@ -1,6 +1,12 @@
 package com.EvilNotch.lanessentials.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.EvilNotch.lanessentials.Reference;
+import com.EvilNotch.lib.minecraft.EnumChatFormatting;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapHomePoint;
@@ -11,6 +17,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +56,30 @@ public class CommandSetHome  extends CommandBase
 		CapHomePoint chp = new CapHomePoint(new Pos(sender.getPosition(),epmp.posY), epmp.dimension, point);
 		
 		//set home point
+		if(ch.capPoints.size() >= ch.maxCount && !ch.capPoints.contains(chp))
+			throw new WrongUsageException(EnumChatFormatting.YELLOW + "player house maxed out at " + ch.maxCount,new Object[0]);
+		
 		ch.sethome(chp);
 	}
+	
+	/**
+	 * list of homes per player doesn't show the default only the strings
+	 */
+	@Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+    	if(!(sender instanceof EntityPlayerMP))
+    			return super.getTabCompletions(server, sender, args, targetPos);
+    	
+    	CapHome cap = (CapHome) CapabilityReg.getCapabilityConatainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+    	List<String> list = new ArrayList();
+    	for(CapHomePoint p : cap.capPoints)
+    	{
+    		String point = p.toString();
+    		if(!point.equals(CommandSetHome.reservedHome))
+    			list.add(p.toString());
+    	}
+    	return list;
+    }
 	
 }

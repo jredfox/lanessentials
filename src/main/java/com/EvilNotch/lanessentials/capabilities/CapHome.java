@@ -1,6 +1,7 @@
 package com.EvilNotch.lanessentials.capabilities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.EvilNotch.lanessentials.CfgLanEssentials;
 import com.EvilNotch.lib.minecraft.content.ConfigLang;
@@ -50,7 +51,7 @@ public class CapHome implements ICapability {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) 
+	public void writeToNBT(NBTTagCompound nbt)
 	{
 		NBTTagList tagList = new NBTTagList();
 		for(int i=0;i<capPoints.size();i++)
@@ -66,7 +67,6 @@ public class CapHome implements ICapability {
 		}
 		nbt.setTag("Homes", tagList);
 		nbt.setInteger("HomeCount", this.maxCount);
-		System.out.println("Write to NBT: " + nbt);
 	}
 	
 	public CapHomePoint getCapPoint(String s)
@@ -102,4 +102,17 @@ public class CapHome implements ICapability {
 		}
 	}
 
+	public void removePoint(String str) 
+	{
+		Iterator<CapHomePoint> it = this.capPoints.iterator();
+		while(it.hasNext())
+		{
+			CapHomePoint p = it.next();
+			if(p.toString().equals(str))
+			{
+				it.remove();
+				break;
+			}
+		}
+	}
 }

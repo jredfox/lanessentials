@@ -5,9 +5,12 @@ import com.EvilNotch.lanessentials.commands.CommandFly;
 import com.EvilNotch.lanessentials.commands.CommandGod;
 import com.EvilNotch.lanessentials.commands.CommandHeal;
 import com.EvilNotch.lanessentials.commands.CommandHome;
+import com.EvilNotch.lanessentials.commands.CommandHomeClear;
+import com.EvilNotch.lanessentials.commands.CommandHomeRemove;
 import com.EvilNotch.lanessentials.commands.CommandKick;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
+import com.EvilNotch.lanessentials.commands.CommandSetHomeCount;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
 import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSpeed;
@@ -22,7 +25,6 @@ import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 
 import net.minecraft.command.CommandDebug;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -40,6 +42,9 @@ public class MainMod
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
     	GeneralRegistry.registerCommand(new CommandHome());
+    	GeneralRegistry.registerCommand(new CommandSetHomeCount());
+    	GeneralRegistry.registerCommand(new CommandHomeClear());
+    	GeneralRegistry.registerCommand(new CommandHomeRemove());
     	GeneralRegistry.registerCommand(new CommandHeal());
     	GeneralRegistry.registerCommand(new CommandSetHealth() );
     	GeneralRegistry.registerCommand(new CommandFeed());
