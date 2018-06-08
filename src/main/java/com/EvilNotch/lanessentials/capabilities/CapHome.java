@@ -5,10 +5,12 @@ import java.util.Iterator;
 
 import com.EvilNotch.lanessentials.CfgLanEssentials;
 import com.EvilNotch.lib.minecraft.content.ConfigLang;
+import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
 import com.EvilNotch.lib.util.ICopy;
 import com.EvilNotch.lib.util.JavaUtil;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +36,7 @@ public class CapHome implements ICapability {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) 
+	public void readFromNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c) 
 	{
 		this.capPoints = new ArrayList<CapHomePoint>();
 		NBTTagList points = (NBTTagList)nbt.getTagList("Homes", 10);
@@ -51,7 +53,7 @@ public class CapHome implements ICapability {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c)
 	{
 		NBTTagList tagList = new NBTTagList();
 		for(int i=0;i<capPoints.size();i++)

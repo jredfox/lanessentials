@@ -1,5 +1,9 @@
 package com.EvilNotch.lanessentials;
 
+import java.util.List;
+
+import com.EvilNotch.lanessentials.capabilities.CapAbility;
+import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
 import com.EvilNotch.lanessentials.commands.CommandFly;
 import com.EvilNotch.lanessentials.commands.CommandGod;
@@ -25,9 +29,23 @@ import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 
 import net.minecraft.command.CommandDebug;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:evilnotchlib",acceptableRemoteVersions = "*")
 public class MainMod
@@ -38,6 +56,7 @@ public class MainMod
     {	
     	System.out.print("[Lan Essentials] Loading and Registering Commands");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
+    	MinecraftForge.EVENT_BUS.register(this);
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
@@ -64,7 +83,46 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandOp());
     		GeneralRegistry.registerCommand(new CommandPardonIp());
     		GeneralRegistry.registerCommand(new CommandPardonPlayer());
+    		GeneralRegistry.registerCommand(new CommandDebug());
     	}
-    	GeneralRegistry.registerCommand(new CommandDebug());
+    }
+    
+	@SubscribeEvent(priority = EventPriority.LOW)
+    public void login(PlayerLoggedInEvent e)
+    {
+	   	if(!(e.player instanceof EntityPlayerMP))
+    		return;
+	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
+    	PlayerCapabilities caps = player.capabilities;
+    	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+    	if(cap.flyEnabled)
+    	{
+    		caps.allowFlying = cap.flyEnabled;
+    		caps.isFlying = cap.isFlying;
+    	}
+    	if(cap.godEnabled)
+    	{
+    		caps.disableDamage = cap.godEnabled;
+    	}
+    	player.sendPlayerAbilities();
+    }
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+    public void respawn(PlayerRespawnEvent e)
+    {
+	   	if(!(e.player instanceof EntityPlayerMP))
+    		return;
+	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
+    	PlayerCapabilities caps = player.capabilities;
+    	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+    	if(cap.flyEnabled)
+    	{
+    		caps.allowFlying = cap.flyEnabled;
+    	}
+    	if(cap.godEnabled)
+    	{
+    		caps.disableDamage = cap.godEnabled;
+    	}
+    	player.sendPlayerAbilities();
     }
 }
