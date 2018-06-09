@@ -104,7 +104,7 @@ public class CapHome implements ICapability {
 		}
 	}
 
-	public void removePoint(String str) 
+	public boolean removePoint(String str) 
 	{
 		Iterator<CapHomePoint> it = this.capPoints.iterator();
 		while(it.hasNext())
@@ -113,8 +113,9 @@ public class CapHome implements ICapability {
 			if(p.toString().equals(str))
 			{
 				it.remove();
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 }

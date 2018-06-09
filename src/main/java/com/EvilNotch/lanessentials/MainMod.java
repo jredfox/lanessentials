@@ -9,8 +9,6 @@ import com.EvilNotch.lanessentials.commands.CommandFly;
 import com.EvilNotch.lanessentials.commands.CommandGod;
 import com.EvilNotch.lanessentials.commands.CommandHeal;
 import com.EvilNotch.lanessentials.commands.CommandHome;
-import com.EvilNotch.lanessentials.commands.CommandHomeClear;
-import com.EvilNotch.lanessentials.commands.CommandHomeRemove;
 import com.EvilNotch.lanessentials.commands.CommandKick;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
@@ -33,14 +31,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -62,8 +64,6 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandSetHome());
     	GeneralRegistry.registerCommand(new CommandHome());
     	GeneralRegistry.registerCommand(new CommandSetHomeCount());
-    	GeneralRegistry.registerCommand(new CommandHomeClear());
-    	GeneralRegistry.registerCommand(new CommandHomeRemove());
     	GeneralRegistry.registerCommand(new CommandHeal());
     	GeneralRegistry.registerCommand(new CommandSetHealth() );
     	GeneralRegistry.registerCommand(new CommandFeed());
@@ -124,5 +124,21 @@ public class MainMod
     		caps.disableDamage = cap.godEnabled;
     	}
     	player.sendPlayerAbilities();
+    }
+	@SubscribeEvent(priority = EventPriority.LOW)
+    public void hurt(LivingAttackEvent e)
+    {
+		if(!(e.getEntity() instanceof EntityPlayerMP) || e.getSource() == DamageSource.OUT_OF_WORLD)
+			return;
+		EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
+		if(player.capabilities.disableDamage)
+			return;//no need to continue if the job is already done
+		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+		if(cap.godEnabled)
+		{
+			player.capabilities.disableDamage = true;
+			player.sendPlayerAbilities();
+			e.setCanceled(true);
+		}
     }
 }

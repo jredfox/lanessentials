@@ -10,6 +10,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameType;
 
 public class CommandGod extends CommandBase
 {
@@ -30,6 +31,8 @@ public class CommandGod extends CommandBase
 		if(!(sender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP epmp = (EntityPlayerMP)sender;
+		if(epmp.isCreative() || epmp.isSpectator())
+			return;
 		epmp.capabilities.disableDamage = !epmp.capabilities.disableDamage;
 		epmp.sendPlayerAbilities();
 		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));

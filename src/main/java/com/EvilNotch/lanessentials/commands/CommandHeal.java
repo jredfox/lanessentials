@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.EvilNotch.lib.minecraft.EntityUtil;
+import com.EvilNotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -32,7 +33,8 @@ public class CommandHeal extends CommandBase
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
+	{
 		if(!(sender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP p = (EntityPlayerMP)sender;
@@ -47,14 +49,15 @@ public class CommandHeal extends CommandBase
 			fs.setFoodSaturationLevel(5.0F);
 		
 		//fire && potions
-		p.setFire(0);
-		Iterator<PotionEffect> it = p.getActivePotionEffects().iterator();
+		EntityUtil.disableFire(p);
+		ArrayList<PotionEffect> pots = JavaUtil.toArray(p.getActivePotionEffects());
+		Iterator<PotionEffect> it = pots.iterator();
 		while(it.hasNext())
 		{
 			PotionEffect pot = it.next();
 			if(pot.getPotion().isBadEffect())
 			{
-				it.remove();
+				p.removePotionEffect(pot.getPotion());
 			}
 		}
 		sender.sendMessage(new TextComponentString("Healed: " + p.getName()) );
