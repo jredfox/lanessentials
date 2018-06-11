@@ -36,11 +36,13 @@ public class CommandSkin  extends CommandBase
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
+		if(!(sender instanceof EntityPlayerMP) || args.length == 0)
+			return;
 		EntityPlayerMP player = (EntityPlayerMP)sender;
 		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		String username = args[0];
-		skin.skin = username;
 		SkinUpdater.updateSkin(username,player,true);
+		skin.skin = username;//if updating the skin thows a wrong usage exception the skin name doesn't get reset
 	}
 }

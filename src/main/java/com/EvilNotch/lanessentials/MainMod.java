@@ -24,6 +24,7 @@ import com.EvilNotch.lanessentials.commands.vanilla.CommandDeOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonPlayer;
+import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.MainJava;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
