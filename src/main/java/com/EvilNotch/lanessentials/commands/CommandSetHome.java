@@ -6,8 +6,10 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.EvilNotch.lanessentials.Reference;
+import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.EnumChatFormatting;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
+import com.EvilNotch.lib.util.Line.LineBase;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapHomePoint;
 import com.EvilNotch.lanessentials.capabilities.Pos;
@@ -26,7 +28,7 @@ import net.minecraftforge.common.capabilities.Capability;
 
 public class CommandSetHome  extends CommandBase
 {	
-	public static final String reservedHome = "default_home0";
+	public static final String reservedHome = "default";
 
 	@Override
 	public String getName() 
@@ -47,12 +49,40 @@ public class CommandSetHome  extends CommandBase
 			return;
 		if(args.length == 1)
 		{
-			if(args[0].equals(reservedHome))
-				throw new WrongUsageException("home cannot be the reserved default for name \"" + reservedHome + "\"",new Object[0]);
+			if(args[0].equals(reservedHome) || args[0].equals("remove") || args[0].equals("count"))
+				throw new WrongUsageException("home cannot be the reserved default for name \"" + args[0] + "\"",new Object[0]);
 		}
-		String point = args.length == 1 ? args[0].trim() : reservedHome;
+		String point = args.length >= 1 ? args[0].trim() : reservedHome;
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
 		CapHome ch = (CapHome) CapabilityReg.getCapabilityConatainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+		
+		if(point.equals("clear"))
+		{
+			ch.capPoints.clear();
+			EntityUtil.printChat(epmp, EnumChatFormatting.RED, EnumChatFormatting.RED, "cleared homes");
+			return;
+		}
+		else if(point.equals("remove"))
+		{
+			if(args.length != 2 || LineBase.toWhiteSpaced(args[1]).equals(""))
+				throw new WrongUsageException("must have home to remove",new Object[0]);
+			String toRemove = args[1].trim();
+			
+			boolean removed = ch.removePoint(toRemove);
+			if(!removed)
+				throw new WrongUsageException("unable to remove point: \"" + toRemove + "\"",new Object[0]);
+			EntityUtil.printChat(epmp, EnumChatFormatting.YELLOW, EnumChatFormatting.YELLOW, "removed home:" + toRemove);
+			return;
+		}
+		else if(point.equals("count"))
+		{
+			if(args.length != 2 || !LineBase.isStringNum(args[1]))
+				throw new WrongUsageException(getUsage(sender),new Object[0]);
+			
+			ch.maxCount = Integer.parseInt(args[1]);
+			return;
+		}
+		
 		CapHomePoint chp = new CapHomePoint(new Pos(sender.getPosition(),epmp.posY), epmp.dimension, point);
 		
 		//set home point
@@ -73,13 +103,24 @@ public class CommandSetHome  extends CommandBase
     	
     	CapHome cap = (CapHome) CapabilityReg.getCapabilityConatainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
     	List<String> list = new ArrayList();
+    	if(args.length <= 1)
+    	{
+    		list.add("count");
+    		list.add("clear");
+    		list.add("remove");
+    	}
     	for(CapHomePoint p : cap.capPoints)
     	{
     		String point = p.toString();
-    		if(!point.equals(CommandSetHome.reservedHome))
+    		if(!point.equals(reservedHome))
     			list.add(p.toString());
+    		else if(args.length == 2)
+    		{
+    			if(args[0].equals("remove"))
+    				list.add(reservedHome);
+    		}
     	}
-    	return list;
+    	return CommandHome.orderList(list,args);
     }
 	
 }

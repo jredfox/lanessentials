@@ -118,4 +118,11 @@ public class CapHome implements ICapability {
 		}
 		return false;
 	}
+	public boolean containsPoint(String str)
+	{
+		for(CapHomePoint p : this.capPoints)
+			if(p.toString().equals(str))
+				return true;
+		return false;
+	}
 }

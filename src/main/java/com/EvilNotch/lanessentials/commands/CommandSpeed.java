@@ -19,7 +19,6 @@ public class CommandSpeed extends CommandBase
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		// TODO Auto-generated method stub
 		return "/speed [double multiplier]";
 	}
 

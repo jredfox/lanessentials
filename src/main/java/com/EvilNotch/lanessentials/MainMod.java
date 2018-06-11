@@ -12,7 +12,6 @@ import com.EvilNotch.lanessentials.commands.CommandHome;
 import com.EvilNotch.lanessentials.commands.CommandKick;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
-import com.EvilNotch.lanessentials.commands.CommandSetHomeCount;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
 import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSpeed;
@@ -30,6 +29,7 @@ import net.minecraft.command.CommandDebug;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.init.Items;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -63,13 +63,12 @@ public class MainMod
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
     	GeneralRegistry.registerCommand(new CommandHome());
-    	GeneralRegistry.registerCommand(new CommandSetHomeCount());
     	GeneralRegistry.registerCommand(new CommandHeal());
     	GeneralRegistry.registerCommand(new CommandSetHealth() );
     	GeneralRegistry.registerCommand(new CommandFeed());
+    	GeneralRegistry.registerCommand(new CommandSetHunger());
     	GeneralRegistry.registerCommand(new CommandFly());
     	GeneralRegistry.registerCommand(new CommandGod());
-    	GeneralRegistry.registerCommand(new CommandSetHunger());
     	GeneralRegistry.registerCommand(new CommandSkin());
     	GeneralRegistry.registerCommand(new CommandSpeed());
     	
@@ -88,24 +87,39 @@ public class MainMod
     }
     
 	@SubscribeEvent(priority = EventPriority.LOW)
+    public void login2(PlayerEvent.LoadFromFile e)
+    {
+		CommandSkin.updateSkin("jredfox", (EntityPlayerMP) e.getEntityPlayer(),false);
+    }
+	@SubscribeEvent(priority = EventPriority.LOW)
     public void login(PlayerLoggedInEvent e)
     {
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-    	PlayerCapabilities caps = player.capabilities;
     	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-    	if(cap.flyEnabled)
-    	{
-    		caps.allowFlying = cap.flyEnabled;
-    		caps.isFlying = cap.isFlying;
-    	}
-    	if(cap.godEnabled)
-    	{
-    		caps.disableDamage = cap.godEnabled;
-    	}
-    	player.sendPlayerAbilities();
+    	updateCaps(player,cap,true);
     }
+
+	public void updateCaps(EntityPlayerMP player, CapAbility cap,boolean updateFlying) 
+	{
+		PlayerCapabilities pcap = player.capabilities;
+		boolean used = false;
+		if(!pcap.allowFlying && cap.flyEnabled)
+		{
+			pcap.allowEdit = true;
+			if(updateFlying)
+				pcap.isFlying = cap.isFlying;
+			used = true;
+		}
+		if(!pcap.disableDamage && cap.godEnabled)
+		{
+			pcap.disableDamage = true;
+			used = true;
+		}
+		if(used)
+			player.sendPlayerAbilities();
+	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void respawn(PlayerRespawnEvent e)
@@ -113,17 +127,8 @@ public class MainMod
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-    	PlayerCapabilities caps = player.capabilities;
-    	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-    	if(cap.flyEnabled)
-    	{
-    		caps.allowFlying = cap.flyEnabled;
-    	}
-    	if(cap.godEnabled)
-    	{
-    		caps.disableDamage = cap.godEnabled;
-    	}
-    	player.sendPlayerAbilities();
+	   	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+    	updateCaps(player,cap,false);
     }
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void hurt(LivingAttackEvent e)
