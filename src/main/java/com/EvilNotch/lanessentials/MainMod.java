@@ -1,9 +1,12 @@
 package com.EvilNotch.lanessentials;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
+import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
 import com.EvilNotch.lanessentials.commands.CommandFly;
 import com.EvilNotch.lanessentials.commands.CommandGod;
@@ -22,10 +25,16 @@ import com.EvilNotch.lanessentials.commands.vanilla.CommandOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonPlayer;
 import com.EvilNotch.lib.main.MainJava;
+import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
+import com.EvilNotch.lib.minecraft.events.SkinFixEvent;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
+import com.EvilNotch.lib.util.JavaUtil;
+import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 
 import net.minecraft.command.CommandDebug;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
@@ -86,10 +95,20 @@ public class MainMod
     	}
     }
     
-	@SubscribeEvent(priority = EventPriority.LOW)
-    public void login2(PlayerEvent.LoadFromFile e)
+	@SubscribeEvent
+    public void skinCap(SkinFixEvent e)
     {
-		CommandSkin.updateSkin("jredfox", (EntityPlayerMP) e.getEntityPlayer(),false);
+		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
+		PropertyMap map = player.getGameProfile().getProperties();
+		ArrayList<Property> props = JavaUtil.toArray(map.get("textures"));
+		
+		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
+		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
+		
+		if(!player.getName().equals(skin.skin))
+		{
+			e.newSkin = skin.skin;
+		}
     }
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void login(PlayerLoggedInEvent e)
