@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
+import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
 import com.EvilNotch.lanessentials.commands.CommandFly;
 import com.EvilNotch.lanessentials.commands.CommandGod;
@@ -43,9 +46,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.init.Items;
+import net.minecraft.network.play.server.SPacketPlayerListItem;
+import net.minecraft.network.play.server.SPacketPlayerListItem.AddPlayerData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -85,6 +92,7 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandSkin());
     	GeneralRegistry.registerCommand(new CommandSpeed());
     	GeneralRegistry.registerCommand(new CommandNick());
+    	GeneralRegistry.registerCommand(new CommandCape());
     	
 //    	GeneralRegistry.registerCommand(new Shit());
     	
@@ -103,12 +111,19 @@ public class MainMod
     }
     
 	@SubscribeEvent
-    public void skinCap(PlayerEvent.NameFormat e)
+    public void nickName(PlayerEvent.NameFormat e)
     {
-		EntityPlayer player = e.getEntityPlayer();
+		if(!(e.getEntityPlayer() instanceof EntityPlayerMP))
+			return;
+		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
 		CapNick name = (CapNick) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(!Strings.isNullOrEmpty(name.nick))
     		e.setDisplayname(name.nick);
+    	SPacketPlayerListItem item = new SPacketPlayerListItem(SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME,player);
+    	for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
+    	{
+    		p.connection.sendPacket(item);
+    	}
     }
 	@SubscribeEvent
     public void skinCap(SkinFixEvent e)

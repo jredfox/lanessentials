@@ -5,6 +5,7 @@ import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityHandler;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapabilityProvider;
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
+import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
@@ -21,6 +22,7 @@ public class CapabilityProvider implements ICapabilityProvider
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "ability"), new CapAbility(),c);
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "skin"), new CapSkin(),c);
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "nick"), new CapNick(),c);
+		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "cape"), new CapCape(),c);
 		System.out.println("registerng Capabilities:" + (CapabilityReg.getCapabilityConatainer(p) == null) );
 	}
 }
