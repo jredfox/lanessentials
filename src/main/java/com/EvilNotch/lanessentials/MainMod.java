@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
+import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
 import com.EvilNotch.lanessentials.commands.CommandFly;
@@ -13,6 +14,7 @@ import com.EvilNotch.lanessentials.commands.CommandGod;
 import com.EvilNotch.lanessentials.commands.CommandHeal;
 import com.EvilNotch.lanessentials.commands.CommandHome;
 import com.EvilNotch.lanessentials.commands.CommandKick;
+import com.EvilNotch.lanessentials.commands.CommandNick;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
@@ -34,6 +36,7 @@ import com.EvilNotch.lib.util.JavaUtil;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
+import joptsimple.internal.Strings;
 import net.minecraft.command.CommandDebug;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,7 +68,7 @@ public class MainMod
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
-    {	
+    {
     	System.out.print("[Lan Essentials] Loading and Registering Commands");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
@@ -81,6 +84,9 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandGod());
     	GeneralRegistry.registerCommand(new CommandSkin());
     	GeneralRegistry.registerCommand(new CommandSpeed());
+    	GeneralRegistry.registerCommand(new CommandNick());
+    	
+//    	GeneralRegistry.registerCommand(new Shit());
     	
     	//server commands redone for client
     	if(MainJava.isClient)
@@ -97,12 +103,17 @@ public class MainMod
     }
     
 	@SubscribeEvent
+    public void skinCap(PlayerEvent.NameFormat e)
+    {
+		EntityPlayer player = e.getEntityPlayer();
+		CapNick name = (CapNick) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	if(!Strings.isNullOrEmpty(name.nick))
+    		e.setDisplayname(name.nick);
+    }
+	@SubscribeEvent
     public void skinCap(SkinFixEvent e)
     {
 		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
-		PropertyMap map = player.getGameProfile().getProperties();
-		ArrayList<Property> props = JavaUtil.toArray(map.get("textures"));
-		
 		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		

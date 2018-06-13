@@ -7,32 +7,32 @@ import com.EvilNotch.lib.util.ICopy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapSkin implements ICapability{
+public class CapNick implements ICapability{
+
+	public String nick = "";
 	
-	public String skin = "";
+	public CapNick(){}
 	
-	public CapSkin(){}
-	
-	public CapSkin(String username){
-		this.skin = username;
+	public CapNick(String username){
+		this.nick = username;
 	}
 
 	@Override
 	public ICopy copy() {
-		return new CapSkin(this.skin);
+		return new CapSkin(this.nick);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) 
 	{
-		this.skin = nbt.getString("skin");
-		if(this.skin.equals(""))
-			this.skin = p.getName();
+		this.nick = nbt.getString("nick");
+		if(this.nick.equals(""))
+			this.nick = p.getName();
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) {
-		nbt.setString("skin", this.skin);
+		nbt.setString("nick", this.nick);
 	}
 
 }

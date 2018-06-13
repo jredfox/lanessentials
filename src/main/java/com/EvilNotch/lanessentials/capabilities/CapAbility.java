@@ -12,13 +12,13 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class CapAbility implements ICapability,ITick{
 	/**
-	 * tells if it can mess with player capabilities on login also used for defaulting when respawning
+	 * tells if the player can fly/take damage on tick
 	 */
 	public boolean flyEnabled = false;
 	public boolean godEnabled = false;
 	
 	/**
-	 * values are unsynced until it's time to write to the disk
+	 * almost never updated till either writing to disk or reading from nbt(player login)
 	 */
 	public boolean isFlying = false;
 	
