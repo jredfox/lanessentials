@@ -56,7 +56,7 @@ public class CommandCape extends CommandBase{
 		{
 			if(!args[0].equals("getURL"))
 				throw new WrongUsageException("/cape getURL [playername]",new Object[0]);
-			SkinData skin = SkinUpdater.getSkinData(args[1]);
+			SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
 			String url = SkinUpdater.getCapeURL(skin,args[1]);
 			EntityUtil.sendURL(player,"Cape Link for " + args[1] + ":", url);
 			return;
@@ -66,7 +66,7 @@ public class CommandCape extends CommandBase{
 		{	
 			if(!JavaUtil.isURL(url))
 			{
-				SkinData data = SkinUpdater.getSkinData(url);//since url is player at this point use that for player name
+				SkinData data = SkinUpdater.getSkinData(url.toLowerCase());//since url is player at this point use that for player name
 				url = SkinUpdater.getCapeURL(data,url);
 			}
 		}
@@ -93,8 +93,7 @@ public class CommandCape extends CommandBase{
 			json.put("url",url);
 			String str = obj.toJSONString();
 			byte[] bytes = org.apache.commons.codec.binary.Base64.encodeBase64(str.getBytes());
-			ReflectionUtil.setObject(p, new String(bytes,StandardCharsets.UTF_8), Property.class, MCPMappings.getField(Property.class, "value"));
-			System.out.println("Field:" + MCPMappings.getFieldOb(Property.class, "value"));
+			ReflectionUtil.setObject(p, new String(bytes,StandardCharsets.UTF_8), Property.class, "value");
 		}
 		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
 		cape.url = url;
