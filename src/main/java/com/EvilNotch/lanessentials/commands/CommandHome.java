@@ -21,6 +21,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
@@ -43,6 +44,7 @@ public class CommandHome  extends CommandBase
 		if(!(sender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
+
 		String point = args.length >= 1 ? args[0].trim() : CommandSetHome.reservedHome;
 		CapHome ch = (CapHome) CapabilityReg.getCapabilityConatainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
 		CapHomePoint chp = ch.getCapPoint(point);
@@ -51,7 +53,7 @@ public class CommandHome  extends CommandBase
 			String s = point.equals(CommandSetHome.reservedHome) ? "unable to find default home" : "cannot find home for \"" + point + "\"";
 			throw new WrongUsageException(s,new Object[0]);
 		}
-		EntityUtil.telePortEntity(epmp, server, chp.pos.getX() + 0.5, (double)chp.pos.getActualY(), chp.pos.getZ() + 0.5, 0.0f, 0.0f, chp.dimId);
+		EntityUtil.telePortEntity(epmp, server, chp.pos.getX() + 0.5, (double)chp.pos.getActualY(), chp.pos.getZ() + 0.5, chp.yaw, chp.pitch, chp.dimId);
 	}
 	/**
 	 * list of homes per player doesn't show the default only the strings

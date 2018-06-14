@@ -30,6 +30,7 @@ import com.EvilNotch.lanessentials.commands.vanilla.CommandDeOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonPlayer;
+import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.MainJava;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
@@ -40,6 +41,7 @@ import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
+import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
 import net.minecraft.command.CommandDebug;
@@ -108,6 +110,11 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandPardonPlayer());
     		GeneralRegistry.registerCommand(new CommandDebug());
     	}
+
+    	/*
+    	 * adds ability without ASM to have more domain urls for skins/capes
+    	 */
+        ReflectionUtil.setFinalObject(null, CfgLanEssentials.skinDomains, YggdrasilMinecraftSessionService.class, "WHITELISTED_DOMAINS");
     }
     
 	@SubscribeEvent

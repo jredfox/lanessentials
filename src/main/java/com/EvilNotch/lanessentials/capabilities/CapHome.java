@@ -47,7 +47,7 @@ public class CapHome implements ICapability {
 		for(int i=0;i<points.tagCount();i++)
 		{
 			NBTTagCompound tag = points.getCompoundTagAt(i);
-			CapHomePoint chp = new CapHomePoint(new Pos(tag.getInteger("x"), tag.getDouble("y"), tag.getInteger("z")),tag.getInteger("dim"),tag.getString("name"));
+			CapHomePoint chp = new CapHomePoint(new Pos(tag.getInteger("x"), tag.getDouble("y"), tag.getInteger("z")),tag.getInteger("dim"),tag.getString("name"),tag.getFloat("yaw"),tag.getFloat("pitch"));
 			capPoints.add(chp);
 		}
 	}
@@ -63,6 +63,8 @@ public class CapHome implements ICapability {
 			compound.setInteger("x",chp.pos.getX());
 			compound.setDouble("y",chp.pos.getActualY());
 			compound.setInteger("z",chp.pos.getZ());
+			compound.setFloat("yaw", chp.yaw);
+			compound.setFloat("pitch", chp.pitch);
 			compound.setInteger("dim",chp.dimId);
 			compound.setString("name", chp.name);
 			tagList.appendTag(compound);

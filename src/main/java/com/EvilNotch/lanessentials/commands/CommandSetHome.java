@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -83,7 +84,31 @@ public class CommandSetHome  extends CommandBase
 			return;
 		}
 		
-		CapHomePoint chp = new CapHomePoint(new Pos(sender.getPosition(),epmp.posY), epmp.dimension, point);
+		EnumFacing facing = epmp.getAdjustedHorizontalFacing();
+		float yaw = 0.0F;
+		float pitch = 0.0F;
+		if(facing == EnumFacing.NORTH)
+		{
+			yaw = 180.0F;
+			System.out.println("North:" + epmp.rotationYaw);
+		}
+		else if(facing == EnumFacing.SOUTH)
+		{
+			yaw = 0.0F;
+			System.out.println("SOUTH:" + epmp.rotationYaw);
+		}
+		else if(facing == EnumFacing.EAST)
+		{
+			yaw = 270.0F;
+			System.out.println("EAST:" + epmp.rotationYaw);
+		}
+		else if(facing == EnumFacing.WEST)
+		{
+			yaw = 90.0F;
+			System.out.println("WEST:" + epmp.rotationYaw);
+		}
+		
+		CapHomePoint chp = new CapHomePoint(new Pos(sender.getPosition(),epmp.posY), epmp.dimension, point,yaw,pitch);
 		
 		//set home point
 		if(ch.capPoints.size() >= ch.maxCount && !ch.capPoints.contains(chp))

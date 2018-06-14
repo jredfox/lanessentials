@@ -103,11 +103,8 @@ public class CommandCape extends CommandBase{
 	@Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
-		List<String> list = new ArrayList();
-		list.add("getURL");
-		List<String> players = JavaUtil.asArray(server.getOnlinePlayerNames());
-		for(String s : players)
-			list.add(s);
+		List<String> list = args.length != 1 && args.length != 2 ? new ArrayList() : JavaUtil.asArray(server.getOnlinePlayerNames());
+		list.add(0,"getURL");
 		return CommandHome.orderList(list, args);
     }
 
