@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
+import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
@@ -33,6 +34,7 @@ import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.MainJava;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
+import com.EvilNotch.lib.minecraft.events.CapeFixEvent;
 import com.EvilNotch.lib.minecraft.events.SkinFixEvent;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 import com.EvilNotch.lib.util.JavaUtil;
@@ -94,8 +96,6 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandNick());
     	GeneralRegistry.registerCommand(new CommandCape());
     	
-//    	GeneralRegistry.registerCommand(new Shit());
-    	
     	//server commands redone for client
     	if(MainJava.isClient)
     	{
@@ -113,7 +113,7 @@ public class MainMod
 	@SubscribeEvent
     public void nickName(PlayerEvent.NameFormat e)
     {
-		if(!(e.getEntityPlayer() instanceof EntityPlayerMP))
+		/*if(!(e.getEntityPlayer() instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
 		CapNick name = (CapNick) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
@@ -123,7 +123,14 @@ public class MainMod
     	for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
     	{
     		p.connection.sendPacket(item);
-    	}
+    	}*/
+    }
+	@SubscribeEvent
+    public void skinCap(CapeFixEvent e)
+    {
+		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(e.getEntityPlayer()).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
+		e.url = cape.url;
+		e.overrideCape = CfgLanEssentials.overrideCape;
     }
 	@SubscribeEvent
     public void skinCap(SkinFixEvent e)
@@ -132,10 +139,7 @@ public class MainMod
 		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		
-		if(!player.getName().equals(skin.skin))
-		{
-			e.newSkin = skin.skin;
-		}
+		e.newSkin = skin.skin;
     }
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void login(PlayerLoggedInEvent e)

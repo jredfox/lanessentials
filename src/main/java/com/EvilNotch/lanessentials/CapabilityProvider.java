@@ -23,6 +23,5 @@ public class CapabilityProvider implements ICapabilityProvider
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "skin"), new CapSkin(),c);
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "nick"), new CapNick(),c);
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "cape"), new CapCape(),c);
-		System.out.println("registerng Capabilities:" + (CapabilityReg.getCapabilityConatainer(p) == null) );
 	}
 }
