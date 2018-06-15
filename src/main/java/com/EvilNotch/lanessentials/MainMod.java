@@ -81,7 +81,6 @@ public class MainMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	Class clazz = YggdrasilMinecraftSessionService.class;
     	System.out.print("[Lan Essentials] Loading and Registering Commands");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
@@ -112,11 +111,6 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandPardonPlayer());
     		GeneralRegistry.registerCommand(new CommandDebug());
     	}
-
-    	/*
-    	 * adds ability without ASM to have more domain urls for skins/capes
-    	 */
-        ReflectionUtil.setFinalObject(null, CfgLanEssentials.skinDomains, YggdrasilMinecraftSessionService.class, "WHITELISTED_DOMAINS");
     }
     
 	@SubscribeEvent
