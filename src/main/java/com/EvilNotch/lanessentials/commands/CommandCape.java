@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,10 +21,12 @@ import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.EnumChatFormatting;
 import com.EvilNotch.lib.minecraft.SkinUpdater;
+import com.EvilNotch.lib.minecraft.TestProps;
 import com.EvilNotch.lib.minecraft.content.SkinData;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -72,14 +75,31 @@ public class CommandCape extends CommandBase{
 		}
 		ArrayList<Property> props = JavaUtil.toArray(player.getGameProfile().getProperties().get("textures"));
 		if(props.size() == 0)
-			throw new WrongUsageException("player skin and cape not set! set skin before setting a cape",new Object[0]);
+		{
+			System.out.println("patching player textures:{}");
+			PropertyMap map = player.getGameProfile().getProperties();
+			map.removeAll("textures");
+			
+			JSONObject json = new JSONObject();
+			json.put("timestamp", System.currentTimeMillis());
+			json.put("profileId", player.getUniqueID().toString());//uuid of sender
+			json.put("profileName", player.getName());
+			json.put("signatureRequired", false);
+			
+			JSONObject textures = new JSONObject();
+			json.put("textures", textures);
+			byte[] bytes = Base64.encodeBase64(json.toJSONString().getBytes());
+			String encoded = new String(bytes,StandardCharsets.UTF_8);
+			map.put("textures", new TestProps("textures", encoded, "") );
+			props = JavaUtil.toArray(player.getGameProfile().getProperties().get("textures"));
+		}
 		for(Property p : props)
 		{
 			String base64 = p.getValue();
 			JSONObject obj = JavaUtil.toJsonFrom64(base64);
-			JSONObject obj2 = (JSONObject) obj.get("textures");
-			if(!obj2.containsKey("SKIN"))
+			if(!obj.containsKey("textures"))
 				throw new WrongUsageException("player skin not set! set skin before setting a cape",new Object[0]);
+			JSONObject obj2 = (JSONObject) obj.get("textures");
 			JSONObject json = (JSONObject)obj2.get("CAPE");
 			if(json == null)
 			{

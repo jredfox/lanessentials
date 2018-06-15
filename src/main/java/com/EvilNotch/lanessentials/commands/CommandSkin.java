@@ -45,15 +45,20 @@ public class CommandSkin  extends CommandBase
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
-		if(!(sender instanceof EntityPlayerMP) || args.length == 0)
-			return;
+		if(!(sender instanceof EntityPlayerMP) || args.length == 0 || JavaUtil.isURL(args[0]) && args.length != 2)
+			throw new WrongUsageException("/skin [name/url,isSteve]",new Object[0]);
 		long time = System.currentTimeMillis();
 		EntityPlayerMP player = (EntityPlayerMP)sender;
 		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		String username = args[0];
-		SkinUpdater.updateSkin(username,player,true);
+		if(args.length == 2)
+			if(!JavaUtil.isStringBoolean(args[1]))
+				throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
+		boolean isAlex = args.length == 2 ? !Boolean.parseBoolean(args[1]) : false;
+		SkinUpdater.updateSkin(username,player,true,isAlex);
 		skin.skin = username;//if updating the skin thows a wrong usage exception the skin name doesn't get reset
+		skin.isAlex = isAlex;
 		JavaUtil.printTime(time, "Done Skin:");
 	}
 }

@@ -150,6 +150,7 @@ public class MainMod
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		
 		e.newSkin = skin.skin;
+		e.isAlexURL = skin.isAlex;
     }
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void login(PlayerLoggedInEvent e)
