@@ -81,6 +81,7 @@ public class MainMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	Class clazz = YggdrasilMinecraftSessionService.class;
     	System.out.print("[Lan Essentials] Loading and Registering Commands");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
@@ -138,8 +139,8 @@ public class MainMod
     {
 		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(e.getEntityPlayer()).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
 		e.url = cape.url;
-		System.out.println("lan:" + e.url);
-		e.overrideCape = CfgLanEssentials.overrideCape;
+		if(CfgLanEssentials.overrideCape)
+			e.overrideCape = true;
     }
 	@SubscribeEvent
     public void skinCap(SkinFixEvent e)
