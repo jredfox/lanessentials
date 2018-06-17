@@ -129,7 +129,7 @@ public class MainMod
     	}*/
     }
 	@SubscribeEvent
-    public void skinCap(CapeFixEvent e)
+    public void capeCap(CapeFixEvent e)
     {
 		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(e.getEntityPlayer()).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
 		e.url = cape.url;

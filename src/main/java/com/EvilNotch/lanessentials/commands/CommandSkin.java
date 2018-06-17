@@ -2,6 +2,7 @@ package com.EvilNotch.lanessentials.commands;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,7 +59,28 @@ public class CommandSkin  extends CommandBase
 		boolean isAlex = args.length == 2 ? !Boolean.parseBoolean(args[1]) : false;
 		SkinUpdater.updateSkin(username,player,true,isAlex);
 		skin.skin = username;//if updating the skin thows a wrong usage exception the skin name doesn't get reset
-		skin.isAlex = isAlex;
-		JavaUtil.printTime(time, "Done Skin:");
+		skin.isAlex = getIsAlex(player);
+		JavaUtil.printTime(time, "Done Skin " + skin.isAlex + ":");
+	}
+
+	public boolean getIsAlex(EntityPlayerMP player) 
+	{
+		Collection<Property> props = player.getGameProfile().getProperties().get("textures");
+		for(Property p : props)
+		{
+			JSONObject json = JavaUtil.toJsonFrom64(p.getValue());
+			JSONObject textures = (JSONObject) json.get("textures");
+			if(textures.containsKey("SKIN"))
+			{
+				JSONObject skin = (JSONObject) textures.get("SKIN");
+				if(skin.containsKey("metadata"))
+				{
+					JSONObject meta = (JSONObject) skin.get("metadata");
+					if(meta.containsKey("model"))
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 }
