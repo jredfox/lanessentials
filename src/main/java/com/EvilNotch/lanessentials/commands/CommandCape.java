@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.capabilities.CapCape;
+import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.minecraft.EntityUtil;
@@ -53,16 +54,37 @@ public class CommandCape extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
-		EntityPlayer player = (EntityPlayer)sender;
+		EntityPlayerMP player = (EntityPlayerMP)sender;
 		//cape getURL [playername]
 		if(args.length == 2)
 		{
-			if(!args[0].equals("getURL"))
-				throw new WrongUsageException("/cape getURL [playername]",new Object[0]);
-			SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
-			String url = SkinUpdater.getCapeURL(skin,args[1]);
-			EntityUtil.sendURL(player,"Cape Link for " + args[1] + ":", url);
-			return;
+			if(args[0].equals("getURL"))
+			{
+				SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
+				String url = SkinUpdater.getCapeURL(skin,args[1]);
+				EntityUtil.sendURL(player,"Cape Link for " + args[1] + ":", url);
+				return;
+			}
+			else if(args[0].equals("getCapability"))
+			{
+				if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
+					throw new WrongUsageException("player isn't currently logged in:" + args[1]);
+				
+				CapCape cap = (CapCape) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
+				if(cap == null)
+				{
+					throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
+				}
+				else if(cap.url.equals(""))
+				{
+					EntityUtil.printChat(player, EnumChatFormatting.RED, "", "cape is blank for user:" + args[1]);
+					return;
+				}
+				EntityUtil.sendURL((EntityPlayer) sender, "capeCapability:", cap.url);
+				return;
+			}
+			else
+				throw new WrongUsageException("/cape [getURL/getCapability, playername]",new Object[0]);
 		}
 		String url = args.length == 1 ? args[0] : "";
 		if(!url.equals(""))
@@ -73,57 +95,14 @@ public class CommandCape extends CommandBase{
 				url = SkinUpdater.getCapeURL(data,url);
 			}
 		}
-		ArrayList<Property> props = JavaUtil.toArray(player.getGameProfile().getProperties().get("textures"));
-		if(props.size() == 0)
-		{
-			System.out.println("patching player textures:{}");
-			PropertyMap map = player.getGameProfile().getProperties();
-			map.removeAll("textures");
-			
-			JSONObject json = new JSONObject();
-			json.put("timestamp", System.currentTimeMillis());
-			json.put("profileId", player.getUniqueID().toString());//uuid of sender
-			json.put("profileName", player.getName());
-			json.put("signatureRequired", false);
-			
-			JSONObject textures = new JSONObject();
-			json.put("textures", textures);
-			byte[] bytes = Base64.encodeBase64(json.toJSONString().getBytes());
-			String encoded = new String(bytes,StandardCharsets.UTF_8);
-			map.put("textures", new TestProps("textures", encoded, "") );
-			props = JavaUtil.toArray(player.getGameProfile().getProperties().get("textures"));
-		}
-		for(Property p : props)
-		{
-			String base64 = p.getValue();
-			JSONObject obj = JavaUtil.toJsonFrom64(base64);
-			if(!obj.containsKey("textures"))
-				throw new WrongUsageException("player skin not set! set skin before setting a cape",new Object[0]);
-			JSONObject obj2 = (JSONObject) obj.get("textures");
-			JSONObject json = (JSONObject)obj2.get("CAPE");
-			if(json == null)
-			{
-				json = new JSONObject();
-				obj2.put("CAPE", json);
-			}
-			if(url.equals(""))
-				obj2.remove("CAPE");//for when args == 0
-			
-			obj.put("signatureRequired", false);
-			json.put("url",url);
-			String str = obj.toJSONString();
-			byte[] bytes = org.apache.commons.codec.binary.Base64.encodeBase64(str.getBytes());
-			ReflectionUtil.setObject(p, new String(bytes,StandardCharsets.UTF_8), Property.class, "value");
-		}
-		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
-		cape.url = url;
-		SkinUpdater.updateSkinPackets((EntityPlayerMP) player);
+		SkinUpdater.setCape(player,url,true);
 	}
 	@Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
 		List<String> list = args.length != 1 && args.length != 2 ? new ArrayList() : JavaUtil.asArray(server.getOnlinePlayerNames());
 		list.add(0,"getURL");
+		list.add(0,"getCapability");
 		return CommandHome.orderList(list, args);
     }
 
