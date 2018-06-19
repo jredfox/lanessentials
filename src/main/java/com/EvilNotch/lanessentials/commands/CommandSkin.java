@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 
@@ -13,6 +15,8 @@ import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
+import com.EvilNotch.lib.minecraft.EntityUtil;
+import com.EvilNotch.lib.minecraft.EnumChatFormatting;
 import com.EvilNotch.lib.minecraft.SkinUpdater;
 import com.EvilNotch.lib.minecraft.TestProps;
 import com.EvilNotch.lib.minecraft.content.SkinData;
@@ -26,9 +30,11 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 public class CommandSkin  extends CommandBase
 {
@@ -46,8 +52,36 @@ public class CommandSkin  extends CommandBase
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
-		if(!(sender instanceof EntityPlayerMP) || args.length == 0 || JavaUtil.isURL(args[0]) && args.length != 2)
+		if(!(sender instanceof EntityPlayerMP) || args.length == 0)
 			throw new WrongUsageException("/skin [name/url,isSteve]",new Object[0]);
+		if(args[0].equals("getURL"))
+		{
+			if(args.length != 2)
+				throw new WrongUsageException("/skin getURL [playername]");
+			SkinData data = SkinUpdater.getSkinData(args[1]);
+			String url = SkinUpdater.getSkinURL(data, args[1]);
+			EntityUtil.sendURL((EntityPlayer) sender, "skin url", url);
+			return;
+		}
+		else if(args[0].equals("getCapability"))
+		{
+			if(args.length != 2)
+				throw new WrongUsageException("/skin getCapability [playername]");
+			EntityPlayerMP player = (EntityPlayerMP)sender;
+			if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
+				throw new WrongUsageException("player isn't currently logged in:" + args[1]);
+			
+			CapSkin cap = (CapSkin) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "skin") );
+			if(cap == null)
+				throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
+			if(JavaUtil.isURL(cap.skin))
+				EntityUtil.sendURL((EntityPlayer) sender, "skinCapability:", cap.skin);
+			else
+				EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE,(EntityPlayer) sender, "skinCapability:", cap.skin);
+			return;
+		}
+		else if(JavaUtil.isURL(args[0]) && args.length != 2)
+			throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
 		long time = System.currentTimeMillis();
 		EntityPlayerMP player = (EntityPlayerMP)sender;
 		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
@@ -83,4 +117,12 @@ public class CommandSkin  extends CommandBase
 		}
 		return false;
 	}
+	@Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+		List<String> list = args.length != 1 && args.length != 2 ? new ArrayList() : JavaUtil.asArray(server.getOnlinePlayerNames());
+		list.add(0,"getURL");
+		list.add(1,"getCapability");
+		return CommandHome.orderList(list, args);
+    }
 }
