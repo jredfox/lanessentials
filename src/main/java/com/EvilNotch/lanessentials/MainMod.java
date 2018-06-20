@@ -2,7 +2,9 @@ package com.EvilNotch.lanessentials;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 
@@ -182,45 +184,8 @@ public class MainMod
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
     	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
     	updateCaps(player,cap,true);
-    	//nick name
     	updateNickName(player);
     }
-	
-	@SubscribeEvent
-    public void nametag(PlayerEvent.StartTracking e)
-    {
-		if(!(e.getTarget() instanceof EntityPlayer))
-			return;
-		EntityPlayerMP u = (EntityPlayerMP) e.getEntityPlayer();
-		EntityPlayerMP other = (EntityPlayerMP) e.getTarget();
-		if(u.connection == null || other.connection == null)
-		{
-			System.out.println("returning player not properlly logged in");
-			return;
-		}
-		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
-//		updateNickName((EntityPlayerMP) e.getTarget());
-    }
-
-	public static void updateNickName(EntityPlayerMP player) 
-	{
-    	player.refreshDisplayName();
-    	
-    	CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
-    	SPacketPlayerListItem item = new SPacketPlayerListItem();
-        AddPlayerData apd = item.new AddPlayerData(player.getGameProfile(), player.ping, player.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
-        item.getEntries().add(apd);
-    	
-        for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
-        {
-            p.connection.sendPacket(item);
-        }
-        player.setCustomNameTag(name.nick);
-        System.out.println("aaaa:" + player.getCustomNameTag());
-    	
-    	NetWorkHandler.INSTANCE.sendToAll(new PacketDisplayNameRefresh(name.nick, player.getEntityId()) );
-	}
 	
 	public void updateCaps(EntityPlayerMP player, CapAbility cap,boolean updateFlying) 
 	{
@@ -250,8 +215,7 @@ public class MainMod
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
 	   	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
     	updateCaps(player,cap,false);
-    	//nick name
-    	updateNickName((EntityPlayerMP) e.player);
+    	updateNickName(player);
     }
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void hurt(LivingAttackEvent e)
@@ -269,4 +233,70 @@ public class MainMod
 			e.setCanceled(true);
 		}
     }
+	@SubscribeEvent
+    public void nametag(PlayerEvent.StartTracking e)
+    {
+		if(!(e.getTarget() instanceof EntityPlayer))
+			return;
+		EntityPlayerMP u = (EntityPlayerMP) e.getEntityPlayer();
+		EntityPlayerMP other = (EntityPlayerMP) e.getTarget();
+		if(u.connection == null || other.connection == null)
+		{
+			System.out.println("returning player not properlly logged in");
+			return;
+		}
+		else if(u.getEntityId() == other.getEntityId() )
+		{
+			System.out.println("returning player is tracking itself userName:" + u.getName());
+			return;
+		}
+		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
+		updateTrackNickName(u,other);
+    }
+	/**
+	 * optimized version for when requesting entity is about to start tracking the player without updating it to everyone
+	 */
+	public static void updateTrackNickName(EntityPlayerMP request,EntityPlayerMP newPlayer) 
+	{
+    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	if(Strings.isNullOrEmpty(name.nick))
+    	{
+    		System.out.println("returning null string");
+    		return;
+    	}
+    	newPlayer.refreshDisplayName();
+    	SPacketPlayerListItem item = new SPacketPlayerListItem();
+        AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+        item.getEntries().add(apd);
+    	
+        request.connection.sendPacket(item);
+        NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, newPlayer.getEntityId()), request);
+	}
+	public static void updateNickName(EntityPlayerMP player) 
+	{
+    	CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	if(Strings.isNullOrEmpty(name.nick))
+    		return;
+    	player.refreshDisplayName();
+    	SPacketPlayerListItem item = new SPacketPlayerListItem();
+        AddPlayerData apd = item.new AddPlayerData(player.getGameProfile(), player.ping, player.interactionManager.getGameType(), new TextComponentString(name.nick));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+        item.getEntries().add(apd);
+        
+        Set<? extends EntityPlayer> li = player.getServerWorld().getEntityTracker().getTrackingPlayers(player);
+        Set<EntityPlayerMP> players = new HashSet();
+        for(EntityPlayer p : li)
+        	players.add((EntityPlayerMP)p);
+        players.add(player);
+    	
+        for(EntityPlayerMP p : players)
+        {
+            p.connection.sendPacket(item);
+            if(!p.equals(player))
+            {
+            	NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, player.getEntityId()), p);
+            }
+        }
+	}
 }
