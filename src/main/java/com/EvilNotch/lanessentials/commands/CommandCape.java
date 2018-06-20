@@ -87,14 +87,7 @@ public class CommandCape extends CommandBase{
 				throw new WrongUsageException("/cape [getURL/getCapability, playername]",new Object[0]);
 		}
 		String url = args.length == 1 ? args[0] : "";
-		if(!url.equals(""))
-		{	
-			if(!JavaUtil.isURL(url))
-			{
-				SkinData data = SkinUpdater.getSkinData(url.toLowerCase());//since url is player at this point use that for player name
-				url = SkinUpdater.getCapeURL(data,url);
-			}
-		}
+
 		SkinUpdater.setCape(player,url,true);
 	}
 	@Override

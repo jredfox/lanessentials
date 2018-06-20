@@ -30,8 +30,11 @@ import com.EvilNotch.lanessentials.commands.vanilla.CommandDeOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonPlayer;
+import com.EvilNotch.lanessentials.packets.NetWorkHandler;
+import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
+import com.EvilNotch.lib.main.Config;
 import com.EvilNotch.lib.main.MainJava;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
@@ -44,8 +47,11 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandDebug;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
@@ -58,13 +64,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -81,7 +91,8 @@ public class MainMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	System.out.print("[Lan Essentials] Loading and Registering Commands");
+    	Class clazz = YggdrasilMinecraftSessionService.class;
+    	System.out.print("[Lan Essentials] Loading and Registering Commands session:");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
@@ -111,22 +122,38 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandPardonPlayer());
     		GeneralRegistry.registerCommand(new CommandDebug());
     	}
+    	/*
+    	 * adds ability without ASM to have more domain urls for skins/capes
+    	 */
+        ReflectionUtil.setFinalObject(null, Config.skinDomains, YggdrasilMinecraftSessionService.class, "WHITELISTED_DOMAINS");
+    }
+    @EventHandler
+    public void init(FMLInitializationEvent event)
+    {
+    	NetWorkHandler.init();
     }
     
 	@SubscribeEvent
     public void nickName(PlayerEvent.NameFormat e)
     {
-		/*if(!(e.getEntityPlayer() instanceof EntityPlayerMP))
-			return;
-		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
-		CapNick name = (CapNick) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
-    	if(!Strings.isNullOrEmpty(name.nick))
-    		e.setDisplayname(name.nick);
-    	SPacketPlayerListItem item = new SPacketPlayerListItem(SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME,player);
-    	for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
-    	{
-    		p.connection.sendPacket(item);
-    	}*/
+        if(!(e.getEntityPlayer() instanceof EntityPlayerMP))
+        {
+            return;
+        }
+        EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
+        if(player.connection == null)
+        	return;
+        CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
+        if(name == null)
+        {
+        	System.out.println("here caps null?????");
+        	return;
+        }
+     
+        if(!Strings.isNullOrEmpty(name.nick))
+        {
+        	e.setDisplayname(name.nick);
+        }
     }
 	@SubscribeEvent
     public void capeCap(CapeFixEvent e)
@@ -146,6 +173,7 @@ public class MainMod
 		e.newSkin = skin.skin;
 		e.isAlexURL = skin.isAlex;
     }
+	
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void login(PlayerLoggedInEvent e)
     {
@@ -154,8 +182,46 @@ public class MainMod
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
     	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
     	updateCaps(player,cap,true);
+    	//nick name
+    	updateNickName(player);
+    }
+	
+	@SubscribeEvent
+    public void nametag(PlayerEvent.StartTracking e)
+    {
+		if(!(e.getTarget() instanceof EntityPlayer))
+			return;
+		EntityPlayerMP u = (EntityPlayerMP) e.getEntityPlayer();
+		EntityPlayerMP other = (EntityPlayerMP) e.getTarget();
+		if(u.connection == null || other.connection == null)
+		{
+			System.out.println("returning player not properlly logged in");
+			return;
+		}
+		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
+//		updateNickName((EntityPlayerMP) e.getTarget());
     }
 
+	public static void updateNickName(EntityPlayerMP player) 
+	{
+    	player.refreshDisplayName();
+    	
+    	CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	SPacketPlayerListItem item = new SPacketPlayerListItem();
+        AddPlayerData apd = item.new AddPlayerData(player.getGameProfile(), player.ping, player.interactionManager.getGameType(), new TextComponentString(name.nick));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+        item.getEntries().add(apd);
+    	
+        for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
+        {
+            p.connection.sendPacket(item);
+        }
+        player.setCustomNameTag(name.nick);
+        System.out.println("aaaa:" + player.getCustomNameTag());
+    	
+    	NetWorkHandler.INSTANCE.sendToAll(new PacketDisplayNameRefresh(name.nick, player.getEntityId()) );
+	}
+	
 	public void updateCaps(EntityPlayerMP player, CapAbility cap,boolean updateFlying) 
 	{
 		PlayerCapabilities pcap = player.capabilities;
@@ -184,6 +250,8 @@ public class MainMod
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
 	   	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
     	updateCaps(player,cap,false);
+    	//nick name
+    	updateNickName((EntityPlayerMP) e.player);
     }
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void hurt(LivingAttackEvent e)
