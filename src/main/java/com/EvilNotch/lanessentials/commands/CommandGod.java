@@ -33,10 +33,10 @@ public class CommandGod extends CommandBase
 		EntityPlayerMP epmp = (EntityPlayerMP)sender;
 		if(epmp.isCreative() || epmp.isSpectator())
 			return;
-		epmp.capabilities.disableDamage = !epmp.capabilities.disableDamage;
-		epmp.sendPlayerAbilities();
 		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-		cap.godEnabled = epmp.capabilities.disableDamage;
+		cap.godEnabled = !cap.godEnabled;
+		epmp.capabilities.disableDamage = cap.godEnabled;
+		epmp.sendPlayerAbilities();
 	}
 
 }

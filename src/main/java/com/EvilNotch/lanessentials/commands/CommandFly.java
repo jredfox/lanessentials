@@ -32,9 +32,9 @@ public class CommandFly extends CommandBase
 		if(!(sender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP p = (EntityPlayerMP)sender;
-		p.capabilities.allowFlying = !p.capabilities.allowFlying;
 		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(p).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-		cap.flyEnabled = p.capabilities.allowFlying;
+		cap.flyEnabled = !cap.flyEnabled;
+		p.capabilities.allowFlying =  cap.flyEnabled;
 		
 		if(!p.capabilities.allowFlying)
 			p.capabilities.isFlying = false;

@@ -26,8 +26,6 @@ public class CapNick implements ICapability{
 	public void readFromNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) 
 	{
 		this.nick = nbt.getString("nick");
-		if(this.nick.equals(""))
-			this.nick = p.getName();
 	}
 
 	@Override

@@ -184,29 +184,9 @@ public class MainMod
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
     	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
     	updateCaps(player,cap,true);
+    	updateClientNicks(player);
     	updateNickName(player);
     }
-	
-	public void updateCaps(EntityPlayerMP player, CapAbility cap,boolean updateFlying) 
-	{
-		PlayerCapabilities pcap = player.capabilities;
-		boolean used = false;
-		if(!pcap.allowFlying && cap.flyEnabled)
-		{
-			pcap.allowEdit = true;
-			if(updateFlying)
-				pcap.isFlying = cap.isFlying;
-			used = true;
-		}
-		if(!pcap.disableDamage && cap.godEnabled)
-		{
-			pcap.disableDamage = true;
-			used = true;
-		}
-		if(used)
-			player.sendPlayerAbilities();
-	}
-
 	@SubscribeEvent(priority = EventPriority.LOW)
     public void respawn(PlayerRespawnEvent e)
     {
@@ -217,22 +197,6 @@ public class MainMod
     	updateCaps(player,cap,false);
     	updateNickName(player);
     }
-	@SubscribeEvent(priority = EventPriority.LOW)
-    public void hurt(LivingAttackEvent e)
-    {
-		if(!(e.getEntity() instanceof EntityPlayerMP) || e.getSource() == DamageSource.OUT_OF_WORLD)
-			return;
-		EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
-		if(player.capabilities.disableDamage)
-			return;//no need to continue if the job is already done
-		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-		if(cap.godEnabled)
-		{
-			player.capabilities.disableDamage = true;
-			player.sendPlayerAbilities();
-			e.setCanceled(true);
-		}
-    }
 	@SubscribeEvent
     public void nametag(PlayerEvent.StartTracking e)
     {
@@ -242,7 +206,6 @@ public class MainMod
 		EntityPlayerMP other = (EntityPlayerMP) e.getTarget();
 		if(u.connection == null || other.connection == null)
 		{
-			System.out.println("returning player not properlly logged in");
 			return;
 		}
 		else if(u.getEntityId() == other.getEntityId() )
@@ -253,6 +216,38 @@ public class MainMod
 		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
 		updateTrackNickName(u,other);
     }
+	
+	/**
+	 * makes player on login aware of all player nicknames
+	 */
+	public void updateClientNicks(EntityPlayerMP request) 
+	{
+		Set<? extends EntityPlayer> players = request.getServerWorld().getEntityTracker().getTrackingPlayers(request);
+		for(EntityPlayer np : request.mcServer.getPlayerList().getPlayers())
+		{
+			EntityPlayerMP newPlayer = (EntityPlayerMP)np;
+			if(!request.equals(newPlayer))
+			{
+		    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
+		    	if(Strings.isNullOrEmpty(name.nick))
+		    	{
+		    		System.out.println("returning nickname not set!");
+		    		return;
+		    	}
+		    	newPlayer.refreshDisplayName();
+		    	SPacketPlayerListItem item = new SPacketPlayerListItem();
+		        AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
+		        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+		        item.getEntries().add(apd);
+		    	
+		        request.connection.sendPacket(item);
+		        if(players.contains(newPlayer))
+		        {
+		        	NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, newPlayer.getEntityId()), request);
+		        }
+			}
+		}
+	}
 	/**
 	 * optimized version for when requesting entity is about to start tracking the player without updating it to everyone
 	 */
@@ -261,7 +256,7 @@ public class MainMod
     	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(Strings.isNullOrEmpty(name.nick))
     	{
-    		System.out.println("returning null string");
+    		System.out.println("returning nickname not set!");
     		return;
     	}
     	newPlayer.refreshDisplayName();
@@ -288,15 +283,53 @@ public class MainMod
         Set<EntityPlayerMP> players = new HashSet();
         for(EntityPlayer p : li)
         	players.add((EntityPlayerMP)p);
-        players.add(player);
     	
         for(EntityPlayerMP p : players)
         {
-            p.connection.sendPacket(item);
             if(!p.equals(player))
             {
             	NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, player.getEntityId()), p);
             }
         }
+        for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
+        {
+        	p.connection.sendPacket(item);
+        }
 	}
+	
+	public void updateCaps(EntityPlayerMP player, CapAbility cap,boolean login) 
+	{
+		PlayerCapabilities pcap = player.capabilities;
+		boolean used = false;
+		if(!pcap.allowFlying && cap.flyEnabled)
+		{
+			pcap.allowFlying = true;
+			if(login)
+				pcap.isFlying = cap.isFlying;
+			used = true;
+		}
+		if(!pcap.disableDamage && cap.godEnabled)
+		{
+			pcap.disableDamage = true;
+			used = true;
+		}
+		if(used)
+			player.sendPlayerAbilities();
+	}
+	@SubscribeEvent(priority = EventPriority.LOW)
+    public void hurt(LivingAttackEvent e)
+    {
+		if(!(e.getEntity() instanceof EntityPlayerMP) || e.getSource() == DamageSource.OUT_OF_WORLD)
+			return;
+		EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
+		if(player.capabilities.disableDamage)
+			return;//no need to continue if the job is already done
+		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+		if(cap.godEnabled)
+		{
+			player.capabilities.disableDamage = true;
+			player.sendPlayerAbilities();
+			e.setCanceled(true);
+		}
+    }
 }
