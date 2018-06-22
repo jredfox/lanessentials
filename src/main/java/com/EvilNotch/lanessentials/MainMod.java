@@ -14,18 +14,22 @@ import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.commands.CommandCape;
+import com.EvilNotch.lanessentials.commands.CommandEnderChest;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
 import com.EvilNotch.lanessentials.commands.CommandFly;
 import com.EvilNotch.lanessentials.commands.CommandGod;
+import com.EvilNotch.lanessentials.commands.CommandHat;
 import com.EvilNotch.lanessentials.commands.CommandHeal;
 import com.EvilNotch.lanessentials.commands.CommandHome;
 import com.EvilNotch.lanessentials.commands.CommandKick;
 import com.EvilNotch.lanessentials.commands.CommandNick;
+import com.EvilNotch.lanessentials.commands.CommandNuke;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
 import com.EvilNotch.lanessentials.commands.CommandSkin;
-import com.EvilNotch.lanessentials.commands.CommandSpeed;
+import com.EvilNotch.lanessentials.commands.CommandSmite;
+import com.EvilNotch.lanessentials.commands.CommandWorkBench;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandBanIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandBanPlayer;
 import com.EvilNotch.lanessentials.commands.vanilla.CommandDeOp;
@@ -38,6 +42,7 @@ import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.Config;
 import com.EvilNotch.lib.main.MainJava;
+import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.events.CapeFixEvent;
@@ -50,6 +55,8 @@ import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiDisconnected;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.command.CommandDebug;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
@@ -65,6 +72,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -108,9 +116,14 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandFly());
     	GeneralRegistry.registerCommand(new CommandGod());
     	GeneralRegistry.registerCommand(new CommandSkin());
-    	GeneralRegistry.registerCommand(new CommandSpeed());
     	GeneralRegistry.registerCommand(new CommandNick());
     	GeneralRegistry.registerCommand(new CommandCape());
+    	GeneralRegistry.registerCommand(new CommandHat());
+    	GeneralRegistry.registerCommand(new CommandWorkBench("wb"));
+    	GeneralRegistry.registerCommand(new CommandWorkBench("workbench"));
+    	GeneralRegistry.registerCommand(new CommandEnderChest());
+    	GeneralRegistry.registerCommand(new CommandSmite());
+    	GeneralRegistry.registerCommand(new CommandNuke());
     	
     	//server commands redone for client
     	if(MainJava.isClient)
@@ -148,7 +161,7 @@ public class MainMod
         CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
         if(name == null)
         {
-        	System.out.println("here caps null?????");
+//        	System.out.println("here caps null?????");
         	return;
         }
      
@@ -182,8 +195,8 @@ public class MainMod
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-    	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-    	updateCaps(player,cap,true);
+	   	CapabilityContainer c = CapabilityReg.getCapabilityConatainer(player);
+    	updateCaps(player,c,true);
     	updateClientNicks(player);
     	updateNickName(player);
     }
@@ -193,8 +206,8 @@ public class MainMod
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-    	updateCaps(player,cap,false);
+	   	CapabilityContainer c = CapabilityReg.getCapabilityConatainer(player);
+    	updateCaps(player,c,false);
     	updateNickName(player);
     }
 	@SubscribeEvent
@@ -223,16 +236,14 @@ public class MainMod
 	public void updateClientNicks(EntityPlayerMP request) 
 	{
 		Set<? extends EntityPlayer> players = request.getServerWorld().getEntityTracker().getTrackingPlayers(request);
-		for(EntityPlayer np : request.mcServer.getPlayerList().getPlayers())
+		for(EntityPlayerMP newPlayer : request.mcServer.getPlayerList().getPlayers())
 		{
-			EntityPlayerMP newPlayer = (EntityPlayerMP)np;
 			if(!request.equals(newPlayer))
 			{
 		    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
 		    	if(Strings.isNullOrEmpty(name.nick))
 		    	{
-		    		System.out.println("returning nickname not set!");
-		    		return;
+		    		continue;
 		    	}
 		    	newPlayer.refreshDisplayName();
 		    	SPacketPlayerListItem item = new SPacketPlayerListItem();
@@ -256,7 +267,6 @@ public class MainMod
     	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(Strings.isNullOrEmpty(name.nick))
     	{
-    		System.out.println("returning nickname not set!");
     		return;
     	}
     	newPlayer.refreshDisplayName();
@@ -297,8 +307,9 @@ public class MainMod
         }
 	}
 	
-	public void updateCaps(EntityPlayerMP player, CapAbility cap,boolean login) 
+	public void updateCaps(EntityPlayerMP player, CapabilityContainer container,boolean login) 
 	{
+		CapAbility cap = (CapAbility) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
 		PlayerCapabilities pcap = player.capabilities;
 		boolean used = false;
 		if(!pcap.allowFlying && cap.flyEnabled)
