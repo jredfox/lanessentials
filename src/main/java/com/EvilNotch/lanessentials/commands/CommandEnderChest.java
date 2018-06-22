@@ -1,5 +1,8 @@
 package com.EvilNotch.lanessentials.commands;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -9,6 +12,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.StatList;
 
 public class CommandEnderChest extends CommandBase{
+	
+    /**
+     * Get a list of aliases for this command. <b>Never return null!</b>
+     */
+    public List<String> getAliases()
+    {
+        return Arrays.<String>asList("enderchest");
+    }
 
 	@Override
 	public String getName() {

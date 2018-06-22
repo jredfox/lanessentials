@@ -9,6 +9,7 @@ import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
+import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -23,5 +24,6 @@ public class CapabilityProvider implements ICapabilityProvider
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "skin"), new CapSkin(),c);
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "nick"), new CapNick(),c);
 		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "cape"), new CapCape(),c);
+		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "speed"), new CapSpeed(), c);
 	}
 }

@@ -1,22 +1,18 @@
 package com.EvilNotch.lanessentials;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import org.json.simple.JSONObject;
 
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapCape;
-import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
+import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandEnderChest;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
 import com.EvilNotch.lanessentials.commands.CommandFly;
+import com.EvilNotch.lanessentials.commands.CommandFlySpeed;
 import com.EvilNotch.lanessentials.commands.CommandGod;
 import com.EvilNotch.lanessentials.commands.CommandHat;
 import com.EvilNotch.lanessentials.commands.CommandHeal;
@@ -29,69 +25,55 @@ import com.EvilNotch.lanessentials.commands.CommandSetHome;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
 import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSmite;
+import com.EvilNotch.lanessentials.commands.CommandWalkSpeed;
 import com.EvilNotch.lanessentials.commands.CommandWorkBench;
-import com.EvilNotch.lanessentials.commands.vanilla.CommandBanIp;
-import com.EvilNotch.lanessentials.commands.vanilla.CommandBanPlayer;
-import com.EvilNotch.lanessentials.commands.vanilla.CommandDeOp;
-import com.EvilNotch.lanessentials.commands.vanilla.CommandOp;
-import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonIp;
-import com.EvilNotch.lanessentials.commands.vanilla.CommandPardonPlayer;
+import com.EvilNotch.lanessentials.commands.vanilla.CMDBanIp;
+import com.EvilNotch.lanessentials.commands.vanilla.CMDBanPlayer;
+import com.EvilNotch.lanessentials.commands.vanilla.CMDDeOp;
+import com.EvilNotch.lanessentials.commands.vanilla.CMDOp;
+import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonIp;
+import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonPlayer;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.Config;
 import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.events.CapeFixEvent;
 import com.EvilNotch.lib.minecraft.events.SkinFixEvent;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
-import com.EvilNotch.lib.util.JavaUtil;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiDisconnected;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.command.CommandDebug;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
+import net.minecraft.command.server.CommandBroadcast;
+import net.minecraft.command.server.CommandListBans;
+import net.minecraft.command.server.CommandListPlayers;
+import net.minecraft.command.server.CommandSaveAll;
+import net.minecraft.command.server.CommandSaveOff;
+import net.minecraft.command.server.CommandSaveOn;
+import net.minecraft.command.server.CommandStop;
+import net.minecraft.command.server.CommandWhitelist;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
-import net.minecraft.init.Items;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.network.play.server.SPacketPlayerListItem.AddPlayerData;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:evilnotchlib")
@@ -119,22 +101,33 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandNick());
     	GeneralRegistry.registerCommand(new CommandCape());
     	GeneralRegistry.registerCommand(new CommandHat());
-    	GeneralRegistry.registerCommand(new CommandWorkBench("wb"));
-    	GeneralRegistry.registerCommand(new CommandWorkBench("workbench"));
+    	GeneralRegistry.registerCommand(new CommandWorkBench());
     	GeneralRegistry.registerCommand(new CommandEnderChest());
     	GeneralRegistry.registerCommand(new CommandSmite());
     	GeneralRegistry.registerCommand(new CommandNuke());
     	
+    	GeneralRegistry.registerCommand(new CommandWalkSpeed());
+        GeneralRegistry.registerCommand(new CommandFlySpeed());
+    	
     	//server commands redone for client
     	if(MainJava.isClient)
     	{
+    		GeneralRegistry.registerCommand(new CMDBanIp());
+    		GeneralRegistry.registerCommand(new CMDBanPlayer());
+    		GeneralRegistry.registerCommand(new CommandBroadcast());
+    		GeneralRegistry.registerCommand(new CMDDeOp());
+    		GeneralRegistry.registerCommand(new CommandListBans());
+    		GeneralRegistry.registerCommand(new CommandListPlayers());
+     		GeneralRegistry.registerCommand(new CMDOp());
+    		GeneralRegistry.registerCommand(new CMDPardonPlayer());
+    		GeneralRegistry.registerCommand(new CMDPardonIp());
+    		GeneralRegistry.registerCommand(new CommandSaveAll());
+    		GeneralRegistry.registerCommand(new CommandSaveOff());
+    		GeneralRegistry.registerCommand(new CommandSaveOn());
+    		GeneralRegistry.registerCommand(new CommandStop());
+    		GeneralRegistry.registerCommand(new CommandWhitelist());
+    		
     		GeneralRegistry.registerCommand(new CommandKick());
-    		GeneralRegistry.registerCommand(new CommandBanIp());
-    		GeneralRegistry.registerCommand(new CommandBanPlayer());
-    		GeneralRegistry.registerCommand(new CommandDeOp());
-    		GeneralRegistry.registerCommand(new CommandOp());
-    		GeneralRegistry.registerCommand(new CommandPardonIp());
-    		GeneralRegistry.registerCommand(new CommandPardonPlayer());
     		GeneralRegistry.registerCommand(new CommandDebug());
     	}
     	/*
@@ -310,6 +303,7 @@ public class MainMod
 	public void updateCaps(EntityPlayerMP player, CapabilityContainer container,boolean login) 
 	{
 		CapAbility cap = (CapAbility) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+		CapSpeed speed = (CapSpeed) container.getCapability( new ResourceLocation(Reference.MODID + ":" + "speed"));
 		PlayerCapabilities pcap = player.capabilities;
 		boolean used = false;
 		if(!pcap.allowFlying && cap.flyEnabled)
@@ -324,6 +318,18 @@ public class MainMod
 			pcap.disableDamage = true;
 			used = true;
 		}
+		if(speed.hasFlySpeed)
+        {
+//			System.out.println("hasFly::::::::::<<<<<<<<<<<<<<<<<<<<<<<?????>>>>>>>>>>>>>>>>>>>>>>>>");
+            ReflectionUtil.setObject(pcap, speed.fly, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "flySpeed"));
+            used = true;
+        }
+        if(speed.hasWalkSpeed)
+        {
+//        	System.out.println("waling around______________________________.........^^^^&&&&");
+        	ReflectionUtil.setObject(pcap, speed.walk, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "walkSpeed"));
+            used = true;
+        }
 		if(used)
 			player.sendPlayerAbilities();
 	}

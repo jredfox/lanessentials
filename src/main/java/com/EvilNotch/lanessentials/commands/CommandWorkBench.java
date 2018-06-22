@@ -1,5 +1,8 @@
 package com.EvilNotch.lanessentials.commands;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.EvilNotch.lanessentials.contianer.ContainerWB;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 
@@ -25,21 +28,27 @@ import net.minecraft.world.World;
 
 public class CommandWorkBench extends CommandBase{
 	
-	public String name = null;
 	
-	public CommandWorkBench(String s)
+	public CommandWorkBench()
 	{
-		this.name = s;
+		
 	}
+    /**
+     * Get a list of aliases for this command. <b>Never return null!</b>
+     */
+    public List<String> getAliases()
+    {
+        return Arrays.<String>asList("wb");
+    }
 
 	@Override
 	public String getName() {
-		return this.name;
+		return "workbench";
 	}
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/" + this.name;
+		return "/workbench";
 	}
 
 	@Override
