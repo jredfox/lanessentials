@@ -28,7 +28,7 @@ public class CommandWalkSpeed extends CommandBase
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/walkspeed float";
+		return "/walkspeed [float]";
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class CommandNuke extends CommandBase{
        }
    }
    
-   private int getHighestBlockYAt(WorldServer w, BlockPos loc) 
+   public int getHighestBlockYAt(WorldServer w, BlockPos loc) 
    {
 	   return  w.getHeight(loc).getY();
    }

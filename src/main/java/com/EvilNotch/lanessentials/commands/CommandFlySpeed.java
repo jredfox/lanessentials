@@ -29,7 +29,7 @@ public class CommandFlySpeed extends CommandBase
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/flyspeed float";
+		return "/flyspeed [float]";
 	}
 
 	@Override

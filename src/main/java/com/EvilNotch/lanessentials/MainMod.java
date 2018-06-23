@@ -8,6 +8,7 @@ import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
+import com.EvilNotch.lanessentials.client.GuiEventReceiver;
 import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandEnderChest;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
@@ -87,6 +88,7 @@ public class MainMod
     	System.out.print("[Lan Essentials] Loading and Registering Commands session:");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
+    	MinecraftForge.EVENT_BUS.register(new GuiEventReceiver());
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
@@ -105,7 +107,6 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandEnderChest());
     	GeneralRegistry.registerCommand(new CommandSmite());
     	GeneralRegistry.registerCommand(new CommandNuke());
-    	
     	GeneralRegistry.registerCommand(new CommandWalkSpeed());
         GeneralRegistry.registerCommand(new CommandFlySpeed());
     	
@@ -130,6 +131,7 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandKick());
     		GeneralRegistry.registerCommand(new CommandDebug());
     	}
+    	
     	/*
     	 * adds ability without ASM to have more domain urls for skins/capes
     	 */
