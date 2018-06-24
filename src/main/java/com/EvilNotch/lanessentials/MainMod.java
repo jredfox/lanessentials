@@ -92,7 +92,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 public class MainMod
 {
 	
-	public static HashMap<Integer,String> ports = new HashMap<Integer,String>();
 	@SidedProxy(clientSide = "com.EvilNotch.lanessentials.proxy.ClientProxy", serverSide = "com.EvilNotch.lanessentials.proxy.ServerProxy")
 	public static ServerProxy proxy;
 
@@ -166,17 +165,7 @@ public class MainMod
     	if(!MainJava.isClient && CfgLanEssentials.portForwardDedicated)
     	{
     		System.out.println("Starting port forwarding dedicated Server!");
-            //separate thread so minecraft doesn't freeze
-            Thread t = new Thread(
-         		   
-            new Runnable() 
-            { 
-         	   public void run() 
-         	   { 
-         		   MainMod.doPortForwarding(event.getServer().getServerPort(),CfgLanEssentials.dedicatedPortProtocal);
-         	   }
-            });
-            t.start();
+    		LanUtil.schedulePortForwarding(event.getServer().getServerPort(),CfgLanEssentials.dedicatedPortProtocal);
     	}
     }
     /**
@@ -189,46 +178,10 @@ public class MainMod
     	{
     		long time = System.currentTimeMillis();
         	System.out.println("Stopping All MC Port Entrys from the router!");
-    		stopPorts();
+    		LanUtil.stopPorts();
     		JavaUtil.printTime(time, "Done Closing Ports:");
     	}
-    	ports.clear();
     }
-	public static void stopPorts() 
-	{
-    	Iterator<Map.Entry<Integer,String>> it = ports.entrySet().iterator();
-    	while(it.hasNext())
-    	{
-    		Map.Entry<Integer, String> pair = it.next();
-    		int port = pair.getKey();
-    		String protocal = pair.getValue();
-    		boolean tcp = protocal.equals("TCP") || protocal.equals("BOTH");
-    		boolean udp =  protocal.equals("UDP") || protocal.equals("BOTH");
-    		if(tcp)
-    			UPnP.closePortTCP(port);
-    		if(udp)
-    			UPnP.closePortUDP(port);
-    	}
-		
-	}
-	public static void doPortForwarding(int port,String protocal)
-	{
-		System.out.println("debugger");
-		long time = System.currentTimeMillis();
-		boolean tcp = protocal.equals("TCP") || protocal.equals("BOTH");
-		boolean udp =  protocal.equals("UDP") || protocal.equals("BOTH");
-		if(udp)
-		{
-			System.out.println("port opened UDP:" + UPnP.openPortUDP(port) + " on port:" + port);
-		}
-		if(tcp)
-		{
-			System.out.println("port opened TCP:" + UPnP.openPortTCP(port) + " on port:" + port);
-		}
-		ports.put(port, protocal);
-		System.out.println("mapping:" + UPnP.isUPnPAvailable());
-		System.out.println("time:" + (System.currentTimeMillis()-time) + "ms");
-	}
     
 	@SubscribeEvent
     public void nickName(PlayerEvent.NameFormat e)

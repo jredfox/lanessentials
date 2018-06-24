@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.EvilNotch.lanessentials.LanUtil;
 import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.dosse.upnp.UPnP;
@@ -77,23 +78,17 @@ public class GuiShareToLan2 extends GuiShareToLan {
            this.mc.displayGuiScreen((GuiScreen)null);
            String s = shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
            
-           //separate thread so minecraft doesn't freeze
-           Thread t = new Thread(
-        		   
-           new Runnable() 
-           { 
-        	   public void run() 
-        	   { 
-        		   MainMod.doPortForwarding(GuiShareToLan2.this.port,"TCP");
-        	   }
-           });
-           t.start();
+
            
            ITextComponent itextcomponent;
 
            if (s != null)
            {
                itextcomponent = new TextComponentTranslation("commands.publish.started", new Object[] {s});
+               
+               //separate thread so minecraft doesn't freeze
+               System.out.println("Starting Port Forwarding:");
+               LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
            }
            else
            {
@@ -102,7 +97,6 @@ public class GuiShareToLan2 extends GuiShareToLan {
 
            this.mc.ingameGUI.getChatGUI().printChatMessage(itextcomponent);
 	   }
-		   
    }
    
    public boolean getCheats() {
