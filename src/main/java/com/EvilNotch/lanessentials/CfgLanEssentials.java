@@ -8,6 +8,9 @@ public class CfgLanEssentials {
 	
 	public static int maxHomeCount = 3;
 	public static boolean overrideCape = false;
+	public static boolean portForwardDedicated = true;
+	public static String dedicatedPortProtocal = "TCP";
+	public static boolean closePort = true;
 	
 	public static void loadConfig(File dir)
 	{
@@ -15,7 +18,10 @@ public class CfgLanEssentials {
 		cfg.load();
 		maxHomeCount = cfg.get("general", "maxHomeCount", maxHomeCount).getInt();
 		overrideCape = cfg.get("general", "keepURLCapeAlways", overrideCape).getBoolean();
+		portForwardDedicated = cfg.get("network", "portForwardDedicatedServer", portForwardDedicated).getBoolean();
+		cfg.addCustomCategoryComment("network", "Protocal can be \"TCP\",\"UDP\", or \"BOTH\"");
+		dedicatedPortProtocal = cfg.get("network", "portForwardDedicatedProtocal", "TCP").getString().toUpperCase();
+		closePort = cfg.get("network", "closePortOnShutdown", closePort).getBoolean();
 		cfg.save();
 	}
-
 }

@@ -5,9 +5,11 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.dosse.upnp.UPnP;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiShareToLan;
@@ -23,7 +25,6 @@ import net.minecraft.world.GameType;
 public class GuiShareToLan2 extends GuiShareToLan {
    private GuiTextField txtPort;
    private static int port;
-   public static Set<Integer> ports = new HashSet<Integer>();
 
    public GuiShareToLan2(GuiScreen par1GuiScreen) {
       super(par1GuiScreen);
@@ -64,7 +65,6 @@ public class GuiShareToLan2 extends GuiShareToLan {
 		} catch (IOException e) {}
       }
       
-      
       ((GuiButton)this.buttonList.get(0)).enabled = port >= 10000 && port <= '\uffff';
    }
    @Override
@@ -76,7 +76,19 @@ public class GuiShareToLan2 extends GuiShareToLan {
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
            String s = shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
-           doPortForwarding(this.port);
+           
+           //separate thread so minecraft doesn't freeze
+           Thread t = new Thread(
+        		   
+           new Runnable() 
+           { 
+        	   public void run() 
+        	   { 
+        		   MainMod.doPortForwarding(GuiShareToLan2.this.port,"TCP");
+        	   }
+           });
+           t.start();
+           
            ITextComponent itextcomponent;
 
            if (s != null)
@@ -129,7 +141,6 @@ public class GuiShareToLan2 extends GuiShareToLan {
            }
            if(port == -1)
         	   port = a;
-           ports.add(port);
            IntegratedServer server = this.mc.getIntegratedServer();
            server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
            ReflectionUtil.setObject(server, true, IntegratedServer.class, "isPublic");
@@ -147,18 +158,6 @@ public class GuiShareToLan2 extends GuiShareToLan {
            return null;
        }
    }
-	public static void doPortForwarding(int port)
-	{
-		System.out.println("debugger");
-		long time = System.currentTimeMillis();
-		UPnP.closePortUDP(port);
-		UPnP.closePortTCP(port);
-		
-		System.out.println("port opened UDP:" + UPnP.openPortUDP(port) + " on port:" + port);
-		System.out.println("port opened TCP:" + UPnP.openPortTCP(port) + " on port:" + port);
-		System.out.println("mapping:" + UPnP.isUPnPAvailable());
-		System.out.println("time:" + (System.currentTimeMillis()-time) + "ms");
-	}
    
 /*   @Override
    protected void actionPerformed(GuiButton button) throws IOException

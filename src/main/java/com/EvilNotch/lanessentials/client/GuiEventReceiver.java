@@ -14,7 +14,7 @@ public class GuiEventReceiver {
    {
 	  if(event.getGui() instanceof GuiShareToLan && !(event.getGui() instanceof GuiShareToLan2)) 
 	  {
-//		 event.setGui(new GuiShareToLan2(this.last));
+		 event.setGui(new GuiShareToLan2(this.last));
          System.out.println("CustomLanPorts: replacing GUI");
       } 
 	  else 

@@ -1,6 +1,9 @@
 package com.EvilNotch.lanessentials;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
@@ -9,6 +12,7 @@ import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 import com.EvilNotch.lanessentials.client.GuiEventReceiver;
+import com.EvilNotch.lanessentials.client.GuiShareToLan2;
 import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandEnderChest;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
@@ -36,6 +40,7 @@ import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonPlayer;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
+import com.EvilNotch.lanessentials.proxy.ServerProxy;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.Config;
@@ -45,6 +50,8 @@ import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.events.CapeFixEvent;
 import com.EvilNotch.lib.minecraft.events.SkinFixEvent;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
+import com.EvilNotch.lib.util.JavaUtil;
+import com.dosse.upnp.UPnP;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
@@ -69,9 +76,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -80,6 +91,10 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:evilnotchlib")
 public class MainMod
 {
+	
+	public static HashMap<Integer,String> ports = new HashMap<Integer,String>();
+	@SidedProxy(clientSide = "com.EvilNotch.lanessentials.proxy.ClientProxy", serverSide = "com.EvilNotch.lanessentials.proxy.ServerProxy")
+	public static ServerProxy proxy;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -88,7 +103,7 @@ public class MainMod
     	System.out.print("[Lan Essentials] Loading and Registering Commands session:");
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
-    	MinecraftForge.EVENT_BUS.register(new GuiEventReceiver());
+    	proxy.preinit();
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
@@ -142,6 +157,78 @@ public class MainMod
     {
     	NetWorkHandler.init();
     }
+    /**
+     * port forward on dedicated servers
+     */
+    @EventHandler
+    public void starting(FMLServerStartingEvent event)
+    {
+    	if(!MainJava.isClient && CfgLanEssentials.portForwardDedicated)
+    	{
+    		System.out.println("Starting port forwarding dedicated Server!");
+            //separate thread so minecraft doesn't freeze
+            Thread t = new Thread(
+         		   
+            new Runnable() 
+            { 
+         	   public void run() 
+         	   { 
+         		   MainMod.doPortForwarding(event.getServer().getServerPort(),CfgLanEssentials.dedicatedPortProtocal);
+         	   }
+            });
+            t.start();
+    	}
+    }
+    /**
+     * Close ports on shutdown!
+     */
+    @EventHandler
+    public void stopping(FMLServerStoppedEvent event)
+    {
+    	if(CfgLanEssentials.closePort)
+    	{
+    		long time = System.currentTimeMillis();
+        	System.out.println("Stopping All MC Port Entrys from the router!");
+    		stopPorts();
+    		JavaUtil.printTime(time, "Done Closing Ports:");
+    	}
+    	ports.clear();
+    }
+	public static void stopPorts() 
+	{
+    	Iterator<Map.Entry<Integer,String>> it = ports.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry<Integer, String> pair = it.next();
+    		int port = pair.getKey();
+    		String protocal = pair.getValue();
+    		boolean tcp = protocal.equals("TCP") || protocal.equals("BOTH");
+    		boolean udp =  protocal.equals("UDP") || protocal.equals("BOTH");
+    		if(tcp)
+    			UPnP.closePortTCP(port);
+    		if(udp)
+    			UPnP.closePortUDP(port);
+    	}
+		
+	}
+	public static void doPortForwarding(int port,String protocal)
+	{
+		System.out.println("debugger");
+		long time = System.currentTimeMillis();
+		boolean tcp = protocal.equals("TCP") || protocal.equals("BOTH");
+		boolean udp =  protocal.equals("UDP") || protocal.equals("BOTH");
+		if(udp)
+		{
+			System.out.println("port opened UDP:" + UPnP.openPortUDP(port) + " on port:" + port);
+		}
+		if(tcp)
+		{
+			System.out.println("port opened TCP:" + UPnP.openPortTCP(port) + " on port:" + port);
+		}
+		ports.put(port, protocal);
+		System.out.println("mapping:" + UPnP.isUPnPAvailable());
+		System.out.println("time:" + (System.currentTimeMillis()-time) + "ms");
+	}
     
 	@SubscribeEvent
     public void nickName(PlayerEvent.NameFormat e)
