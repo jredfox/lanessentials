@@ -17,12 +17,14 @@ public class CommandFly extends CommandBase
 {
 
 	@Override
-	public String getName() {
+	public String getName() 
+	{
 		return "fly";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) 
+	{
 		return "/fly";
 	}
 

@@ -1,5 +1,6 @@
 package com.EvilNotch.lanessentials.commands;
 
+import com.EvilNotch.lanessentials.LanFeilds;
 import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 import com.EvilNotch.lib.Api.MCPMappings;
@@ -46,7 +47,7 @@ public class CommandWalkSpeed extends CommandBase
 				throw new WrongUsageException(getUsage(sender),new Object[0]);
 			float walkspeed = Float.parseFloat(strfloat);
 			PlayerCapabilities pc = epmp.capabilities;
-			ReflectionUtil.setObject(pc, walkspeed, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "walkSpeed"));
+			ReflectionUtil.setObject(pc, walkspeed, PlayerCapabilities.class, LanFeilds.walkSpeed);
 			cap.walk = walkspeed;
 			cap.hasWalkSpeed = true;
 			epmp.sendPlayerAbilities();
@@ -56,7 +57,7 @@ public class CommandWalkSpeed extends CommandBase
 			float defaultWalk = 0.1F;
 			EntityPlayerMP epmp = (EntityPlayerMP)sender;
 			PlayerCapabilities pc = epmp.capabilities;
-			ReflectionUtil.setObject(pc, defaultWalk, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "walkSpeed"));
+			ReflectionUtil.setObject(pc, defaultWalk, PlayerCapabilities.class, LanFeilds.walkSpeed);
 			cap.walk = 0;
 			cap.hasWalkSpeed = false;
 			epmp.sendPlayerAbilities();

@@ -6,7 +6,6 @@ import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.EvilNotch.lib.Api.MCPMappings;
-import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 
 import net.minecraft.command.CommandBase;

@@ -1,9 +1,6 @@
 package com.EvilNotch.lanessentials;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
@@ -11,8 +8,8 @@ import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
-import com.EvilNotch.lanessentials.client.GuiEventReceiver;
-import com.EvilNotch.lanessentials.client.GuiShareToLan2;
+import com.EvilNotch.lanessentials.client.CommandIP;
+import com.EvilNotch.lanessentials.client.CommandPublicIP;
 import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandEnderChest;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
@@ -25,6 +22,7 @@ import com.EvilNotch.lanessentials.commands.CommandHome;
 import com.EvilNotch.lanessentials.commands.CommandKick;
 import com.EvilNotch.lanessentials.commands.CommandNick;
 import com.EvilNotch.lanessentials.commands.CommandNuke;
+import com.EvilNotch.lanessentials.commands.CommandServerIP;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
@@ -51,7 +49,6 @@ import com.EvilNotch.lib.minecraft.events.CapeFixEvent;
 import com.EvilNotch.lib.minecraft.events.SkinFixEvent;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 import com.EvilNotch.lib.util.JavaUtil;
-import com.dosse.upnp.UPnP;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
@@ -76,13 +73,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -103,6 +99,7 @@ public class MainMod
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
     	proxy.preinit();
+    	LanFeilds.cacheMCP();
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
@@ -141,6 +138,7 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandSaveOn());
     		GeneralRegistry.registerCommand(new CommandStop());
     		GeneralRegistry.registerCommand(new CommandWhitelist());
+    		GeneralRegistry.registerCommand(new CommandServerIP());
     		
     		GeneralRegistry.registerCommand(new CommandKick());
     		GeneralRegistry.registerCommand(new CommandDebug());
@@ -283,7 +281,7 @@ public class MainMod
 		    	newPlayer.refreshDisplayName();
 		    	SPacketPlayerListItem item = new SPacketPlayerListItem();
 		        AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
-		        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+		        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
 		        item.getEntries().add(apd);
 		    	
 		        request.connection.sendPacket(item);
@@ -307,7 +305,7 @@ public class MainMod
     	newPlayer.refreshDisplayName();
     	SPacketPlayerListItem item = new SPacketPlayerListItem();
         AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
         item.getEntries().add(apd);
     	
         request.connection.sendPacket(item);
@@ -321,7 +319,7 @@ public class MainMod
     	player.refreshDisplayName();
     	SPacketPlayerListItem item = new SPacketPlayerListItem();
         AddPlayerData apd = item.new AddPlayerData(player.getGameProfile(), player.ping, player.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, "action"));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
         item.getEntries().add(apd);
         
         Set<? extends EntityPlayer> li = player.getServerWorld().getEntityTracker().getTrackingPlayers(player);
@@ -363,13 +361,13 @@ public class MainMod
 		if(speed.hasFlySpeed)
         {
 //			System.out.println("hasFly::::::::::<<<<<<<<<<<<<<<<<<<<<<<?????>>>>>>>>>>>>>>>>>>>>>>>>");
-            ReflectionUtil.setObject(pcap, speed.fly, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "flySpeed"));
+            ReflectionUtil.setObject(pcap, speed.fly, PlayerCapabilities.class, LanFeilds.flySpeed);
             used = true;
         }
         if(speed.hasWalkSpeed)
         {
 //        	System.out.println("waling around______________________________.........^^^^&&&&");
-        	ReflectionUtil.setObject(pcap, speed.walk, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "walkSpeed"));
+        	ReflectionUtil.setObject(pcap, speed.walk, PlayerCapabilities.class, LanFeilds.walkSpeed);
             used = true;
         }
 		if(used)

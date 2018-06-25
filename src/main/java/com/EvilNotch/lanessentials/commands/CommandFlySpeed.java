@@ -1,5 +1,6 @@
 package com.EvilNotch.lanessentials.commands;
 
+import com.EvilNotch.lanessentials.LanFeilds;
 import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 import com.EvilNotch.lib.Api.MCPMappings;
@@ -48,7 +49,7 @@ public class CommandFlySpeed extends CommandBase
 			
 			float flyspeed = Float.parseFloat(strfloat);
 			PlayerCapabilities pc = epmp.capabilities;
-			ReflectionUtil.setObject(pc, flyspeed, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "flySpeed"));
+			ReflectionUtil.setObject(pc, flyspeed, PlayerCapabilities.class, LanFeilds.flySpeed);
 			cap.fly = flyspeed;
 			cap.hasFlySpeed = true;
 			epmp.sendPlayerAbilities();
@@ -58,7 +59,7 @@ public class CommandFlySpeed extends CommandBase
 			float defaultFly = 0.05F;
 			EntityPlayerMP epmp = (EntityPlayerMP)sender;
 			PlayerCapabilities pc = epmp.capabilities;
-			ReflectionUtil.setObject(pc, defaultFly, PlayerCapabilities.class, MCPMappings.getField(PlayerCapabilities.class, "flySpeed"));
+			ReflectionUtil.setObject(pc, defaultFly, PlayerCapabilities.class, LanFeilds.flySpeed);
 			cap.fly = 0;
 			cap.hasFlySpeed = false;
 			epmp.sendPlayerAbilities();

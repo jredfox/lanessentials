@@ -19,8 +19,8 @@ public class CfgLanEssentials {
 		maxHomeCount = cfg.get("general", "maxHomeCount", maxHomeCount).getInt();
 		overrideCape = cfg.get("general", "keepURLCapeAlways", overrideCape).getBoolean();
 		portForwardDedicated = cfg.get("network", "portForwardDedicatedServer", portForwardDedicated).getBoolean();
-		cfg.addCustomCategoryComment("network", "Protocal can be \"TCP\",\"UDP\", or \"BOTH\"");
-		dedicatedPortProtocal = cfg.get("network", "portForwardDedicatedProtocal", "TCP").getString().toUpperCase();
+		cfg.addCustomCategoryComment("network", "Protocal can be either \"TCP\", or \"UDP\"");
+		dedicatedPortProtocal = cfg.get("network", "portForwardDedicatedProtocal", dedicatedPortProtocal).getString().toUpperCase();
 		closePort = cfg.get("network", "closePortOnShutdown", closePort).getBoolean();
 		cfg.save();
 	}

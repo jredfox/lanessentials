@@ -23,7 +23,7 @@ public class ContainerWB extends ContainerWorkbench{
      */
     public boolean canInteractWith(EntityPlayer playerIn)
     {
-       return playerIn.getDistanceSq((double)this.p.getX() + 0.5D, (double)this.p.getY() + 0.5D, (double)this.p.getZ() + 0.5D) <= 64.0D;
+       return true;
     }
 
 }

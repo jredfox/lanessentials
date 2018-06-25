@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.EvilNotch.lanessentials.LanFeilds;
 import com.EvilNotch.lanessentials.LanUtil;
 import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lib.Api.ReflectionUtil;
@@ -78,7 +79,7 @@ public class GuiShareToLan2 extends GuiShareToLan {
            this.mc.displayGuiScreen((GuiScreen)null);
            String s = shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
            
-
+           LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
            
            ITextComponent itextcomponent;
 
@@ -88,7 +89,6 @@ public class GuiShareToLan2 extends GuiShareToLan {
                
                //separate thread so minecraft doesn't freeze
                System.out.println("Starting Port Forwarding:");
-               LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
            }
            else
            {
@@ -100,12 +100,12 @@ public class GuiShareToLan2 extends GuiShareToLan {
    }
    
    public boolean getCheats() {
-	   return (Boolean)ReflectionUtil.getObject(this, GuiShareToLan.class, "allowCheats");
+	   return (Boolean)ReflectionUtil.getObject(this, GuiShareToLan.class, LanFeildsClient.allowCheats);
    }
 
    public String getGameMode() 
    {
-	   return (String)ReflectionUtil.getObject(this, GuiShareToLan.class, "gameMode");
+	   return (String)ReflectionUtil.getObject(this, GuiShareToLan.class, LanFeildsClient.gameMode);
    }
 
    /**
@@ -137,9 +137,9 @@ public class GuiShareToLan2 extends GuiShareToLan {
         	   port = a;
            IntegratedServer server = this.mc.getIntegratedServer();
            server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
-           ReflectionUtil.setObject(server, true, IntegratedServer.class, "isPublic");
+           ReflectionUtil.setObject(server, true, IntegratedServer.class, LanFeildsClient.isPublic);
            ThreadLanServerPing ping = new ThreadLanServerPing(server.getMOTD(), port + "");
-           ReflectionUtil.setFinalObject(server, ping, IntegratedServer.class, "lanServerPing");
+           ReflectionUtil.setObject(server, ping, IntegratedServer.class, LanFeildsClient.lanServerPing);
            
            ping.start();
            server.getPlayerList().setGameType(type);
