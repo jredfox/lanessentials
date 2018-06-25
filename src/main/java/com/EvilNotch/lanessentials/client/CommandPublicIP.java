@@ -13,8 +13,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.client.IClientCommand;
 
-public class CommandPublicIP extends CommandBase{
+public class CommandPublicIP extends CommandBase implements IClientCommand{
 	
     /**
      * Return the required permission level for this command.
@@ -48,6 +49,11 @@ public class CommandPublicIP extends CommandBase{
 		{
 			EntityUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch public ip adress");
 		}
+	}
+
+	@Override
+	public boolean allowUsageWithoutPrefix(ICommandSender sender, String message) {
+		return true;
 	}
 
 }
