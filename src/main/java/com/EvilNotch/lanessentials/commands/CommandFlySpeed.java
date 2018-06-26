@@ -1,7 +1,7 @@
 package com.EvilNotch.lanessentials.commands;
 
-import com.EvilNotch.lanessentials.LanFeilds;
 import com.EvilNotch.lanessentials.Reference;
+import com.EvilNotch.lanessentials.api.LanFeilds;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;

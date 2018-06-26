@@ -33,7 +33,7 @@ public class ClientProxy extends ServerProxy{
 			GameProfile profile = Minecraft.getMinecraft().getSession().getProfile();
 			SkinUpdater.getSkinData(profile.getName().toLowerCase());
 			JavaUtil.printTime(time, "Done Caching Client's Skin:");
-	    	if(!MainMod.skinCache.exists() && !SkinUpdater.uuids.isEmpty())
+	    	if(!SkinUpdater.skinCache.exists() && !SkinUpdater.uuids.isEmpty())
 	    	{
 	    		System.out.println("Saving UUID Cache:");
 	    		SkinUpdater.saveSkinCache();

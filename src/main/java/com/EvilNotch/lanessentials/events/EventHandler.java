@@ -114,7 +114,7 @@ public class EventHandler {
 			return;
 		else if(u.getEntityId() == other.getEntityId() )
 			return;
-		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
+//		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
 		CapUtil.updateTrackNickName(u,other);
     }
 	

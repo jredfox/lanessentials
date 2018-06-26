@@ -1,6 +1,7 @@
 package com.EvilNotch.lanessentials.api;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.EvilNotch.lanessentials.CfgLanEssentials;
 import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.capabilities.CapCape;
@@ -61,6 +63,7 @@ public class SkinUpdater {
 	
 	public static List<SkinData> data = new ArrayList<SkinData>();
 	public static HashMap<String,String> uuids = new HashMap();
+	public static File skinCache = null;
 	
 	public static void updateSkin(String username,EntityPlayerMP player,boolean packets,boolean alexURL) throws WrongUsageException
 	{
@@ -77,7 +80,7 @@ public class SkinUpdater {
 	
 	public static void updateSkin(String username,PropertyMap pm,EntityPlayerMP sender,boolean alexURL) throws WrongUsageException
 	{
-		if(SkinUpdater.data.size() > Config.maxSkinCache)
+		if(SkinUpdater.data.size() > CfgLanEssentials.maxSkinCache)
 		{
 			SkinUpdater.data.clear();
 		}
@@ -517,12 +520,12 @@ public class SkinUpdater {
 	}
 	public static void parseSkinCache() 
 	{
-		if(MainMod.skinCache.exists())
+		if(skinCache.exists())
 		{
 			try
 			{
 				JSONParser parser = new JSONParser();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(MainMod.skinCache),StandardCharsets.UTF_8) );
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(skinCache),StandardCharsets.UTF_8) );
 				JSONArray arr = (JSONArray) parser.parse(reader);
 				Iterator<JSONObject> it = arr.iterator();
 				while(it.hasNext())
@@ -538,7 +541,7 @@ public class SkinUpdater {
 					long oldDay = JavaUtil.getDays(time);
 					long newDay = JavaUtil.getDays(System.currentTimeMillis());
 					long daysPassed = newDay-oldDay;
-					if(daysPassed >= Config.maxSkinCacheDays)
+					if(daysPassed >= CfgLanEssentials.maxSkinCacheDays)
 					{
 						System.out.println("skipping style skinDays:" + daysPassed + " skin:" + name);
 						continue;
@@ -559,7 +562,7 @@ public class SkinUpdater {
 	
 	public static void saveSkinCache() 
 	{
-		if(SkinUpdater.data.size() > Config.maxSkinCache)
+		if(SkinUpdater.data.size() > CfgLanEssentials.maxSkinCache)
 		{
 			SkinUpdater.data.clear();
 		}
@@ -574,18 +577,18 @@ public class SkinUpdater {
 			json.put("value", valueJson);
 			arr.add(json);
 		}
-		if(!MainMod.skinCache.exists())
+		if(!skinCache.exists())
 		{
 			try 
 			{
-				MainMod.skinCache.createNewFile();
+				skinCache.createNewFile();
 			} 
 			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
 		}
-		JavaUtil.saveFileLines(JavaUtil.asArray(new String[]{arr.toJSONString()}), MainMod.skinCache, true);
+		JavaUtil.saveFileLines(JavaUtil.asArray(new String[]{arr.toJSONString()}), skinCache, true);
 	}
 	public static void setCape(EntityPlayer player, String url,boolean packets) throws WrongUsageException 
 	{

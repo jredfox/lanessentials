@@ -3,7 +3,6 @@ package com.EvilNotch.lanessentials.api;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.EvilNotch.lanessentials.LanFeilds;
 import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapNick;

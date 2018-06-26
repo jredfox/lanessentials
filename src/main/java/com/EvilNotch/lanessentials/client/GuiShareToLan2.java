@@ -5,8 +5,8 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.EvilNotch.lanessentials.LanFeilds;
 import com.EvilNotch.lanessentials.MainMod;
+import com.EvilNotch.lanessentials.api.LanFeilds;
 import com.EvilNotch.lanessentials.api.LanUtil;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.dosse.upnp.UPnP;
@@ -79,16 +79,13 @@ public class GuiShareToLan2 extends GuiShareToLan {
            this.mc.displayGuiScreen((GuiScreen)null);
            String s = shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
            
-           LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
+//           LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
            
            ITextComponent itextcomponent;
 
            if (s != null)
            {
                itextcomponent = new TextComponentTranslation("commands.publish.started", new Object[] {s});
-               
-               //separate thread so minecraft doesn't freeze
-               System.out.println("Starting Port Forwarding:");
            }
            else
            {

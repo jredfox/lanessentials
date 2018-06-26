@@ -27,7 +27,7 @@ public class PacketNickHandler extends MessegeBase<PacketDisplayNameRefresh>{
 				System.out.println("Recieved Packet NickName For Invalid PlayerID:" + message.id + " debug:" + client.world.playerEntities);
 				return;
 			}
-			System.out.println("setting player:" + player.getName() + " > " + message.nick);
+//			System.out.println("setting player:" + player.getName() + " > " + message.nick);
 			ReflectionUtil.setObject(player, message.nick, EntityPlayer.class, MCPMappings.getField(EntityPlayer.class, "displayname"));
 		});
 	}

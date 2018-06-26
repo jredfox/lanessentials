@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.EvilNotch.lanessentials.api.LanFeilds;
 import com.EvilNotch.lanessentials.api.LanUtil;
 import com.EvilNotch.lanessentials.api.SkinUpdater;
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
@@ -93,17 +94,16 @@ public class MainMod
 	
 	@SidedProxy(clientSide = "com.EvilNotch.lanessentials.proxy.ClientProxy", serverSide = "com.EvilNotch.lanessentials.proxy.ServerProxy")
 	public static ServerProxy proxy;
-	public static File skinCache = null;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
     	System.out.print("[Lan Essentials] Loading and Registering Commands session:");
 		File dir = event.getModConfigurationDirectory().getParentFile();
-		skinCache = new File(dir,"skinCache.json");
+		SkinUpdater.skinCache = new File(dir,"skinCache.json");
 		SkinUpdater.parseSkinCache();
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
-    	MinecraftForge.EVENT_BUS.register(this);
+    	MinecraftForge.EVENT_BUS.register(new com.EvilNotch.lanessentials.events.EventHandler());
     	proxy.preinit();
     	LanFeilds.cacheMCP();
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
@@ -153,7 +153,7 @@ public class MainMod
     	/*
     	 * adds ability without ASM to have more domain urls for skins/capes
     	 */
-        ReflectionUtil.setFinalObject(null, Config.skinDomains, YggdrasilMinecraftSessionService.class, "WHITELISTED_DOMAINS");
+        ReflectionUtil.setFinalObject(null, CfgLanEssentials.skinDomains, YggdrasilMinecraftSessionService.class, "WHITELISTED_DOMAINS");
     }
     @EventHandler
     public void init(FMLInitializationEvent event)
