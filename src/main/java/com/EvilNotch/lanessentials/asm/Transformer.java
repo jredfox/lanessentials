@@ -30,7 +30,33 @@ public class Transformer implements IClassTransformer
                 e.printStackTrace();
             }
         }
+        else if(name.contains("bjq"))
+        {
+        	try
+        	{
+        		if(name.equals("bjq$1"))
+        			return patchGui(name);
+        		else if(name.equals("bjq$a"))
+        			return patchGui(name);
+        		else if(name.equals("bjq"))
+        			return patchGui(name);
+        	}
+        	catch(IOException e)
+        	{
+        		e.printStackTrace();
+        	}
+        }
 
+        return bytes;
+    }
+    
+    public byte[] patchGui(String name) throws IOException
+    {   
+    	String[] parts = name.split("\\.");
+    	name = parts[parts.length-1];
+        InputStream lenStream = Transformer.class.getResourceAsStream("classes/client/gui/" + name);
+        byte[] bytes = IOUtils.toByteArray(lenStream);
+        System.out.println("Lan Essentials Transformer Patched Class: \"" + name + "\" for skins");
         return bytes;
     }
 
