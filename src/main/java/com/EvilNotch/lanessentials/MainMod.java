@@ -2,6 +2,8 @@ package com.EvilNotch.lanessentials;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import com.EvilNotch.lanessentials.api.LanFeilds;
@@ -26,7 +28,6 @@ import com.EvilNotch.lanessentials.commands.CommandHome;
 import com.EvilNotch.lanessentials.commands.CommandKick;
 import com.EvilNotch.lanessentials.commands.CommandNick;
 import com.EvilNotch.lanessentials.commands.CommandNuke;
-import com.EvilNotch.lanessentials.commands.CommandServerIP;
 import com.EvilNotch.lanessentials.commands.CommandSetHealth;
 import com.EvilNotch.lanessentials.commands.CommandSetHome;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
@@ -34,6 +35,8 @@ import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSmite;
 import com.EvilNotch.lanessentials.commands.CommandWalkSpeed;
 import com.EvilNotch.lanessentials.commands.CommandWorkBench;
+import com.EvilNotch.lanessentials.commands.network.CommandPortForward;
+import com.EvilNotch.lanessentials.commands.network.CommandServerIP;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDBanIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDBanPlayer;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDDeOp;
@@ -57,6 +60,9 @@ import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import joptsimple.internal.Strings;
 import net.minecraft.command.CommandDebug;
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandManager;
 import net.minecraft.command.server.CommandBroadcast;
 import net.minecraft.command.server.CommandListBans;
 import net.minecraft.command.server.CommandListPlayers;
@@ -126,6 +132,8 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandNuke());
     	GeneralRegistry.registerCommand(new CommandWalkSpeed());
         GeneralRegistry.registerCommand(new CommandFlySpeed());
+		GeneralRegistry.registerCommand(new CommandServerIP());
+    	GeneralRegistry.registerCommand(new CommandPortForward());
     	
     	//server commands redone for client
     	if(MainJava.isClient)
@@ -144,11 +152,13 @@ public class MainMod
     		GeneralRegistry.registerCommand(new CommandSaveOn());
     		GeneralRegistry.registerCommand(new CommandStop());
     		GeneralRegistry.registerCommand(new CommandWhitelist());
-    		GeneralRegistry.registerCommand(new CommandServerIP());
     		
     		GeneralRegistry.registerCommand(new CommandKick());
     		GeneralRegistry.registerCommand(new CommandDebug());
     	}
+    	
+    	//remove vanilla broken command publish
+    	GeneralRegistry.removeVanillaCommand("publish");
     	
     	/*
     	 * adds ability without ASM to have more domain urls for skins/capes
@@ -165,7 +175,7 @@ public class MainMod
      */
     @EventHandler
     public void starting(FMLServerStartingEvent event)
-    {
+    {			
     	if(!MainJava.isClient && CfgLanEssentials.portForwardDedicated)
     	{
     		System.out.println("Starting port forwarding dedicated Server!");

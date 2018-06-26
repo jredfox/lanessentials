@@ -77,7 +77,7 @@ public class GuiShareToLan2 extends GuiShareToLan {
 	   else
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
-           String s = shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
+           String s = LanUtil.shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
            
 //           LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
            
@@ -105,50 +105,7 @@ public class GuiShareToLan2 extends GuiShareToLan {
 	   return (String)ReflectionUtil.getObject(this, GuiShareToLan.class, LanFeildsClient.gameMode);
    }
 
-   /**
-    * On dedicated does nothing. On integrated, sets commandsAllowedForAll, gameType and allows external connections.
-    */
-   public String shareToLAN(int port,GameType type, boolean allowCheats)
-   {
-       try
-       {
-           int a = -1;
 
-           try
-           {
-        	   if(port == -1)
-        	   {
-        		   a = HttpUtil.getSuitableLanPort();
-        	   }
-           }
-           catch (IOException var5)
-           {
-               ;
-           }
-
-           if (a <= 0)
-           {
-               a = 25564;
-           }
-           if(port == -1)
-        	   port = a;
-           IntegratedServer server = this.mc.getIntegratedServer();
-           server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
-           ReflectionUtil.setObject(server, true, IntegratedServer.class, LanFeildsClient.isPublic);
-           ThreadLanServerPing ping = new ThreadLanServerPing(server.getMOTD(), port + "");
-           ReflectionUtil.setObject(server, ping, IntegratedServer.class, LanFeildsClient.lanServerPing);
-           
-           ping.start();
-           server.getPlayerList().setGameType(type);
-           server.getPlayerList().setCommandsAllowedForAll(allowCheats);
-           this.mc.player.setPermissionLevel(allowCheats ? 4 : 0);
-           return port + "";
-       }
-       catch (IOException var6)
-       {
-           return null;
-       }
-   }
    
 /*   @Override
    protected void actionPerformed(GuiButton button) throws IOException

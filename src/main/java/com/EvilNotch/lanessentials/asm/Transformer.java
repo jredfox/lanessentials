@@ -32,6 +32,7 @@ public class Transformer implements IClassTransformer
         }
         else if(name.contains("bjq"))
         {
+        	//patch gui multi player tab
         	try
         	{
         		if(name.equals("bjq$1"))
@@ -56,7 +57,7 @@ public class Transformer implements IClassTransformer
     	name = parts[parts.length-1];
         InputStream lenStream = Transformer.class.getResourceAsStream("classes/client/gui/" + name);
         byte[] bytes = IOUtils.toByteArray(lenStream);
-        System.out.println("Lan Essentials Transformer Patched Class: \"" + name + "\" for skins");
+        System.out.println("Lan Essentials Transformer Patched Class: \"" + name + "\" for nick");
         return bytes;
     }
 

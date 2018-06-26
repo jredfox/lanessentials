@@ -1,20 +1,31 @@
 package com.EvilNotch.lanessentials.api;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.EvilNotch.lanessentials.client.LanFeildsClient;
+import com.EvilNotch.lanessentials.proxy.ClientProxy;
+import com.EvilNotch.lanessentials.proxy.ServerProxy;
+import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.MainJava;
 import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.EnumChatFormatting;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.dosse.upnp.UPnP;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ThreadLanServerPing;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.HttpUtil;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.GameType;
 
 public class LanUtil {
 	
@@ -109,5 +120,54 @@ public class LanUtil {
         });
         t.start();
 	}
-
+	
+	public static String getMCPort(MinecraftServer server){
+		return MainJava.isClient ? ClientProxy.getPort() : ServerProxy.getServerPort(server);
+	}
+	/**
+	  * On dedicated does nothing. On integrated, sets commandsAllowedForAll, gameType and allows external connections.
+	 */
+   public static String shareToLAN(int port,GameType type, boolean allowCheats)
+   {
+       try
+       {
+           int a = getRandomPort();
+           
+           if(port <= 0)
+        	   port = a;
+           Minecraft mc = Minecraft.getMinecraft();
+           IntegratedServer server = mc.getIntegratedServer();
+           server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
+           ReflectionUtil.setObject(server, true, IntegratedServer.class, LanFeildsClient.isPublic);
+           ThreadLanServerPing ping = new ThreadLanServerPing(server.getMOTD(), port + "");
+           ReflectionUtil.setObject(server, ping, IntegratedServer.class, LanFeildsClient.lanServerPing);
+           
+           ping.start();
+           server.getPlayerList().setGameType(type);
+           server.getPlayerList().setCommandsAllowedForAll(allowCheats);
+           mc.player.setPermissionLevel(allowCheats ? 4 : 0);
+           return port + "";
+       }
+       catch (IOException var6)
+       {
+           return null;
+       }
+   }
+	public static int getRandomPort()
+	{
+        int a = -1;
+        try
+        {
+     		 a = HttpUtil.getSuitableLanPort();
+        }
+        catch (IOException var5)
+        {
+            ;
+        }
+        if (a <= 0)
+        {
+            a = 25564;
+        }
+        return a;
+	}
 }
