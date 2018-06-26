@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.EvilNotch.lanessentials.LanFeilds;
-import com.EvilNotch.lanessentials.LanUtil;
 import com.EvilNotch.lanessentials.MainMod;
+import com.EvilNotch.lanessentials.api.LanUtil;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.dosse.upnp.UPnP;
 

@@ -12,11 +12,11 @@ import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 
 import com.EvilNotch.lanessentials.Reference;
+import com.EvilNotch.lanessentials.api.SkinUpdater;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.SkinUpdater;
 import com.EvilNotch.lib.minecraft.TestProps;
 import com.EvilNotch.lib.minecraft.content.SkinData;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;

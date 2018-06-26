@@ -1,8 +1,11 @@
 package com.EvilNotch.lanessentials;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.EvilNotch.lanessentials.api.LanUtil;
+import com.EvilNotch.lanessentials.api.SkinUpdater;
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
@@ -36,6 +39,8 @@ import com.EvilNotch.lanessentials.commands.vanilla.CMDDeOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonPlayer;
+import com.EvilNotch.lanessentials.events.CapeFixEvent;
+import com.EvilNotch.lanessentials.events.SkinFixEvent;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.EvilNotch.lanessentials.proxy.ServerProxy;
@@ -45,8 +50,6 @@ import com.EvilNotch.lib.main.Config;
 import com.EvilNotch.lib.main.MainJava;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.minecraft.events.CapeFixEvent;
-import com.EvilNotch.lib.minecraft.events.SkinFixEvent;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
@@ -90,12 +93,15 @@ public class MainMod
 	
 	@SidedProxy(clientSide = "com.EvilNotch.lanessentials.proxy.ClientProxy", serverSide = "com.EvilNotch.lanessentials.proxy.ServerProxy")
 	public static ServerProxy proxy;
+	public static File skinCache = null;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	Class clazz = YggdrasilMinecraftSessionService.class;
     	System.out.print("[Lan Essentials] Loading and Registering Commands session:");
+		File dir = event.getModConfigurationDirectory().getParentFile();
+		skinCache = new File(dir,"skinCache.json");
+		SkinUpdater.parseSkinCache();
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(this);
     	proxy.preinit();
@@ -179,214 +185,10 @@ public class MainMod
     		LanUtil.stopPorts();
     		JavaUtil.printTime(time, "Done Closing Ports:");
     	}
+		//player premium uuid cache
+		SkinUpdater.saveSkinCache();
+		//lan-essentials code that needs to be run elsewhere
+		com.EvilNotch.lanessentials.events.EventHandler.noSkins.clear();
     }
-    
-	@SubscribeEvent
-    public void nickName(PlayerEvent.NameFormat e)
-    {
-        if(!(e.getEntityPlayer() instanceof EntityPlayerMP))
-        {
-            return;
-        }
-        EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
-        if(player.connection == null)
-        	return;
-        CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
-        if(name == null)
-        {
-//        	System.out.println("here caps null?????");
-        	return;
-        }
-     
-        if(!Strings.isNullOrEmpty(name.nick))
-        {
-        	e.setDisplayname(name.nick);
-        }
-    }
-	@SubscribeEvent
-    public void capeCap(CapeFixEvent e)
-    {
-		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(e.getEntityPlayer()).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
-		e.url = cape.url;
-		if(CfgLanEssentials.overrideCape)
-			e.overrideCape = true;
-    }
-	@SubscribeEvent
-    public void skinCap(SkinFixEvent e)
-    {
-		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
-		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
-		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
-		
-		e.newSkin = skin.skin;
-		e.isAlexURL = skin.isAlex;
-    }
-	
-	@SubscribeEvent(priority = EventPriority.LOW)
-    public void login(PlayerLoggedInEvent e)
-    {
-	   	if(!(e.player instanceof EntityPlayerMP))
-    		return;
-	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapabilityContainer c = CapabilityReg.getCapabilityConatainer(player);
-    	updateCaps(player,c,true);
-    	updateClientNicks(player);
-    	updateNickName(player);
-    }
-	@SubscribeEvent(priority = EventPriority.LOW)
-    public void respawn(PlayerRespawnEvent e)
-    {
-	   	if(!(e.player instanceof EntityPlayerMP))
-    		return;
-	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapabilityContainer c = CapabilityReg.getCapabilityConatainer(player);
-    	updateCaps(player,c,false);
-    	updateNickName(player);
-    }
-	@SubscribeEvent
-    public void nametag(PlayerEvent.StartTracking e)
-    {
-		if(!(e.getTarget() instanceof EntityPlayer))
-			return;
-		EntityPlayerMP u = (EntityPlayerMP) e.getEntityPlayer();
-		EntityPlayerMP other = (EntityPlayerMP) e.getTarget();
-		if(u.connection == null || other.connection == null)
-		{
-			return;
-		}
-		else if(u.getEntityId() == other.getEntityId() )
-		{
-			System.out.println("returning player is tracking itself userName:" + u.getName());
-			return;
-		}
-		System.out.println("firing @:" + u.getName() + " with:" + other.getName());
-		updateTrackNickName(u,other);
-    }
-	
-	/**
-	 * makes player on login aware of all player nicknames
-	 */
-	public void updateClientNicks(EntityPlayerMP request) 
-	{
-		Set<? extends EntityPlayer> players = request.getServerWorld().getEntityTracker().getTrackingPlayers(request);
-		for(EntityPlayerMP newPlayer : request.mcServer.getPlayerList().getPlayers())
-		{
-			if(!request.equals(newPlayer))
-			{
-		    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
-		    	if(Strings.isNullOrEmpty(name.nick))
-		    	{
-		    		continue;
-		    	}
-		    	newPlayer.refreshDisplayName();
-		    	SPacketPlayerListItem item = new SPacketPlayerListItem();
-		        AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
-		        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
-		        item.getEntries().add(apd);
-		    	
-		        request.connection.sendPacket(item);
-		        if(players.contains(newPlayer))
-		        {
-		        	NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, newPlayer.getEntityId()), request);
-		        }
-			}
-		}
-	}
-	/**
-	 * optimized version for when requesting entity is about to start tracking the player without updating it to everyone
-	 */
-	public static void updateTrackNickName(EntityPlayerMP request,EntityPlayerMP newPlayer) 
-	{
-    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
-    	if(Strings.isNullOrEmpty(name.nick))
-    	{
-    		return;
-    	}
-    	newPlayer.refreshDisplayName();
-    	SPacketPlayerListItem item = new SPacketPlayerListItem();
-        AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
-        item.getEntries().add(apd);
-    	
-        request.connection.sendPacket(item);
-        NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, newPlayer.getEntityId()), request);
-	}
-	public static void updateNickName(EntityPlayerMP player) 
-	{
-    	CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
-    	if(Strings.isNullOrEmpty(name.nick))
-    		return;
-    	player.refreshDisplayName();
-    	SPacketPlayerListItem item = new SPacketPlayerListItem();
-        AddPlayerData apd = item.new AddPlayerData(player.getGameProfile(), player.ping, player.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
-        item.getEntries().add(apd);
-        
-        Set<? extends EntityPlayer> li = player.getServerWorld().getEntityTracker().getTrackingPlayers(player);
-        Set<EntityPlayerMP> players = new HashSet();
-        for(EntityPlayer p : li)
-        	players.add((EntityPlayerMP)p);
-    	
-        for(EntityPlayerMP p : players)
-        {
-            if(!p.equals(player))
-            {
-            	NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, player.getEntityId()), p);
-            }
-        }
-        for(EntityPlayerMP p : player.mcServer.getPlayerList().getPlayers())
-        {
-        	p.connection.sendPacket(item);
-        }
-	}
-	
-	public void updateCaps(EntityPlayerMP player, CapabilityContainer container,boolean login) 
-	{
-		CapAbility cap = (CapAbility) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-		CapSpeed speed = (CapSpeed) container.getCapability( new ResourceLocation(Reference.MODID + ":" + "speed"));
-		PlayerCapabilities pcap = player.capabilities;
-		boolean used = false;
-		if(!pcap.allowFlying && cap.flyEnabled)
-		{
-			pcap.allowFlying = true;
-			if(login)
-				pcap.isFlying = cap.isFlying;
-			used = true;
-		}
-		if(!pcap.disableDamage && cap.godEnabled)
-		{
-			pcap.disableDamage = true;
-			used = true;
-		}
-		if(speed.hasFlySpeed)
-        {
-//			System.out.println("hasFly::::::::::<<<<<<<<<<<<<<<<<<<<<<<?????>>>>>>>>>>>>>>>>>>>>>>>>");
-            ReflectionUtil.setObject(pcap, speed.fly, PlayerCapabilities.class, LanFeilds.flySpeed);
-            used = true;
-        }
-        if(speed.hasWalkSpeed)
-        {
-//        	System.out.println("waling around______________________________.........^^^^&&&&");
-        	ReflectionUtil.setObject(pcap, speed.walk, PlayerCapabilities.class, LanFeilds.walkSpeed);
-            used = true;
-        }
-		if(used)
-			player.sendPlayerAbilities();
-	}
-	@SubscribeEvent(priority = EventPriority.LOW)
-    public void hurt(LivingAttackEvent e)
-    {
-		if(!(e.getEntity() instanceof EntityPlayerMP) || e.getSource() == DamageSource.OUT_OF_WORLD)
-			return;
-		EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
-		if(player.capabilities.disableDamage)
-			return;//no need to continue if the job is already done
-		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
-		if(cap.godEnabled)
-		{
-			player.capabilities.disableDamage = true;
-			player.sendPlayerAbilities();
-			e.setCanceled(true);
-		}
-    }
+
 }

@@ -2,6 +2,7 @@ package com.EvilNotch.lanessentials.commands;
 
 import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lanessentials.Reference;
+import com.EvilNotch.lanessentials.api.CapUtil;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
@@ -41,6 +42,6 @@ public class CommandNick extends CommandBase{
 		EntityPlayer player = (EntityPlayer) sender;
 		CapNick name = (CapNick) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
 		name.nick = args.length == 1 ? args[0] : player.getName();
-		MainMod.updateNickName((EntityPlayerMP) player);
+		CapUtil.updateNickName((EntityPlayerMP) player);
 	}
 }
