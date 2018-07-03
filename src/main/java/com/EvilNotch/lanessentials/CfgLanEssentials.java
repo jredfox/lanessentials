@@ -15,12 +15,14 @@ public class CfgLanEssentials {
 	public static int maxSkinCache = 200000;
 	public static long maxSkinCacheDays = 2;
 	public static String[] skinDomains = null;
+	public static boolean overrideHomeCount = true;
 	
 	public static void loadConfig(File dir)
 	{
 		Configuration cfg = new Configuration(new File(dir,Reference.MODID + ".cfg"));
 		cfg.load();
 		maxHomeCount = cfg.get("general", "maxHomeCount", maxHomeCount).getInt();
+		overrideHomeCount = cfg.get("general", "overrideHomeCountMin", overrideHomeCount).getBoolean();
 		overrideCape = cfg.get("general", "keepURLCapeAlways", overrideCape).getBoolean();
 		portForwardDedicated = cfg.get("network", "portForwardDedicatedServer", portForwardDedicated).getBoolean();
 		cfg.addCustomCategoryComment("network", "Protocal can be either \"TCP\", or \"UDP\"");

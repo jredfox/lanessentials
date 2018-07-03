@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.EvilNotch.lanessentials.CfgLanEssentials;
+import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lanessentials.client.LanFeildsClient;
 import com.EvilNotch.lanessentials.proxy.ClientProxy;
 import com.EvilNotch.lanessentials.proxy.ServerProxy;
@@ -73,6 +75,8 @@ public class LanUtil {
 	
 	public static void stopPorts() 
 	{
+		if(!CfgLanEssentials.closePort)
+			return;
     	Iterator<Map.Entry<Integer,String>> it = ports.entrySet().iterator();
     	while(it.hasNext())
     	{
@@ -83,7 +87,7 @@ public class LanUtil {
     		boolean udp =  protocal.equals("UDP");
     		if(tcp)
     			UPnP.closePortTCP(port);
-    		if(udp)
+    		else if(udp)
     			UPnP.closePortUDP(port);
     	}
        	ports.clear();
@@ -124,35 +128,11 @@ public class LanUtil {
 	public static String getMCPort(MinecraftServer server){
 		return MainJava.isClient ? ClientProxy.getPort() : ServerProxy.getServerPort(server);
 	}
-	/**
-	  * On dedicated does nothing. On integrated, sets commandsAllowedForAll, gameType and allows external connections.
-	 */
-   public static String shareToLAN(int port,GameType type, boolean allowCheats)
-   {
-       try
-       {
-           int a = getRandomPort();
-           
-           if(port <= 0)
-        	   port = a;
-           Minecraft mc = Minecraft.getMinecraft();
-           IntegratedServer server = mc.getIntegratedServer();
-           server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
-           ReflectionUtil.setObject(server, true, IntegratedServer.class, LanFeildsClient.isPublic);
-           ThreadLanServerPing ping = new ThreadLanServerPing(server.getMOTD(), port + "");
-           ReflectionUtil.setObject(server, ping, IntegratedServer.class, LanFeildsClient.lanServerPing);
-           
-           ping.start();
-           server.getPlayerList().setGameType(type);
-           server.getPlayerList().setCommandsAllowedForAll(allowCheats);
-           mc.player.setPermissionLevel(allowCheats ? 4 : 0);
-           return port + "";
-       }
-       catch (IOException var6)
-       {
-           return null;
-       }
-   }
+	public static String shareToLAN(int port,GameType type,boolean allowCheats)
+	{
+		return MainMod.proxy.shareToLan(port,type,allowCheats);
+	}
+
 	public static int getRandomPort()
 	{
         int a = -1;

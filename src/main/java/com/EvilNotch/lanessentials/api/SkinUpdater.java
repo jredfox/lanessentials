@@ -35,6 +35,7 @@ import com.EvilNotch.lib.minecraft.content.SkinData;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.EvilNotch.lib.util.number.IntObj;
+import com.dosse.upnp.UPnP;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
@@ -64,6 +65,26 @@ public class SkinUpdater {
 	public static List<SkinData> data = new ArrayList<SkinData>();
 	public static HashMap<String,String> uuids = new HashMap();
 	public static File skinCache = null;
+	
+	public static void schedualeSkinUpdate(String username,EntityPlayerMP player,boolean packets,boolean alexURL)
+	{
+        Thread t = new Thread(
+        new Runnable() 
+        { 
+     	   public void run() 
+     	   { 
+     		  try 
+     		  {
+				updateSkin(username,player,packets,alexURL);
+     		  } 
+     		  catch (WrongUsageException e) 
+     		  {
+				e.printStackTrace();
+     		  }
+     	   }
+        });
+        t.start();
+	}
 	
 	public static void updateSkin(String username,EntityPlayerMP player,boolean packets,boolean alexURL) throws WrongUsageException
 	{

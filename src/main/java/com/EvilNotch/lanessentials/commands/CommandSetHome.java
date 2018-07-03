@@ -80,7 +80,8 @@ public class CommandSetHome  extends CommandBase
 			if(args.length != 2 || !LineBase.isStringNum(args[1]))
 				throw new WrongUsageException(getUsage(sender),new Object[0]);
 			
-			ch.maxCount = Integer.parseInt(args[1]);
+			int size = Integer.parseInt(args[1]);
+			ch.setMaxHomeCount(size);
 			return;
 		}
 		

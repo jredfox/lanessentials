@@ -12,6 +12,7 @@ import com.EvilNotch.lanessentials.api.CapUtil;
 import com.EvilNotch.lanessentials.api.SkinUpdater;
 import com.EvilNotch.lanessentials.capabilities.CapAbility;
 import com.EvilNotch.lanessentials.capabilities.CapCape;
+import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lib.main.eventhandlers.UUIDFixer;
@@ -60,6 +61,14 @@ public class EventHandler {
 	   	CapUtil.updateCaps(player,c,true);//update capability like fly and god
 	   	CapUtil.updateClientNicks(player);//grab all other people's nick names to you for tab
     	CapUtil.updateNickName(player);//your nick to other players
+    	
+    	CapHome home = (CapHome) c.getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+    	//for when people change the config sync changes if and only if override is allowed changing it to false will allow for homes < max home count
+    	if(home.maxCount < CfgLanEssentials.maxHomeCount && CfgLanEssentials.overrideHomeCount)
+    	{
+    		System.out.println("changing home count:" + home.maxCount + " > " + CfgLanEssentials.maxHomeCount);
+    		home.maxCount = CfgLanEssentials.maxHomeCount;
+    	}
     }
 	
 	@SubscribeEvent(priority = EventPriority.LOW)

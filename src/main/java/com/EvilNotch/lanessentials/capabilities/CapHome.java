@@ -2,9 +2,9 @@ package com.EvilNotch.lanessentials.capabilities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.EvilNotch.lanessentials.CfgLanEssentials;
-import com.EvilNotch.lib.minecraft.content.ConfigLang;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
 import com.EvilNotch.lib.util.ICopy;
@@ -13,7 +13,6 @@ import com.EvilNotch.lib.util.JavaUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.BlockPos;
 
 public class CapHome implements ICapability {
 
@@ -126,5 +125,16 @@ public class CapHome implements ICapability {
 			if(p.toString().equals(str))
 				return true;
 		return false;
+	}
+
+	public void setMaxHomeCount(int i) 
+	{
+		int init = maxCount;
+		maxCount = i;
+		if(maxCount < init)
+		{
+			List<CapHomePoint> toRemove = this.capPoints.subList(i,this.capPoints.size());
+			toRemove.clear();
+		}
 	}
 }

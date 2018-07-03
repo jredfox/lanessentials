@@ -35,6 +35,8 @@ import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSmite;
 import com.EvilNotch.lanessentials.commands.CommandWalkSpeed;
 import com.EvilNotch.lanessentials.commands.CommandWorkBench;
+import com.EvilNotch.lanessentials.commands.network.CommandOpenToLan;
+import com.EvilNotch.lanessentials.commands.network.CommandOpenToNet;
 import com.EvilNotch.lanessentials.commands.network.CommandPortForward;
 import com.EvilNotch.lanessentials.commands.network.CommandServerIP;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDBanIp;
@@ -132,8 +134,6 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandNuke());
     	GeneralRegistry.registerCommand(new CommandWalkSpeed());
         GeneralRegistry.registerCommand(new CommandFlySpeed());
-		GeneralRegistry.registerCommand(new CommandServerIP());
-    	GeneralRegistry.registerCommand(new CommandPortForward());
     	
     	//server commands redone for client
     	if(MainJava.isClient)
@@ -159,6 +159,11 @@ public class MainMod
     	
     	//remove vanilla broken command publish
     	GeneralRegistry.removeVanillaCommand("publish");
+    	//network server commands
+		GeneralRegistry.registerCommand(new CommandServerIP());
+    	GeneralRegistry.registerCommand(new CommandPortForward());
+    	GeneralRegistry.registerCommand(new CommandOpenToLan());
+    	GeneralRegistry.registerCommand(new CommandOpenToNet());
     	
     	/*
     	 * adds ability without ASM to have more domain urls for skins/capes
