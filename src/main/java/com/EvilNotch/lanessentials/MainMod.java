@@ -16,6 +16,7 @@ import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lanessentials.capabilities.CapSpeed;
 import com.EvilNotch.lanessentials.client.CommandIP;
 import com.EvilNotch.lanessentials.client.CommandPublicIP;
+import com.EvilNotch.lanessentials.commands.CommandButcher;
 import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandEnderChest;
 import com.EvilNotch.lanessentials.commands.CommandFeed;
@@ -50,6 +51,7 @@ import com.EvilNotch.lanessentials.events.CapeFixEvent;
 import com.EvilNotch.lanessentials.events.SkinFixEvent;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
+import com.EvilNotch.lanessentials.proxy.ServerOnly;
 import com.EvilNotch.lanessentials.proxy.ServerProxy;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
@@ -136,6 +138,7 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandNuke());
     	GeneralRegistry.registerCommand(new CommandWalkSpeed());
         GeneralRegistry.registerCommand(new CommandFlySpeed());
+        GeneralRegistry.registerCommand(new CommandButcher());
     	
     	//server commands redone for client
     	if(MainJava.isClient)
@@ -187,7 +190,7 @@ public class MainMod
     	if(!MainJava.isClient && CfgLanEssentials.portForwardDedicated)
     	{
     		System.out.println("Starting port forwarding dedicated Server!");
-    		LanUtil.schedulePortForwarding(event.getServer().getServerPort(),CfgLanEssentials.dedicatedPortProtocal);
+    		LanUtil.schedulePortForwarding(ServerOnly.getServerPort(event.getServer()),CfgLanEssentials.dedicatedPortProtocal);
     	}
     }
     /**

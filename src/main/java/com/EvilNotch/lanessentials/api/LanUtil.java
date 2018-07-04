@@ -10,6 +10,7 @@ import com.EvilNotch.lanessentials.CfgLanEssentials;
 import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lanessentials.client.LanFeildsClient;
 import com.EvilNotch.lanessentials.proxy.ClientProxy;
+import com.EvilNotch.lanessentials.proxy.ServerOnly;
 import com.EvilNotch.lanessentials.proxy.ServerProxy;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.EvilNotch.lib.main.MainJava;
@@ -129,7 +130,7 @@ public class LanUtil {
 	}
 	
 	public static String getMCPort(MinecraftServer server){
-		return MainJava.isClient ? ClientProxy.getPort() : ServerProxy.getServerPort(server);
+		return MainJava.isClient ? ClientProxy.getPort() : "" + ServerOnly.getServerPort(server);
 	}
 	/**
 	 * for server side only integrated/dedicated

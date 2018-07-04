@@ -77,4 +77,8 @@ public class ServerOnly {
 		}
 	}
 
+	public static int getServerPort(MinecraftServer server) {
+		return server.getServerPort();
+	}
+
 }

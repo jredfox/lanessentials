@@ -26,10 +26,7 @@ public class ServerProxy {
 
 	public void preinit() {
 	}
-
-	public static String getServerPort(MinecraftServer server) {
-		return "" + server.getServerPort();
-	}
+	
 	public void dedicatedPreinit(){
 		LanFeilds.cacheDedicatedMCP();
 	}
