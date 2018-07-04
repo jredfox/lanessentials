@@ -8,6 +8,7 @@ import java.util.Set;
 import com.EvilNotch.lanessentials.MainMod;
 import com.EvilNotch.lanessentials.api.LanFeilds;
 import com.EvilNotch.lanessentials.api.LanUtil;
+import com.EvilNotch.lanessentials.proxy.ClientProxy;
 import com.EvilNotch.lib.Api.ReflectionUtil;
 import com.dosse.upnp.UPnP;
 
@@ -77,12 +78,10 @@ public class GuiShareToLan2 extends GuiShareToLan {
 	   else
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
-           String s = LanUtil.shareToLAN(this.port,GameType.getByName(getGameMode()), getCheats());
-           
+           String s = LanUtil.shareToLanClient(this.port,GameType.getByName(getGameMode()), getCheats());           
 //           LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
            
            ITextComponent itextcomponent;
-
            if (s != null)
            {
                itextcomponent = new TextComponentTranslation("commands.publish.started", new Object[] {s});
@@ -105,24 +104,6 @@ public class GuiShareToLan2 extends GuiShareToLan {
 	   return (String)ReflectionUtil.getObject(this, GuiShareToLan.class, LanFeildsClient.gameMode);
    }
 
-
-   
-/*   @Override
-   protected void actionPerformed(GuiButton button) throws IOException
-   {
-
-       try {
-			 InetAddress IP = InetAddress.getLocalHost();
-	         String i = (IP.getHostAddress());
-	         ServerSocket sock = new ServerSocket();
-	         sock.bind(new InetSocketAddress(IP, this.port)); 
-	         System.out.println("failed!!!!");
-			} catch (Exception e) {e.printStackTrace();}
-       
-	   super.actionPerformed(button);
-
-   }
-*/
    public static int getPort() {
       return port;
    }

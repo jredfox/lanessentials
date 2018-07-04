@@ -46,7 +46,7 @@ public class UPnP {
     /**
      * this method will take a while to instantiate do not call unless necessary 
      */
-    public static void refresh()
+    public static void refreshProgram()
     {
     	defaultGW = null;
     	finder = new GatewayFinder() {

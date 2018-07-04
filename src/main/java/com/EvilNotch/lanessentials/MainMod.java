@@ -35,6 +35,7 @@ import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSmite;
 import com.EvilNotch.lanessentials.commands.CommandWalkSpeed;
 import com.EvilNotch.lanessentials.commands.CommandWorkBench;
+import com.EvilNotch.lanessentials.commands.network.CommandCloseLan;
 import com.EvilNotch.lanessentials.commands.network.CommandOpenToLan;
 import com.EvilNotch.lanessentials.commands.network.CommandOpenToNet;
 import com.EvilNotch.lanessentials.commands.network.CommandPortForward;
@@ -114,6 +115,7 @@ public class MainMod
     	MinecraftForge.EVENT_BUS.register(new com.EvilNotch.lanessentials.events.EventHandler());
     	proxy.preinit();
     	LanFeilds.cacheMCP();
+    	proxy.dedicatedPreinit();
     	CapabilityReg.registerCapProvider(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
@@ -164,6 +166,7 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandPortForward());
     	GeneralRegistry.registerCommand(new CommandOpenToLan());
     	GeneralRegistry.registerCommand(new CommandOpenToNet());
+    	GeneralRegistry.registerCommand(new CommandCloseLan());
     	
     	/*
     	 * adds ability without ASM to have more domain urls for skins/capes

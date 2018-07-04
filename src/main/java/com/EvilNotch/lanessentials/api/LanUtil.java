@@ -28,6 +28,7 @@ import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.HttpUtil;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.GameType;
+import net.minecraft.world.WorldServer;
 
 public class LanUtil {
 	
@@ -67,6 +68,8 @@ public class LanUtil {
 				return false;
 			}
 		}
+		else
+			System.out.println("UNKNOWN PROTOCAL Please Report This to Mod Auther As Only TCP and UDP are Supported!:\"" + protocal + "\"" );
 		ports.put(port, protocal);
 		System.out.println("mapping:" + UPnP.isUPnPAvailable());
 		System.out.println("time:" + (System.currentTimeMillis()-time) + "ms");
@@ -109,7 +112,7 @@ public class LanUtil {
      		   long time = System.currentTimeMillis();
      		   if(!UPnP.isUPnPUpNow() && hasPorted)
      		   {
-     			   UPnP.refresh();
+     			   UPnP.refreshProgram();
      		   }
      		   boolean sucess = doPortForwarding(serverPort,protocal);
      		   if(!sucess)
@@ -128,9 +131,15 @@ public class LanUtil {
 	public static String getMCPort(MinecraftServer server){
 		return MainJava.isClient ? ClientProxy.getPort() : ServerProxy.getServerPort(server);
 	}
-	public static String shareToLAN(int port,GameType type,boolean allowCheats)
+	/**
+	 * for server side only integrated/dedicated
+	 */
+	public static String shareToLAN(int port,WorldServer w)
 	{
-		return MainMod.proxy.shareToLan(port,type,allowCheats);
+		return MainMod.proxy.shareToLan(port,w);
+	}
+	public static String shareToLanClient(int port, GameType type, boolean allowCheats) {
+		return ClientProxy.shareToLanClient(port, type, allowCheats);
 	}
 
 	public static int getRandomPort()
@@ -149,5 +158,16 @@ public class LanUtil {
             a = 25564;
         }
         return a;
+	}
+	/**
+	 * will return rnd if the port returns 0 or -1
+	 */
+	public static int getMCPortSafley(MinecraftServer server) 
+	{
+		Integer i = Integer.parseInt(LanUtil.getMCPort(server));
+		if(i <= 0)
+			return LanUtil.getRandomPort();
+		else
+			return i;
 	}
 }
