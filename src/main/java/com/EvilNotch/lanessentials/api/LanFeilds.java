@@ -14,7 +14,7 @@ public class LanFeilds {
 	public static String walkSpeed = null;
 	public static String nickAction = null;
 	public static String gameType = null;
-	public static String allowCommands = null;
+	public static String allowCheats = null;
 	
 	//dedicated server side only
 	public static String propertyManager = null;
@@ -26,7 +26,7 @@ public class LanFeilds {
 		walkSpeed = MCPMappings.getField(PlayerCapabilities.class, "walkSpeed");
 		nickAction = MCPMappings.getField(SPacketPlayerListItem.class, "action");
 		gameType = MCPMappings.getField(PlayerList.class, "gameType");
-		allowCommands = MCPMappings.getField(PlayerList.class, "commandsAllowedForAll");
+		allowCheats = MCPMappings.getField(PlayerList.class,"commandsAllowedForAll");
 	}
 	public static void cacheDedicatedMCP(){
 		propertyManager = MCPMappings.getField(net.minecraft.server.dedicated.DedicatedServer.class, "settings");

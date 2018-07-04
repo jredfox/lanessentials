@@ -1,10 +1,14 @@
 package com.EvilNotch.lanessentials.commands;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
@@ -21,10 +25,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CommandButcher extends CommandBase{
+	
+	public static List<String> list = null;
 
 	@Override
 	public String getName() {
@@ -38,6 +45,8 @@ public class CommandButcher extends CommandBase{
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if(args.length == 0)
+			throw new WrongUsageException("Must Specify Type/Entity");
 		WorldServer w = (WorldServer) sender.getEntityWorld();
 		Types type = Types.getType(args[0]);
 		List<Entity> ents = w.getLoadedEntityList();
@@ -125,7 +134,7 @@ public class CommandButcher extends CommandBase{
 		{
 			for(Entity e : ents)
 			{
-				if(isCreature(e))
+				if(isCreature(e) && !(e instanceof EntityPlayer))
 					e.setDead();
 			}
 		}
@@ -165,6 +174,21 @@ public class CommandButcher extends CommandBase{
 		boolean creature = e.isCreatureType(EnumCreatureType.CREATURE, false);
 		return creature;
 	}
+	@Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+		if(list == null)
+		{
+			list = new ArrayList();
+			for(Types t : Types.values())
+				list.add(t.s);
+		
+			List<String> li = new ArrayList();
+			for(ResourceLocation loc :  EntityList.getEntityNameList())
+				list.add(loc.toString());
+		}
+		return getListOfStringsMatchingLastWord(args,list);
+    }
 
 	public static enum Types{
 		living("living"),

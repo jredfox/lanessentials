@@ -119,10 +119,13 @@ public class ClientProxy extends ServerProxy{
         IntegratedServer server = mc.getIntegratedServer();
         PlayerList list = server.getPlayerList();
         GameType type = (GameType) ReflectionUtil.getObject(list, PlayerList.class, LanFeilds.gameType);
+        boolean allowCheats = w.getWorldInfo().areCommandsAllowed();
         if(type == null)
         	type = GameType.SURVIVAL;
-        boolean allowCheats = w.getWorldInfo().areCommandsAllowed();
-        System.out.println("Creative:" + (type == type.CREATIVE) + " allowCheats:" + allowCheats);
+        else
+        {
+        	allowCheats = (Boolean) ReflectionUtil.getObject(list, PlayerList.class, LanFeilds.allowCheats);
+        }
 		return shareToLanClient(port,type,allowCheats);
 	}
 
