@@ -29,6 +29,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -73,7 +74,9 @@ public class CommandButcher extends CommandBase{
 			{
 				ResourceLocation compare = EntityList.getKey(e);
 				if(loc.equals(compare))
-					e.setDead();
+				{
+					killEnt(e);
+				}
 			}
 		}
 		else if(type == Types.living)
@@ -81,7 +84,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(e instanceof EntityLiving && !(e instanceof EntityPlayer))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if(type == Types.nonliving)
@@ -89,7 +92,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(!(e instanceof EntityLiving) && !(e instanceof EntityLivingBase))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.entityBase)
@@ -97,7 +100,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(!(e instanceof EntityLiving) && e instanceof EntityLivingBase && !(e instanceof EntityPlayer))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.item)
@@ -105,7 +108,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(e instanceof EntityItem)
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.projectile)
@@ -113,7 +116,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(e instanceof Entity && e instanceof IProjectile || e instanceof EntityFireball || e instanceof EntityShulkerBullet || e instanceof EntityEnderEye || e instanceof EntityFireworkRocket)
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.fire)
@@ -121,7 +124,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(e.isImmuneToFire() && !(e instanceof EntityPlayer))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.water)
@@ -134,7 +137,7 @@ public class CommandButcher extends CommandBase{
 					water = ((EntityLivingBase)e).canBreatheUnderwater();
 				}
 				if(water && !(e instanceof EntityPlayer))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.monster)
@@ -142,7 +145,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(isHostile(e))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if (type == Types.creature)
@@ -150,7 +153,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(isCreature(e) && !(e instanceof EntityPlayer))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if(type == Types.ambient)
@@ -160,7 +163,7 @@ public class CommandButcher extends CommandBase{
 				boolean ambient = e.isCreatureType(EnumCreatureType.AMBIENT, false);
 				if(ambient)
 				{
-					e.setDead();
+					killEnt(e);
 				}
 			}
 		}
@@ -169,7 +172,7 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(e instanceof EntityAreaEffectCloud)
-					e.setDead();
+					killEnt(e);
 			}
 		}
 		else if(type == Types.all)
@@ -177,12 +180,27 @@ public class CommandButcher extends CommandBase{
 			for(Entity e : ents)
 			{
 				if(!(e instanceof EntityPlayer))
-					e.setDead();
+					killEnt(e);
 			}
 		}
 	}
+	/**
+	 * kill an entity without letting it drop anything
+	 */
+	public static void killEnt(Entity e) 
+	{
+		if(e instanceof IInventory)
+		{
+			IInventory inventory = (IInventory)e;
+			inventory.clear();
+		}
+		e.setDead();
+	}
+
 	public List<Entity> getEnts(World w,int x, int z,int radius) {
-		return w.getEntitiesWithinAABB(Entity.class,  new AxisAlignedBB(x-radius - 0.999,-0.999,z-radius-0.999,x+radius+0.999,255.999,z+radius+0.999));
+		AxisAlignedBB a = new AxisAlignedBB(x-radius - 0.1,-0.1,z-radius-0.1,x+radius+0.1,255.1,z+radius+0.1);
+		System.out.println(a.minX + " +x:" + a.maxX);
+		return w.getEntitiesWithinAABB(Entity.class,a);
 	}
 
 	/**
