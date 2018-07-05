@@ -41,9 +41,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 public class EventHandler {
 	
 	@SubscribeEvent
-    public void skinFix(PlayerEvent.LoadFromFile e)
+    public void skinFix(PlayerLoggedInEvent e)
     {
-		SkinUpdater.fireSkinEvent(e.getEntityPlayer(),false);
+		if(e.player instanceof EntityPlayerMP)
+			SkinUpdater.schedualeSkinEventUpdate((EntityPlayerMP) e.player);
     }
 	@SubscribeEvent
 	public void skinNo(PlayerLoggedOutEvent e)
@@ -189,8 +190,8 @@ public class EventHandler {
 					}
 				}
 				 String name = pair.getKey();
-				 EntityPlayer player = EntityUtil.getPlayer(name);
-				 SkinUpdater.fireSkinEvent(player, true);
+				 EntityPlayerMP player = (EntityPlayerMP) EntityUtil.getPlayer(name);
+				 SkinUpdater.fireSkinEvent(player);
 				 //if not reset add to the remove list
 				 if(i.integer != 0)
 					 toRemove.add(name);

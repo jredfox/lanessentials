@@ -53,47 +53,62 @@ public class CommandSkin  extends CommandBase
 	{
 		if(!(sender instanceof EntityPlayerMP) || args.length == 0)
 			throw new WrongUsageException("/skin [name/url,isSteve]",new Object[0]);
-		if(args[0].equals("getURL"))
-		{
-			if(args.length != 2)
-				throw new WrongUsageException("/skin getURL [playername]");
-			SkinData data = SkinUpdater.getSkinData(args[1]);
-			String url = SkinUpdater.getSkinURL(data, args[1]);
-			EntityUtil.sendURL((EntityPlayer) sender, "skin url", url);
-			return;
-		}
-		else if(args[0].equals("getCapability"))
-		{
-			if(args.length != 2)
-				throw new WrongUsageException("/skin getCapability [playername]");
-			EntityPlayerMP player = (EntityPlayerMP)sender;
-			if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
-				throw new WrongUsageException("player isn't currently logged in:" + args[1]);
-			
-			CapSkin cap = (CapSkin) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "skin") );
-			if(cap == null)
-				throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
-			if(JavaUtil.isURL(cap.skin))
-				EntityUtil.sendURL((EntityPlayer) sender, "skinCapability:", cap.skin);
-			else
-				EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE,(EntityPlayer) sender, "skinCapability:", cap.skin);
-			return;
-		}
-		else if(JavaUtil.isURL(args[0]) && args.length != 2)
-			throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
-		long time = System.currentTimeMillis();
-		EntityPlayerMP player = (EntityPlayerMP)sender;
-		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
-		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
-		String username = args[0];
-		if(args.length == 2)
-			if(!JavaUtil.isStringBoolean(args[1]))
-				throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
-		boolean isAlex = args.length == 2 ? !Boolean.parseBoolean(args[1]) : false;
-		SkinUpdater.updateSkin(username,player,true,isAlex);
-		skin.skin = username;//if updating the skin thows a wrong usage exception the skin name doesn't get reset
-		skin.isAlex = getIsAlex(player);
-		JavaUtil.printTime(time, "Done Skin " + skin.isAlex + ":");
+        Thread t = new Thread(
+        new Runnable() 
+        { 
+     	   public void run() 
+     	   { 
+     		   try
+     		   {
+     	        if(args[0].equals("getURL"))
+     			{
+     				if(args.length != 2)
+     					throw new WrongUsageException("/skin getURL [playername]");
+     				SkinData data = SkinUpdater.getSkinData(args[1]);
+     				String url = SkinUpdater.getSkinURL(data, args[1]);
+     				EntityUtil.sendURL((EntityPlayer) sender, "skin url", url);
+     				return;
+     			}
+     			else if(args[0].equals("getCapability"))
+     			{
+     				if(args.length != 2)
+     					throw new WrongUsageException("/skin getCapability [playername]");
+     				EntityPlayerMP player = (EntityPlayerMP)sender;
+     				if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
+     					throw new WrongUsageException("player isn't currently logged in:" + args[1]);
+     				
+     				CapSkin cap = (CapSkin) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "skin") );
+     				if(cap == null)
+     					throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
+     				if(JavaUtil.isURL(cap.skin))
+     					EntityUtil.sendURL((EntityPlayer) sender, "skinCapability:", cap.skin);
+     				else
+     					EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE,(EntityPlayer) sender, "skinCapability:", cap.skin);
+     				return;
+     			}
+     			else if(JavaUtil.isURL(args[0]) && args.length != 2)
+     				throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
+     			long time = System.currentTimeMillis();
+     			EntityPlayerMP player = (EntityPlayerMP)sender;
+     			CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
+     			CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
+     			String username = args[0];
+     			if(args.length == 2)
+     				if(!JavaUtil.isStringBoolean(args[1]))
+     					throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
+     			boolean isAlex = args.length == 2 ? !Boolean.parseBoolean(args[1]) : false;
+     			SkinUpdater.updateSkin(username,player,true,isAlex);
+     			skin.skin = username;//if updating the skin thows a wrong usage exception the skin name doesn't get reset
+     			skin.isAlex = getIsAlex(player);
+     			JavaUtil.printTime(time, "Done Skin " + skin.isAlex + ":");
+     	      }
+     		  catch(Exception e)
+     		  {
+     			  EntityUtil.printChat((EntityPlayerMP) sender, EnumChatFormatting.RED, "", "Ussage:" + e.getMessage());
+     		  }
+     	   }
+        });
+        t.start();
 	}
 
 	public boolean getIsAlex(EntityPlayerMP player) 

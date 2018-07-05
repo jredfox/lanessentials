@@ -54,18 +54,21 @@ public class CommandButcher extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(args.length == 0)
-			throw new WrongUsageException("Must Specify Type/Entity");
+			throw new WrongUsageException("Must Specify Type/Entity",new Object[0]);
 		if(args.length == 2 && !LineBase.isStringNum(args[1]))
-			throw new WrongUsageException("radius must be int!");
+			throw new WrongUsageException("radius must be int!",new Object[0]);
 		
 		WorldServer w = (WorldServer) sender.getEntityWorld();
 		Types type = Types.getType(args[0]);
 		BlockPos pos = sender.getPosition();
+		//list filters based on everything or radius depending on args
 		List<Entity> ents = args.length == 1 ? w.getLoadedEntityList() : getEnts(sender.getEntityWorld(),pos.getX(),pos.getZ(),Integer.parseInt(args[1]));
 		
 		if(type == null)
 		{
 			ResourceLocation loc = new ResourceLocation(args[0]);
+			if(loc.toString().equals("minecraft:player"))
+				throw new WrongUsageException("butcher command isn't for players",new Object[0]);
 			for(Entity e : ents)
 			{
 				ResourceLocation compare = EntityList.getKey(e);

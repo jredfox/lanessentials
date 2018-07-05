@@ -53,41 +53,56 @@ public class CommandCape extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
-		EntityPlayerMP player = (EntityPlayerMP)sender;
-		//cape getURL [playername]
-		if(args.length == 2)
-		{
-			if(args[0].equals("getURL"))
-			{
-				SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
-				String url = SkinUpdater.getCapeURL(skin,args[1]);
-				EntityUtil.sendURL(player,"Cape Link for " + args[1] + ":", url);
-				return;
-			}
-			else if(args[0].equals("getCapability"))
-			{
-				if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
-					throw new WrongUsageException("player isn't currently logged in:" + args[1]);
-				
-				CapCape cap = (CapCape) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
-				if(cap == null)
-				{
-					throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
-				}
-				else if(cap.url.equals(""))
-				{
-					EntityUtil.printChat(player, EnumChatFormatting.RED, "", "cape is blank for user:" + args[1]);
-					return;
-				}
-				EntityUtil.sendURL((EntityPlayer) sender, "capeCapability:", cap.url);
-				return;
-			}
-			else
-				throw new WrongUsageException("/cape [getURL/getCapability, playername]",new Object[0]);
-		}
-		String url = args.length == 1 ? args[0] : "";
+        Thread t = new Thread(
+        new Runnable() 
+        { 
+     	   public void run() 
+     	   { 
+     		   try
+     		   {
+     			  EntityPlayerMP player = (EntityPlayerMP)sender;
+     		 	  //cape getURL [playername]
+     			  if(args.length == 2)
+     			  {
+     				if(args[0].equals("getURL"))
+     				{
+     					SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
+     					String url = SkinUpdater.getCapeURL(skin,args[1]);
+     					EntityUtil.sendURL(player,"Cape Link for " + args[1] + ":", url);
+     					return;
+     				}
+     				else if(args[0].equals("getCapability"))
+     				{
+     					if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
+     						throw new WrongUsageException("player isn't currently logged in:" + args[1]);
+     					
+     					CapCape cap = (CapCape) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
+     					if(cap == null)
+     					{
+     						throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
+     					}
+     					else if(cap.url.equals(""))
+     					{
+     						EntityUtil.printChat(player, EnumChatFormatting.RED, "", "cape is blank for user:" + args[1]);
+     						return;
+     					}
+     					EntityUtil.sendURL((EntityPlayer) sender, "capeCapability:", cap.url);
+     					return;
+     				}
+     				else
+     					throw new WrongUsageException("/cape [getURL/getCapability, playername]",new Object[0]);
+     			}
+     			String url = args.length == 1 ? args[0] : "";
 
-		SkinUpdater.setCape(player,url,true);
+     			SkinUpdater.setCape(player,url,true);
+     		 }
+     		 catch(Exception e)
+     		 {
+     			EntityUtil.printChat((EntityPlayerMP) sender, EnumChatFormatting.RED, "", "Ussage:" + e.getMessage());
+     		 }
+     	   }
+        });
+        t.start();
 	}
 	@Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)

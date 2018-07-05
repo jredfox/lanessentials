@@ -66,21 +66,14 @@ public class SkinUpdater {
 	public static HashMap<String,String> uuids = new HashMap();
 	public static File skinCache = null;
 	
-	public static void schedualeSkinUpdate(String username,EntityPlayerMP player,boolean packets,boolean alexURL)
+	public static void schedualeSkinEventUpdate(EntityPlayerMP player)
 	{
         Thread t = new Thread(
         new Runnable() 
         { 
      	   public void run() 
      	   { 
-     		  try 
-     		  {
-				updateSkin(username,player,packets,alexURL);
-     		  } 
-     		  catch (WrongUsageException e) 
-     		  {
-				e.printStackTrace();
-     		  }
+     		  fireSkinEvent(player);
      	   }
         });
         t.start();
@@ -484,7 +477,7 @@ public class SkinUpdater {
 	/**
 	 * returns whether or not it succeeded
 	 */
-	public static boolean fireSkinEvent(EntityPlayer p,boolean usePackets) 
+	public static boolean fireSkinEvent(EntityPlayerMP p) 
 	{
 		SkinFixEvent event = new SkinFixEvent(p);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -493,8 +486,9 @@ public class SkinUpdater {
 			try
 			{
 				//only update if forceUpdate or names are not right
+				boolean usePackets = p.connection == null;
 				System.out.println("UPDATING SKIN:" + p.getName() + " > " + event.newSkin);
-				SkinUpdater.updateSkin(event.newSkin, (EntityPlayerMP) p, usePackets,event.isAlexURL);
+				SkinUpdater.updateSkin(event.newSkin, p, true,event.isAlexURL);
 				return true;
 			}
 			catch (WrongUsageException e)
