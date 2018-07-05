@@ -5,11 +5,14 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.EvilNotch.lib.util.Line.LineBase;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -18,14 +21,19 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.item.EntityEnderEye;
+import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -40,16 +48,20 @@ public class CommandButcher extends CommandBase{
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/butcher [types,radius]";
+		return "/butcher [types,int-radius]";
 	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(args.length == 0)
 			throw new WrongUsageException("Must Specify Type/Entity");
+		if(args.length == 2 && !LineBase.isStringNum(args[1]))
+			throw new WrongUsageException("radius must be int!");
+		
 		WorldServer w = (WorldServer) sender.getEntityWorld();
 		Types type = Types.getType(args[0]);
-		List<Entity> ents = w.getLoadedEntityList();
+		BlockPos pos = sender.getPosition();
+		List<Entity> ents = args.length == 1 ? w.getLoadedEntityList() : getEnts(sender.getEntityWorld(),pos.getX(),pos.getZ(),Integer.parseInt(args[1]));
 		
 		if(type == null)
 		{
@@ -97,7 +109,7 @@ public class CommandButcher extends CommandBase{
 		{
 			for(Entity e : ents)
 			{
-				if(e instanceof Entity && e instanceof IProjectile || e instanceof EntityFireball)
+				if(e instanceof Entity && e instanceof IProjectile || e instanceof EntityFireball || e instanceof EntityShulkerBullet || e instanceof EntityEnderEye || e instanceof EntityFireworkRocket)
 					e.setDead();
 			}
 		}
@@ -149,6 +161,14 @@ public class CommandButcher extends CommandBase{
 				}
 			}
 		}
+		else if(type == Types.areacloud)
+		{
+			for(Entity e : ents)
+			{
+				if(e instanceof EntityAreaEffectCloud)
+					e.setDead();
+			}
+		}
 		else if(type == Types.all)
 		{
 			for(Entity e : ents)
@@ -158,6 +178,10 @@ public class CommandButcher extends CommandBase{
 			}
 		}
 	}
+	public List<Entity> getEnts(World w,int x, int z,int radius) {
+		return w.getEntitiesWithinAABB(Entity.class,  new AxisAlignedBB(x-radius - 0.999,-0.999,z-radius-0.999,x+radius+0.999,255.999,z+radius+0.999));
+	}
+
 	/**
 	 * determine if mob is hostile
 	 * @param e
@@ -201,6 +225,7 @@ public class CommandButcher extends CommandBase{
 		monster("monster"),
 		creature("creature"),
 		ambient("ambient"),
+		areacloud("areacloud"),
 		all("all");
 		
 		public String s;
