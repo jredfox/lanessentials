@@ -19,11 +19,11 @@ public class CapabilityProvider implements ICapabilityProvider
 	@Override
 	public void register(EntityPlayer p,CapabilityContainer c) 
 	{
-		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "home"), new CapHome(),c);
-		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "ability"), new CapAbility(),c);
-		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "skin"), new CapSkin(),c);
-		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "nick"), new CapNick(),c);
-		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "cape"), new CapCape(),c);
-		CapabilityReg.registerCapability(p, new ResourceLocation(Reference.MODID + ":" + "speed"), new CapSpeed(), c);
+		c.registerCapability(new ResourceLocation(Reference.MODID + ":" + "home"), new CapHome());
+		c.registerCapability(new ResourceLocation(Reference.MODID + ":" + "ability"), new CapAbility());
+		c.registerCapability(new ResourceLocation(Reference.MODID + ":" + "skin"), new CapSkin());
+		c.registerCapability(new ResourceLocation(Reference.MODID + ":" + "nick"), new CapNick());
+		c.registerCapability(new ResourceLocation(Reference.MODID + ":" + "cape"), new CapCape());
+		c.registerCapability(new ResourceLocation(Reference.MODID + ":" + "speed"), new CapSpeed());
 	}
 }

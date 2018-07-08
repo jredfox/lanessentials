@@ -33,11 +33,6 @@ public class CapAbility implements ICapability,ITick{
 	}
 
 	@Override
-	public ICopy copy() {
-		return new CapAbility(this.flyEnabled,this.godEnabled);
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c) {
 		this.flyEnabled = nbt.getBoolean("flyEnabled");
 		this.godEnabled = nbt.getBoolean("godEnabled");

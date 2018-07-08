@@ -29,12 +29,6 @@ public class CapHome implements ICapability {
 	}
 
 	@Override
-	public ICopy copy() 
-	{
-		return new CapHome(JavaUtil.copyArrays(this.capPoints));
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c) 
 	{
 		this.capPoints = new ArrayList<CapHomePoint>();

@@ -18,11 +18,6 @@ public class CapNick implements ICapability{
 	}
 
 	@Override
-	public ICopy copy() {
-		return new CapSkin(this.nick);
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) 
 	{
 		this.nick = nbt.getString("nick");

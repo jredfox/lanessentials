@@ -18,11 +18,6 @@ public class CapCape implements ICapability{
 	}
 
 	@Override
-	public ICopy copy() {
-		return new CapSkin(this.url);
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) 
 	{
 		this.url = nbt.getString("cape");

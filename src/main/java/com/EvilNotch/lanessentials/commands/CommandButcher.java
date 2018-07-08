@@ -26,6 +26,7 @@ import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityFlying;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
@@ -64,7 +65,7 @@ public class CommandButcher extends CommandBase{
 		BlockPos pos = sender.getPosition();
 		//list filters based on everything or radius depending on args
 		List<Entity> ents = args.length == 1 ? w.getLoadedEntityList() : getEnts(sender.getEntityWorld(),pos.getX(),pos.getZ(),Integer.parseInt(args[1]));
-		
+
 		if(type == null)
 		{
 			ResourceLocation loc = new ResourceLocation(args[0]);
@@ -140,6 +141,14 @@ public class CommandButcher extends CommandBase{
 					killEnt(e);
 			}
 		}
+		else if(type == Types.flying)
+		{
+			for(Entity e : ents)
+			{
+				if(e instanceof EntityFlying || e instanceof net.minecraft.entity.EntityFlying)
+					killEnt(e);
+			}
+		}
 		else if (type == Types.monster)
 		{
 			for(Entity e : ents)
@@ -198,9 +207,7 @@ public class CommandButcher extends CommandBase{
 	}
 
 	public List<Entity> getEnts(World w,int x, int z,int radius) {
-		AxisAlignedBB a = new AxisAlignedBB(x-radius - 0.1,-0.1,z-radius-0.1,x+radius+0.1,255.1,z+radius+0.1);
-		System.out.println(a.minX + " +x:" + a.maxX);
-		return w.getEntitiesWithinAABB(Entity.class,a);
+		return w.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x,0,z,x+1,257,z+1).grow(radius));
 	}
 
 	/**
@@ -247,6 +254,7 @@ public class CommandButcher extends CommandBase{
 		creature("creature"),
 		ambient("ambient"),
 		areacloud("areacloud"),
+		flying("flying"),
 		all("all");
 		
 		public String s;

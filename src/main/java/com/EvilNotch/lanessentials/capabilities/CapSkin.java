@@ -19,11 +19,6 @@ public class CapSkin implements ICapability{
 	}
 
 	@Override
-	public ICopy copy() {
-		return new CapSkin(this.skin);
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) 
 	{
 		this.skin = nbt.getString("skin");

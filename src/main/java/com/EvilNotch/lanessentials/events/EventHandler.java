@@ -15,11 +15,9 @@ import com.EvilNotch.lanessentials.capabilities.CapCape;
 import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
-import com.EvilNotch.lib.main.eventhandlers.UUIDFixer;
 import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.minecraft.events.PlayerDataFixEvent;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.EvilNotch.lib.util.number.IntObj;
 
@@ -204,24 +202,6 @@ public class EventHandler {
 			 noSkins.remove(n);
 		 }
 		 sTick++;
-	 }
-	 
-	 @SubscribeEvent
-	 public void playerData(PlayerDataFixEvent e)
-	 {
-		 if(e.type != UUIDFixer.Types.UUIDFIX)
-			 return;
-		 
-		 String name = e.player.getName().toLowerCase();
-		 SkinUpdater.removeUser(name);
-		 
-		 String newUUID = SkinUpdater.getUUID(name);
-		 if(newUUID == null)
-		 {
-			 System.out.println("unable to fetch uuid from mojang:");
-			 return;
-		 }
-		 SkinUpdater.uuids.put(name, newUUID);//strip the bars away from uuid to match mojangs api
 	 }
 
 }

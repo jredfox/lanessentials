@@ -24,10 +24,6 @@ public class CapSpeed  implements ICapability
 	}
 	
 	@Override
-	public ICopy copy() {
-		return new CapSpeed(this.walk,this.fly,this.hasFlySpeed,this.hasWalkSpeed);
-	}
-	@Override
 	public void readFromNBT(NBTTagCompound nbt, EntityPlayer player, CapabilityContainer container) {
 		this.walk = nbt.getFloat("walk");	
 		this.fly = nbt.getFloat("fly");
