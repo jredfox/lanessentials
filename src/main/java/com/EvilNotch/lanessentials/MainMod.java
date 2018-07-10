@@ -1,21 +1,10 @@
 package com.EvilNotch.lanessentials;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 import com.EvilNotch.lanessentials.api.LanFeilds;
 import com.EvilNotch.lanessentials.api.LanUtil;
 import com.EvilNotch.lanessentials.api.SkinUpdater;
-import com.EvilNotch.lanessentials.capabilities.CapAbility;
-import com.EvilNotch.lanessentials.capabilities.CapCape;
-import com.EvilNotch.lanessentials.capabilities.CapNick;
-import com.EvilNotch.lanessentials.capabilities.CapSkin;
-import com.EvilNotch.lanessentials.capabilities.CapSpeed;
-import com.EvilNotch.lanessentials.client.CommandIP;
-import com.EvilNotch.lanessentials.client.CommandPublicIP;
 import com.EvilNotch.lanessentials.commands.CommandButcher;
 import com.EvilNotch.lanessentials.commands.CommandCape;
 import com.EvilNotch.lanessentials.commands.CommandEnderChest;
@@ -34,6 +23,7 @@ import com.EvilNotch.lanessentials.commands.CommandSetHome;
 import com.EvilNotch.lanessentials.commands.CommandSetHunger;
 import com.EvilNotch.lanessentials.commands.CommandSkin;
 import com.EvilNotch.lanessentials.commands.CommandSmite;
+import com.EvilNotch.lanessentials.commands.CommandSpawn;
 import com.EvilNotch.lanessentials.commands.CommandWalkSpeed;
 import com.EvilNotch.lanessentials.commands.CommandWorkBench;
 import com.EvilNotch.lanessentials.commands.network.CommandCloseLan;
@@ -47,27 +37,17 @@ import com.EvilNotch.lanessentials.commands.vanilla.CMDDeOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDOp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonIp;
 import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonPlayer;
-import com.EvilNotch.lanessentials.events.CapeFixEvent;
-import com.EvilNotch.lanessentials.events.SkinFixEvent;
 import com.EvilNotch.lanessentials.packets.NetWorkHandler;
-import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.EvilNotch.lanessentials.proxy.ServerOnly;
 import com.EvilNotch.lanessentials.proxy.ServerProxy;
-import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.main.Config;
 import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
-import joptsimple.internal.Strings;
 import net.minecraft.command.CommandDebug;
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandManager;
 import net.minecraft.command.server.CommandBroadcast;
 import net.minecraft.command.server.CommandListBans;
 import net.minecraft.command.server.CommandListPlayers;
@@ -76,17 +56,7 @@ import net.minecraft.command.server.CommandSaveOff;
 import net.minecraft.command.server.CommandSaveOn;
 import net.minecraft.command.server.CommandStop;
 import net.minecraft.command.server.CommandWhitelist;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.PlayerCapabilities;
-import net.minecraft.network.play.server.SPacketPlayerListItem;
-import net.minecraft.network.play.server.SPacketPlayerListItem.AddPlayerData;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -94,10 +64,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:evilnotchlib")
 public class MainMod
@@ -139,6 +105,7 @@ public class MainMod
     	GeneralRegistry.registerCommand(new CommandWalkSpeed());
         GeneralRegistry.registerCommand(new CommandFlySpeed());
         GeneralRegistry.registerCommand(new CommandButcher());
+        GeneralRegistry.registerCommand(new CommandSpawn());
     	
     	//server commands redone for client
     	if(MainJava.isClient)

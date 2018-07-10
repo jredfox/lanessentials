@@ -13,19 +13,22 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAreaEffectCloud;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityEnderEye;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityVex;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityFlying;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
@@ -37,7 +40,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CommandButcher extends CommandBase{
 	
@@ -145,7 +147,15 @@ public class CommandButcher extends CommandBase{
 		{
 			for(Entity e : ents)
 			{
-				if(e instanceof EntityFlying || e instanceof net.minecraft.entity.EntityFlying)
+				if(e instanceof EntityFlying || e instanceof net.minecraft.entity.EntityFlying || e instanceof EntityBat || e instanceof EntityBlaze || e instanceof EntityVex)
+					killEnt(e);
+			}
+		}
+		else if(type == Types.boss)
+		{
+			for(Entity e : ents)
+			{
+				if(e instanceof EntityWither || e instanceof EntityDragon)
 					killEnt(e);
 			}
 		}
@@ -255,6 +265,7 @@ public class CommandButcher extends CommandBase{
 		ambient("ambient"),
 		areacloud("areacloud"),
 		flying("flying"),
+		boss("boss"),
 		all("all");
 		
 		public String s;
