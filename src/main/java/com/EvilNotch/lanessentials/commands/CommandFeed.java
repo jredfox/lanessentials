@@ -37,5 +37,12 @@ public class CommandFeed extends CommandBase
 		
 		sender.sendMessage(new TextComponentString(epmp.getName() + " ate a full pork"));
 	}
+    /**
+     * get selectors working
+     */
+    public boolean isUsernameIndex(String[] args, int index)
+    {
+        return index == 0;
+    }
 
 }

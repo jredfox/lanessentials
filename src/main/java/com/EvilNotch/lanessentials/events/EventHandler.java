@@ -41,8 +41,9 @@ public class EventHandler {
 	@SubscribeEvent
     public void skinFix(PlayerLoggedInEvent e)
     {
+		//isn't multi thread since it crashes otherwise
 		if(e.player instanceof EntityPlayerMP)
-			SkinUpdater.schedualeSkinEventUpdate((EntityPlayerMP) e.player);
+			SkinUpdater.fireSkinEvent((EntityPlayerMP) e.player);
     }
 	@SubscribeEvent
 	public void skinNo(PlayerLoggedOutEvent e)
@@ -107,7 +108,11 @@ public class EventHandler {
         if(player.connection == null)
         	return;
         CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
-     
+        if(name == null)
+        {
+        	System.out.println("event is firing before player has loaded from file :(");
+        	return;
+        }
         if(!Strings.isNullOrEmpty(name.nick))
         	e.setDisplayname(name.nick);
     }
