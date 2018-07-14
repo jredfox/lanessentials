@@ -6,10 +6,12 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class CommandSpawn extends CommandBase
 {
@@ -28,7 +30,7 @@ public class CommandSpawn extends CommandBase
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
 		int dimension = 0;
-		BlockPos bp = server.getWorld(dimension).getSpawnPoint();
+		
 		if(!(sender instanceof EntityPlayer) && args.length != 1)
 		{
 			System.out.println("sender must be a player"); 
@@ -42,19 +44,10 @@ public class CommandSpawn extends CommandBase
 		}
 		if(args.length == 0)
 			ep = (EntityPlayerMP)sender;
-		
-		EntityUtil.telePortEntity(ep, server, bp.getX() + 0.5, bp.getY(), bp.getZ() + 0.5, ep.rotationYaw, ep.rotationPitch, dimension);
-		boolean flag = false;
-		while (!ep.world.getCollisionBoxes(ep, ep.getEntityBoundingBox()).isEmpty() && ep.posY < 256.0D)
-	    {
-	    	ep.setPosition(ep.posX, ep.posY + 1.0D, ep.posZ);
-	    	flag = true;
-	    }
-		if(flag)
-			ep.connection.setPlayerLocation(ep.posX, ep.posY, ep.posZ, ep.rotationYaw, ep.rotationPitch);
+		EntityUtil.teleportSpawn(ep,server,dimension);	
 	}
-	
-    /**
+
+	/**
      * get selectors working
      */
     public boolean isUsernameIndex(String[] args, int index)
