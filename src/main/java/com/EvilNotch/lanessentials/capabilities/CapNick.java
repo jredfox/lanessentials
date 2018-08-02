@@ -2,7 +2,6 @@ package com.EvilNotch.lanessentials.capabilities;
 
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
-import com.EvilNotch.lib.util.ICopy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

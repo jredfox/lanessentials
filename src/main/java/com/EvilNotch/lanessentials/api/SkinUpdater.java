@@ -33,7 +33,7 @@ import com.EvilNotch.lib.minecraft.EnumChatFormatting;
 import com.EvilNotch.lib.minecraft.TestProps;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.util.JavaUtil;
-import com.EvilNotch.lib.util.number.IntObj;
+import com.EvilNotch.lib.util.primitive.IntObj;
 import com.dosse.upnp.UPnP;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;

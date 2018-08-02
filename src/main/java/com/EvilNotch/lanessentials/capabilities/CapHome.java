@@ -7,7 +7,6 @@ import java.util.List;
 import com.EvilNotch.lanessentials.CfgLanEssentials;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
-import com.EvilNotch.lib.util.ICopy;
 import com.EvilNotch.lib.util.JavaUtil;
 
 import net.minecraft.entity.player.EntityPlayer;

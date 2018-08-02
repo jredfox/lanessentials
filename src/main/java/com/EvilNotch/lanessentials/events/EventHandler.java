@@ -19,7 +19,7 @@ import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.util.JavaUtil;
-import com.EvilNotch.lib.util.number.IntObj;
+import com.EvilNotch.lib.util.primitive.IntObj;
 
 import joptsimple.internal.Strings;
 import net.minecraft.entity.player.EntityPlayer;
