@@ -1,29 +1,23 @@
 package com.EvilNotch.lanessentials.commands;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 
 import com.EvilNotch.lanessentials.Reference;
 import com.EvilNotch.lanessentials.api.SkinData;
 import com.EvilNotch.lanessentials.api.SkinUpdater;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
-import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.minecraft.EntityUtil;
 import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.TestProps;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -66,7 +60,10 @@ public class CommandSkin  extends CommandBase
      					throw new WrongUsageException("/skin getURL [playername]");
      				SkinData data = SkinUpdater.getSkinData(args[1]);
      				String url = SkinUpdater.getSkinURL(data, args[1]);
-     				EntityUtil.sendURL((EntityPlayer) sender, "skin url", url);
+     				if(JavaUtil.isURL(url))
+     					EntityUtil.sendClipBoard(EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", url);
+     				else
+     					EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", url);
      				return;
      			}
      			else if(args[0].equals("getCapability"))
@@ -90,7 +87,7 @@ public class CommandSkin  extends CommandBase
      				throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
      			long time = System.currentTimeMillis();
      			EntityPlayerMP player = (EntityPlayerMP)sender;
-     			CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
+     			CapContainer container = CapabilityReg.getCapabilityConatainer(player);
      			CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
      			String username = args[0];
      			if(args.length == 2)

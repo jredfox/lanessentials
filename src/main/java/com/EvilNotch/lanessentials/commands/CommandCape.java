@@ -68,7 +68,7 @@ public class CommandCape extends CommandBase{
      				{
      					SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
      					String url = SkinUpdater.getCapeURL(skin,args[1]);
-     					EntityUtil.sendURL(player,"Cape Link for " + args[1] + ":", url);
+         				EntityUtil.sendClipBoard(EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", url);
      					return;
      				}
      				else if(args[0].equals("getCapability"))
@@ -86,7 +86,10 @@ public class CommandCape extends CommandBase{
      						EntityUtil.printChat(player, EnumChatFormatting.RED, "", "cape is blank for user:" + args[1]);
      						return;
      					}
-     					EntityUtil.sendURL((EntityPlayer) sender, "capeCapability:", cap.url);
+         				if(JavaUtil.isURL(cap.url))
+         					EntityUtil.sendClipBoard(EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", cap.url);
+         				else
+         					EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", cap.url);
      					return;
      				}
      				else

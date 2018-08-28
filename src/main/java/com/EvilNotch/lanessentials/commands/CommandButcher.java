@@ -28,6 +28,7 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityVex;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityFlying;
 import net.minecraft.entity.player.EntityPlayer;
@@ -94,7 +95,7 @@ public class CommandButcher extends CommandBase{
 		{
 			for(Entity e : ents)
 			{
-				if(!(e instanceof EntityLiving) && !(e instanceof EntityLivingBase))
+				if(!(e instanceof EntityLivingBase))
 					killEnt(e);
 			}
 		}
@@ -229,10 +230,10 @@ public class CommandButcher extends CommandBase{
 	{
 		boolean monster = e.isCreatureType(EnumCreatureType.MONSTER, false);
 		if(!monster)
-			return e instanceof EntityMob || e instanceof IRangedAttackMob;
+			return e instanceof IMob || e instanceof IRangedAttackMob;
 		return true;
 	}
-	public boolean isCreature(Entity e){
+	public boolean isCreature(Entity e){ 
 		boolean creature = e.isCreatureType(EnumCreatureType.CREATURE, false);
 		return creature;
 	}

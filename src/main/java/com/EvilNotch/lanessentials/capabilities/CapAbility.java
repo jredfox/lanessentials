@@ -1,15 +1,14 @@
 package com.EvilNotch.lanessentials.capabilities;
 
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
+import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.ITick;
-import com.EvilNotch.lib.util.JavaUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapAbility implements ICapability,ITick{
+public class CapAbility implements IPCapability,ITick{
 	/**
 	 * tells if the player can fly/take damage on tick
 	 */
@@ -32,14 +31,14 @@ public class CapAbility implements ICapability,ITick{
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c) {
+	public void readFromNBT(EntityPlayerMP p,NBTTagCompound nbt,CapContainer c) {
 		this.flyEnabled = nbt.getBoolean("flyEnabled");
 		this.godEnabled = nbt.getBoolean("godEnabled");
 		this.isFlying = nbt.getBoolean("isFlying");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c) {
+	public void writeToNBT(EntityPlayerMP p,NBTTagCompound nbt,CapContainer c) {
 		nbt.setBoolean("flyEnabled", this.flyEnabled);
 		nbt.setBoolean("godEnabled", this.godEnabled);
 		
@@ -50,7 +49,7 @@ public class CapAbility implements ICapability,ITick{
 	 * fixes mods and issues with /gamemode
 	 */
 	@Override
-	public void tick(EntityPlayer p, CapabilityContainer c) 
+	public void tick(EntityPlayer p, CapContainer c) 
 	{
 		boolean used = false;
 		if(this.flyEnabled)

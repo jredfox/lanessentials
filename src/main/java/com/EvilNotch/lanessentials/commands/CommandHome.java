@@ -53,7 +53,7 @@ public class CommandHome  extends CommandBase
 			String s = point.equals(CommandSetHome.reservedHome) ? "unable to find default home" : "cannot find home for \"" + point + "\"";
 			throw new WrongUsageException(s,new Object[0]);
 		}
-		EntityUtil.telePortEntity(epmp, server, chp.pos.getX() + 0.5, (double)chp.pos.getActualY(), chp.pos.getZ() + 0.5, chp.yaw, chp.pitch, chp.dimId);
+		EntityUtil.telePortEntitySync(epmp, server, chp.pos.getX() + 0.5, (double)chp.pos.getActualY(), chp.pos.getZ() + 0.5, chp.yaw, chp.pitch, chp.dimId);
 	}
 	/**
 	 * list of homes per player doesn't show the default only the strings

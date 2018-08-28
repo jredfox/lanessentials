@@ -1,12 +1,12 @@
 package com.EvilNotch.lanessentials.capabilities;
 
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
+import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapNick implements ICapability{
+public class CapNick implements IPCapability{
 
 	public String nick = "";
 	
@@ -17,13 +17,13 @@ public class CapNick implements ICapability{
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) 
+	public void readFromNBT(EntityPlayerMP p,NBTTagCompound nbt, CapContainer c) 
 	{
 		this.nick = nbt.getString("nick");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, EntityPlayer p, CapabilityContainer c) {
+	public void writeToNBT(EntityPlayerMP p,NBTTagCompound nbt, CapContainer c) {
 		nbt.setString("nick", this.nick);
 	}
 

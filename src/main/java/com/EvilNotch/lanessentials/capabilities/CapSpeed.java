@@ -1,12 +1,12 @@
 package com.EvilNotch.lanessentials.capabilities;
 
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
+import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapSpeed  implements ICapability
+public class CapSpeed  implements IPCapability
 {
 	public float walk;
 	public float fly;
@@ -23,14 +23,14 @@ public class CapSpeed  implements ICapability
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt, EntityPlayer player, CapabilityContainer container) {
+	public void readFromNBT(EntityPlayerMP player,NBTTagCompound nbt, CapContainer container) {
 		this.walk = nbt.getFloat("walk");	
 		this.fly = nbt.getFloat("fly");
 		this.hasFlySpeed = nbt.getBoolean("flySpeedEnabled");
 		this.hasWalkSpeed = nbt.getBoolean("walkSpeedEnabled");
 	}
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, EntityPlayer player, CapabilityContainer container) {
+	public void writeToNBT(EntityPlayerMP player,NBTTagCompound nbt, CapContainer container) {
 		nbt.setFloat("walk", this.walk);
 		nbt.setFloat("fly", this.fly);
 		nbt.setBoolean("flySpeedEnabled", this.hasFlySpeed);

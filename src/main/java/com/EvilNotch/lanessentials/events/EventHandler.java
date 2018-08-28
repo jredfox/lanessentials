@@ -16,7 +16,7 @@ import com.EvilNotch.lanessentials.capabilities.CapHome;
 import com.EvilNotch.lanessentials.capabilities.CapNick;
 import com.EvilNotch.lanessentials.capabilities.CapSkin;
 import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 import com.EvilNotch.lib.util.JavaUtil;
 import com.EvilNotch.lib.util.primitive.IntObj;
@@ -57,7 +57,7 @@ public class EventHandler {
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapabilityContainer c = CapabilityReg.getCapabilityConatainer(player);
+	   	CapContainer c = CapabilityReg.getCapabilityConatainer(player);
 	   	CapUtil.updateCaps(player,c,true);//update capability like fly and god
 	   	CapUtil.updateClientNicks(player);//grab all other people's nick names to you for tab
     	CapUtil.updateNickName(player);//your nick to other players
@@ -77,7 +77,7 @@ public class EventHandler {
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapabilityContainer c = CapabilityReg.getCapabilityConatainer(player);
+	   	CapContainer c = CapabilityReg.getCapabilityConatainer(player);
 	   	CapUtil.updateCaps(player,c,false);
     	CapUtil.updateNickName(player);
     }
@@ -143,7 +143,7 @@ public class EventHandler {
     public void skinCap(SkinFixEvent e)
     {
 		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
-		CapabilityContainer container = CapabilityReg.getCapabilityConatainer(player);
+		CapContainer container = CapabilityReg.getCapabilityConatainer(player);
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		
 		e.newSkin = skin.skin;

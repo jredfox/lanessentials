@@ -5,15 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.EvilNotch.lanessentials.CfgLanEssentials;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.ICapability;
-import com.EvilNotch.lib.util.JavaUtil;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
+import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class CapHome implements ICapability {
+public class CapHome implements IPCapability {
 
 	public ArrayList<CapHomePoint> capPoints = new ArrayList<CapHomePoint>();
 	public int maxCount = CfgLanEssentials.maxHomeCount;
@@ -28,7 +27,7 @@ public class CapHome implements ICapability {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c) 
+	public void readFromNBT(EntityPlayerMP p,NBTTagCompound nbt,CapContainer c) 
 	{
 		this.capPoints = new ArrayList<CapHomePoint>();
 		NBTTagList points = (NBTTagList)nbt.getTagList("Homes", 10);
@@ -45,7 +44,7 @@ public class CapHome implements ICapability {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt,EntityPlayer p,CapabilityContainer c)
+	public void writeToNBT(EntityPlayerMP p,NBTTagCompound nbt,CapContainer c)
 	{
 		NBTTagList tagList = new NBTTagList();
 		for(int i=0;i<capPoints.size();i++)

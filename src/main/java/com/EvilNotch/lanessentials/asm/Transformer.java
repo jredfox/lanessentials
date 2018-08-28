@@ -14,7 +14,8 @@ import net.minecraft.launchwrapper.IClassTransformer;
 public class Transformer implements IClassTransformer
 {
     /* private final String obfClassName = "qh"; */
-    public final String className = "com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService";
+    public static final String className = "com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService";
+    public static final String inputBase = "assets/lanessentials/classes/";
 
     @Override
     public byte[] transform(String name, String newName, byte[] bytes)
@@ -55,7 +56,7 @@ public class Transformer implements IClassTransformer
     {   
     	String[] parts = name.split("\\.");
     	name = parts[parts.length-1];
-        InputStream lenStream = Transformer.class.getResourceAsStream("classes/client/gui/" + name);
+        InputStream lenStream = Transformer.class.getClassLoader().getResourceAsStream(inputBase + "client/gui/" + name);
         byte[] bytes = IOUtils.toByteArray(lenStream);
         System.out.println("Lan Essentials Transformer Patched Class: \"" + name + "\" for nick");
         return bytes;
@@ -63,7 +64,8 @@ public class Transformer implements IClassTransformer
 
     public byte[] patchSkins(String name) throws IOException
     {   
-        InputStream lenStream = Transformer.class.getResourceAsStream("classes/" + (name.contains("$") ? "YggdrasilMinecraftSessionService$1" : "YggdrasilMinecraftSessionService"));
+        InputStream lenStream = Transformer.class.getClassLoader().getResourceAsStream(inputBase + (name.contains("$") ? "YggdrasilMinecraftSessionService$1" : "YggdrasilMinecraftSessionService"));
+        System.out.println(inputBase + (name.contains("$") ? "YggdrasilMinecraftSessionService$1" : "YggdrasilMinecraftSessionService"));
         byte[] bytes = IOUtils.toByteArray(lenStream);
         System.out.println("Lan Essentials Transformer Patched Class: \"" + name + "\" for skins");
         return bytes;

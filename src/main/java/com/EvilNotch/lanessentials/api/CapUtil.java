@@ -11,7 +11,7 @@ import com.EvilNotch.lanessentials.packets.NetWorkHandler;
 import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.EvilNotch.lib.Api.MCPMappings;
 import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityContainer;
+import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
 import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
 
 import joptsimple.internal.Strings;
@@ -25,7 +25,7 @@ import net.minecraft.util.text.TextComponentString;
 
 public class CapUtil {
 	
-	public static void updateCaps(EntityPlayerMP player, CapabilityContainer container,boolean login) 
+	public static void updateCaps(EntityPlayerMP player, CapContainer container,boolean login) 
 	{
 		CapAbility cap = (CapAbility) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
 		CapSpeed speed = (CapSpeed) container.getCapability( new ResourceLocation(Reference.MODID + ":" + "speed"));
