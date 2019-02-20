@@ -1,25 +1,14 @@
-package com.EvilNotch.lanessentials.client;
+package com.evilnotch.lanessentials.client;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.HashSet;
-import java.util.Set;
 
-import com.EvilNotch.lanessentials.MainMod;
-import com.EvilNotch.lanessentials.api.LanFeilds;
-import com.EvilNotch.lanessentials.api.LanUtil;
-import com.EvilNotch.lanessentials.proxy.ClientProxy;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.dosse.upnp.UPnP;
+import com.evilnotch.lanessentials.api.LanUtil;
+import com.evilnotch.lib.api.ReflectionUtil;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiShareToLan;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.multiplayer.ThreadLanServerPing;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.util.HttpUtil;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;

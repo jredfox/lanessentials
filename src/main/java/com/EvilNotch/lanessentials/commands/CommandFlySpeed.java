@@ -1,12 +1,12 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lanessentials.api.LanFeilds;
-import com.EvilNotch.lanessentials.capabilities.CapSpeed;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.Line.LineBase;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.api.LanFeilds;
+import com.evilnotch.lanessentials.capabilities.CapSpeed;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -36,13 +36,13 @@ public class CommandFlySpeed extends CommandBase
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			return;
-		CapContainer container = CapabilityReg.getCapabilityConatainer((EntityPlayer)sender);
+		CapContainer container = CapRegHandler.getCapContainer((EntityPlayer)sender);
 		CapSpeed cap = (CapSpeed) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "speed"));
 		if(args.length == 1)
 		{
 			EntityPlayerMP epmp = (EntityPlayerMP)sender;
 			String strfloat = args[0];
-			if(!LineBase.isStringNum(strfloat))
+			if(!JavaUtil.isStringNum(strfloat))
 				throw new WrongUsageException(getUsage(sender),new Object[0]);
 			
 			float flyspeed = Float.parseFloat(strfloat);

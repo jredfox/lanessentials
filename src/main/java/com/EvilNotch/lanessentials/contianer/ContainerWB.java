@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.contianer;
+package com.evilnotch.lanessentials.contianer;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

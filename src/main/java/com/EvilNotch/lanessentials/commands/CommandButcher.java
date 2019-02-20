@@ -1,11 +1,11 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.EvilNotch.lib.util.Line.LineBase;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -26,7 +26,6 @@ import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityVex;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityBat;
@@ -60,7 +59,7 @@ public class CommandButcher extends CommandBase{
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(args.length == 0)
 			throw new WrongUsageException("Must Specify Type/Entity",new Object[0]);
-		if(args.length == 2 && !LineBase.isStringNum(args[1]))
+		if(args.length == 2 && !JavaUtil.isStringNum(args[1]))
 			throw new WrongUsageException("radius must be int!",new Object[0]);
 		
 		WorldServer w = (WorldServer) sender.getEntityWorld();

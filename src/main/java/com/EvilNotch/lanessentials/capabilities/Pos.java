@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.capabilities;
+package com.evilnotch.lanessentials.capabilities;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;

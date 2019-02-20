@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.asm;
+package com.evilnotch.lanessentials.asm;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,17 +31,12 @@ public class Transformer implements IClassTransformer
                 e.printStackTrace();
             }
         }
-        else if(name.contains("bjq"))
+        else if(name.equals("bjq"))
         {
         	//patch gui multi player tab
         	try
         	{
-        		if(name.equals("bjq$1"))
-        			return patchGui(name);
-        		else if(name.equals("bjq$a"))
-        			return patchGui(name);
-        		else if(name.equals("bjq"))
-        			return patchGui(name);
+				return patchGui(name);
         	}
         	catch(IOException e)
         	{

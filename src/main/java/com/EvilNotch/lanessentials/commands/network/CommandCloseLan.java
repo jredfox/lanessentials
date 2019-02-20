@@ -1,9 +1,6 @@
-package com.EvilNotch.lanessentials.commands.network;
+package com.evilnotch.lanessentials.commands.network;
 
-import com.EvilNotch.lanessentials.MainMod;
-import com.EvilNotch.lanessentials.proxy.ClientProxy;
-import com.EvilNotch.lanessentials.proxy.ServerProxy;
-import com.EvilNotch.lib.main.MainJava;
+import com.evilnotch.lanessentials.MainMod;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

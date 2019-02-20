@@ -1,33 +1,23 @@
-package com.EvilNotch.lanessentials.api;
+package com.evilnotch.lanessentials.api;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.EvilNotch.lanessentials.CfgLanEssentials;
-import com.EvilNotch.lanessentials.MainMod;
-import com.EvilNotch.lanessentials.client.LanFeildsClient;
-import com.EvilNotch.lanessentials.proxy.ClientProxy;
-import com.EvilNotch.lanessentials.proxy.ServerOnly;
-import com.EvilNotch.lanessentials.proxy.ServerProxy;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.util.JavaUtil;
 import com.dosse.upnp.UPnP;
+import com.evilnotch.lanessentials.CfgLanEssentials;
+import com.evilnotch.lanessentials.MainMod;
+import com.evilnotch.lanessentials.proxy.ClientProxy;
+import com.evilnotch.lanessentials.proxy.ServerOnly;
+import com.evilnotch.lib.main.MainJava;
+import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ThreadLanServerPing;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.HttpUtil;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
 
@@ -103,7 +93,7 @@ public class LanUtil {
 	public static boolean hasPorted = false;
 	public static void schedulePortForwarding(int serverPort, String protocal) 
 	{
-		System.out.println("here:" + MainJava.isClient + " hasPortedBefore:" + hasPorted);
+		System.out.println("here:" + LoaderMain.isClient + " hasPortedBefore:" + hasPorted);
         Thread t = new Thread(
      		   
         new Runnable() 
@@ -118,11 +108,11 @@ public class LanUtil {
      		   boolean sucess = doPortForwarding(serverPort,protocal);
      		   if(!sucess)
      		   {
-     			   EntityUtil.broadCastMessege(EnumChatFormatting.RED + "Port Opening Failed:" + serverPort + " Protocal:" + protocal + " " + JavaUtil.getTime(time) + "ms");
+     			   PlayerUtil.broadCastMessege(EnumChatFormatting.RED + "Port Opening Failed:" + serverPort + " Protocal:" + protocal + " " + JavaUtil.getTime(time) + "ms");
      		   }
      		   else
      		   {
-     			  EntityUtil.broadCastMessege(EnumChatFormatting.AQUA + "Port Open:" + EnumChatFormatting.YELLOW + serverPort + EnumChatFormatting.BLUE + " Protocal:" + EnumChatFormatting.YELLOW + protocal + " " + JavaUtil.getTime(time) + "ms");
+     			  PlayerUtil.broadCastMessege(EnumChatFormatting.AQUA + "Port Open:" + EnumChatFormatting.YELLOW + serverPort + EnumChatFormatting.BLUE + " Protocal:" + EnumChatFormatting.YELLOW + protocal + " " + JavaUtil.getTime(time) + "ms");
      		   }
      	   }
         });
@@ -130,7 +120,7 @@ public class LanUtil {
 	}
 	
 	public static String getMCPort(MinecraftServer server){
-		return MainJava.isClient ? ClientProxy.getPort() : "" + ServerOnly.getServerPort(server);
+		return LoaderMain.isClient ? ClientProxy.getPort() : "" + ServerOnly.getServerPort(server);
 	}
 	/**
 	 * for server side only integrated/dedicated

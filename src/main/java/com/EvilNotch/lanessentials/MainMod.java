@@ -1,50 +1,52 @@
-package com.EvilNotch.lanessentials;
+package com.evilnotch.lanessentials;
 
 import java.io.File;
 
-import com.EvilNotch.lanessentials.api.LanFeilds;
-import com.EvilNotch.lanessentials.api.LanUtil;
-import com.EvilNotch.lanessentials.api.SkinUpdater;
-import com.EvilNotch.lanessentials.commands.CommandButcher;
-import com.EvilNotch.lanessentials.commands.CommandCape;
-import com.EvilNotch.lanessentials.commands.CommandEnderChest;
-import com.EvilNotch.lanessentials.commands.CommandFeed;
-import com.EvilNotch.lanessentials.commands.CommandFly;
-import com.EvilNotch.lanessentials.commands.CommandFlySpeed;
-import com.EvilNotch.lanessentials.commands.CommandGod;
-import com.EvilNotch.lanessentials.commands.CommandHat;
-import com.EvilNotch.lanessentials.commands.CommandHeal;
-import com.EvilNotch.lanessentials.commands.CommandHome;
-import com.EvilNotch.lanessentials.commands.CommandKick;
-import com.EvilNotch.lanessentials.commands.CommandNick;
-import com.EvilNotch.lanessentials.commands.CommandNuke;
-import com.EvilNotch.lanessentials.commands.CommandSetHealth;
-import com.EvilNotch.lanessentials.commands.CommandSetHome;
-import com.EvilNotch.lanessentials.commands.CommandSetHunger;
-import com.EvilNotch.lanessentials.commands.CommandSkin;
-import com.EvilNotch.lanessentials.commands.CommandSmite;
-import com.EvilNotch.lanessentials.commands.CommandSpawn;
-import com.EvilNotch.lanessentials.commands.CommandWalkSpeed;
-import com.EvilNotch.lanessentials.commands.CommandWorkBench;
-import com.EvilNotch.lanessentials.commands.network.CommandCloseLan;
-import com.EvilNotch.lanessentials.commands.network.CommandOpenToLan;
-import com.EvilNotch.lanessentials.commands.network.CommandOpenToNet;
-import com.EvilNotch.lanessentials.commands.network.CommandPortForward;
-import com.EvilNotch.lanessentials.commands.network.CommandServerIP;
-import com.EvilNotch.lanessentials.commands.vanilla.CMDBanIp;
-import com.EvilNotch.lanessentials.commands.vanilla.CMDBanPlayer;
-import com.EvilNotch.lanessentials.commands.vanilla.CMDDeOp;
-import com.EvilNotch.lanessentials.commands.vanilla.CMDOp;
-import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonIp;
-import com.EvilNotch.lanessentials.commands.vanilla.CMDPardonPlayer;
-import com.EvilNotch.lanessentials.packets.NetWorkHandler;
-import com.EvilNotch.lanessentials.proxy.ServerOnly;
-import com.EvilNotch.lanessentials.proxy.ServerProxy;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.minecraft.registry.GeneralRegistry;
-import com.EvilNotch.lib.util.JavaUtil;
+import com.evilnotch.lanessentials.api.LanFeilds;
+import com.evilnotch.lanessentials.api.LanUtil;
+import com.evilnotch.lanessentials.api.SkinUpdater;
+import com.evilnotch.lanessentials.commands.CommandButcher;
+import com.evilnotch.lanessentials.commands.CommandCape;
+import com.evilnotch.lanessentials.commands.CommandEnderChest;
+import com.evilnotch.lanessentials.commands.CommandFeed;
+import com.evilnotch.lanessentials.commands.CommandFly;
+import com.evilnotch.lanessentials.commands.CommandFlySpeed;
+import com.evilnotch.lanessentials.commands.CommandGod;
+import com.evilnotch.lanessentials.commands.CommandHat;
+import com.evilnotch.lanessentials.commands.CommandHeal;
+import com.evilnotch.lanessentials.commands.CommandHome;
+import com.evilnotch.lanessentials.commands.CommandKick;
+import com.evilnotch.lanessentials.commands.CommandNick;
+import com.evilnotch.lanessentials.commands.CommandNuke;
+import com.evilnotch.lanessentials.commands.CommandSetHealth;
+import com.evilnotch.lanessentials.commands.CommandSetHome;
+import com.evilnotch.lanessentials.commands.CommandSetHunger;
+import com.evilnotch.lanessentials.commands.CommandSkin;
+import com.evilnotch.lanessentials.commands.CommandSmite;
+import com.evilnotch.lanessentials.commands.CommandSpawn;
+import com.evilnotch.lanessentials.commands.CommandWalkSpeed;
+import com.evilnotch.lanessentials.commands.CommandWorkBench;
+import com.evilnotch.lanessentials.commands.network.CommandCloseLan;
+import com.evilnotch.lanessentials.commands.network.CommandOpenToLan;
+import com.evilnotch.lanessentials.commands.network.CommandOpenToNet;
+import com.evilnotch.lanessentials.commands.network.CommandPortForward;
+import com.evilnotch.lanessentials.commands.network.CommandServerIP;
+import com.evilnotch.lanessentials.commands.vanilla.CMDBanIp;
+import com.evilnotch.lanessentials.commands.vanilla.CMDBanPlayer;
+import com.evilnotch.lanessentials.commands.vanilla.CMDDeOp;
+import com.evilnotch.lanessentials.commands.vanilla.CMDOp;
+import com.evilnotch.lanessentials.commands.vanilla.CMDPardonIp;
+import com.evilnotch.lanessentials.commands.vanilla.CMDPardonPlayer;
+import com.evilnotch.lanessentials.packets.PacketDisplayNameRefresh;
+import com.evilnotch.lanessentials.packets.PacketNickHandler;
+import com.evilnotch.lanessentials.proxy.ServerOnly;
+import com.evilnotch.lanessentials.proxy.ServerProxy;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.network.NetWorkHandler;
+import com.evilnotch.lib.minecraft.registry.GeneralRegistry;
+import com.evilnotch.lib.util.JavaUtil;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 
 import net.minecraft.command.CommandDebug;
@@ -64,12 +66,13 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:evilnotchlib")
 public class MainMod
 {
 	
-	@SidedProxy(clientSide = "com.EvilNotch.lanessentials.proxy.ClientProxy", serverSide = "com.EvilNotch.lanessentials.proxy.ServerProxy")
+	@SidedProxy(clientSide = "com.evilnotch.lanessentials.proxy.ClientProxy", serverSide = "com.evilnotch.lanessentials.proxy.ServerProxy")
 	public static ServerProxy proxy;
 
     @EventHandler
@@ -80,11 +83,11 @@ public class MainMod
 		SkinUpdater.skinCache = new File(dir,"skinCache.json");
 		SkinUpdater.parseSkinCache();
     	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
-    	MinecraftForge.EVENT_BUS.register(new com.EvilNotch.lanessentials.events.EventHandler());
+    	MinecraftForge.EVENT_BUS.register(new com.evilnotch.lanessentials.events.EventHandler());
     	proxy.preinit();
     	LanFeilds.cacheMCP();
     	proxy.dedicatedPreinit();
-    	CapabilityReg.registerCapProvider(new CapabilityProvider());
+    	CapRegHandler.registerRegistry(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
     	GeneralRegistry.registerCommand(new CommandHome());
@@ -108,7 +111,7 @@ public class MainMod
         GeneralRegistry.registerCommand(new CommandSpawn());
     	
     	//server commands redone for client
-    	if(MainJava.isClient)
+    	if(LoaderMain.isClient)
     	{
     		GeneralRegistry.registerCommand(new CMDBanIp());
     		GeneralRegistry.registerCommand(new CMDBanPlayer());
@@ -143,18 +146,20 @@ public class MainMod
     	 */
         ReflectionUtil.setFinalObject(null, CfgLanEssentials.skinDomains, YggdrasilMinecraftSessionService.class, "WHITELISTED_DOMAINS");
     }
+    
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	NetWorkHandler.init();
+    	NetWorkHandler.registerMessage(PacketNickHandler.class, PacketDisplayNameRefresh.class, Side.CLIENT);
     }
+    
     /**
      * port forward on dedicated servers
      */
     @EventHandler
     public void starting(FMLServerStartingEvent event)
     {			
-    	if(!MainJava.isClient && CfgLanEssentials.portForwardDedicated)
+    	if(!LoaderMain.isClient && CfgLanEssentials.portForwardDedicated)
     	{
     		System.out.println("Starting port forwarding dedicated Server!");
     		LanUtil.schedulePortForwarding(ServerOnly.getServerPort(event.getServer()),CfgLanEssentials.dedicatedPortProtocal);
@@ -176,7 +181,7 @@ public class MainMod
 		//player premium uuid cache
 		SkinUpdater.saveSkinCache();
 		//lan-essentials code that needs to be run elsewhere
-		com.EvilNotch.lanessentials.events.EventHandler.noSkins.clear();
+		com.evilnotch.lanessentials.events.EventHandler.noSkins.clear();
     }
 
 }

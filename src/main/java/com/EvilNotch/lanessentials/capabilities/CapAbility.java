@@ -1,14 +1,13 @@
-package com.EvilNotch.lanessentials.capabilities;
+package com.evilnotch.lanessentials.capabilities;
 
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.ITick;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.ICapabilityTick;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapAbility implements IPCapability,ITick{
+public class CapAbility implements ICapabilityTick<EntityPlayerMP>{
 	/**
 	 * tells if the player can fly/take damage on tick
 	 */
@@ -49,7 +48,7 @@ public class CapAbility implements IPCapability,ITick{
 	 * fixes mods and issues with /gamemode
 	 */
 	@Override
-	public void tick(EntityPlayer p, CapContainer c) 
+	public void tick(EntityPlayerMP p, CapContainer c) 
 	{
 		boolean used = false;
 		if(this.flyEnabled)

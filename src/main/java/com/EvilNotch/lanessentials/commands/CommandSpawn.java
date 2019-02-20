@@ -1,17 +1,14 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
-import com.EvilNotch.lib.minecraft.EntityUtil;
+import com.evilnotch.lib.minecraft.util.TeleportUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CommandSpawn extends CommandBase
 {
@@ -44,7 +41,7 @@ public class CommandSpawn extends CommandBase
 		}
 		if(args.length == 0)
 			ep = (EntityPlayerMP)sender;
-		EntityUtil.teleportSpawn(ep,server,dimension);	
+		TeleportUtil.teleportSpawn(ep, server, dimension);	
 	}
 
 	/**

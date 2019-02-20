@@ -1,8 +1,8 @@
-package com.EvilNotch.lanessentials.commands.network;
+package com.evilnotch.lanessentials.commands.network;
 
-import com.EvilNotch.lanessentials.api.LanUtil;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
+import com.evilnotch.lanessentials.api.LanUtil;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -30,7 +30,7 @@ public class CommandPortForward extends CommandBase{
 		EntityPlayerMP p = (EntityPlayerMP)sender;
 		if(!LanUtil.ports.isEmpty())
 		{
-			EntityUtil.printChat(p, EnumChatFormatting.RED, "", "Closing Ports");
+			PlayerUtil.printChat(p, EnumChatFormatting.RED, "", "Closing Ports");
 			LanUtil.stopPorts();
 		}
 		String port = LanUtil.getMCPort(server);
@@ -39,7 +39,7 @@ public class CommandPortForward extends CommandBase{
 			throw new WrongUsageException("Lan Must Be open Before Port Forwarding",new Object[0]);
 		if(actualPort > 65535)
 			throw new WrongUsageException("Invalid Port",new Object[0]);
-		EntityUtil.printChat(p, EnumChatFormatting.WHITE, "", "Starting Port Forwarding. This command is still loading even if you don't think so");
+		PlayerUtil.printChat(p, EnumChatFormatting.WHITE, "", "Starting Port Forwarding. This command is still loading even if you don't think so");
 		LanUtil.schedulePortForwarding(actualPort, "TCP");
 	}
 

@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.events;
+package com.evilnotch.lanessentials.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;

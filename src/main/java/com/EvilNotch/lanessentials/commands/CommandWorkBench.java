@@ -1,9 +1,9 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.EvilNotch.lanessentials.contianer.ContainerWB;
+import com.evilnotch.lanessentials.contianer.ContainerWB;
 
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.command.CommandBase;

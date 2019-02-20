@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.events;
+package com.evilnotch.lanessentials.events;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;

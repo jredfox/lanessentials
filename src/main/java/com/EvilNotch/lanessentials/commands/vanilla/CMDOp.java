@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.commands.vanilla;
+package com.evilnotch.lanessentials.commands.vanilla;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;

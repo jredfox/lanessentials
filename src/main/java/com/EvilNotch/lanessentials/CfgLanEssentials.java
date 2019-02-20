@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials;
+package com.evilnotch.lanessentials;
 
 import java.io.File;
 

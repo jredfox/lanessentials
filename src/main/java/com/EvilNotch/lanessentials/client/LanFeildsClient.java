@@ -1,6 +1,6 @@
-package com.EvilNotch.lanessentials.client;
+package com.evilnotch.lanessentials.client;
 
-import com.EvilNotch.lib.Api.MCPMappings;
+import com.evilnotch.lib.api.mcp.MCPMappings;
 
 import net.minecraft.client.gui.GuiShareToLan;
 import net.minecraft.client.multiplayer.ThreadLanServerPing;

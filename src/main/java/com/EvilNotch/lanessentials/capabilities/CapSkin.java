@@ -1,12 +1,12 @@
-package com.EvilNotch.lanessentials.capabilities;
+package com.evilnotch.lanessentials.capabilities;
 
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.ICapability;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapSkin implements IPCapability{
+public class CapSkin implements ICapability<EntityPlayerMP>{
 	
 	public String skin = "";
 	public boolean isAlex = false;

@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

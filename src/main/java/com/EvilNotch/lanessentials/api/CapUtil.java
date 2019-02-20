@@ -1,18 +1,18 @@
-package com.EvilNotch.lanessentials.api;
+package com.evilnotch.lanessentials.api;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lanessentials.capabilities.CapAbility;
-import com.EvilNotch.lanessentials.capabilities.CapNick;
-import com.EvilNotch.lanessentials.capabilities.CapSpeed;
-import com.EvilNotch.lanessentials.packets.NetWorkHandler;
-import com.EvilNotch.lanessentials.packets.PacketDisplayNameRefresh;
-import com.EvilNotch.lib.Api.MCPMappings;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.capabilities.CapAbility;
+import com.evilnotch.lanessentials.capabilities.CapNick;
+import com.evilnotch.lanessentials.capabilities.CapSpeed;
+import com.evilnotch.lanessentials.packets.PacketDisplayNameRefresh;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.api.mcp.MCPMappings;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.network.NetWorkHandler;
 
 import joptsimple.internal.Strings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -67,7 +67,7 @@ public class CapUtil {
 		{
 			if(!request.equals(newPlayer))
 			{
-		    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
+		    	CapNick name = (CapNick) CapRegHandler.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
 		    	if(Strings.isNullOrEmpty(name.nick))
 		    	{
 		    		continue;
@@ -90,7 +90,7 @@ public class CapUtil {
 	 */
 	public static void updateTrackNickName(EntityPlayerMP request,EntityPlayerMP newPlayer)
 	{
-    	CapNick name = (CapNick) CapabilityReg.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	CapNick name = (CapNick) CapRegHandler.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(Strings.isNullOrEmpty(name.nick))
     	{
     		return;
@@ -105,7 +105,7 @@ public class CapUtil {
 	}
 	public static void updateNickName(EntityPlayerMP player) 
 	{
-    	CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	CapNick name = (CapNick) CapRegHandler.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(Strings.isNullOrEmpty(name.nick))
     		return;
     	player.refreshDisplayName();

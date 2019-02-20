@@ -1,12 +1,12 @@
-package com.EvilNotch.lanessentials.proxy;
+package com.evilnotch.lanessentials.proxy;
 
 import java.net.InetAddress;
 import java.util.List;
 
-import com.EvilNotch.lanessentials.api.LanFeilds;
-import com.EvilNotch.lanessentials.api.LanUtil;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.minecraft.EntityUtil;
+import com.evilnotch.lanessentials.api.LanFeilds;
+import com.evilnotch.lanessentials.api.LanUtil;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetworkSystem;
@@ -16,7 +16,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.dedicated.PropertyManager;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.GameType;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ServerOnly {
@@ -28,8 +27,8 @@ public class ServerOnly {
 	{
 		List<EntityPlayerMP> players = s.getPlayerList().getPlayers();
 		for(EntityPlayerMP p : players)
-			if(!EntityUtil.isPlayerOwner(p))
-				EntityUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting"));
+			if(!PlayerUtil.isPlayerOwner(p))
+				PlayerUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting"));
 		
 		DedicatedServer server = (DedicatedServer)s;
 		System.out.println("Stopping ports!");

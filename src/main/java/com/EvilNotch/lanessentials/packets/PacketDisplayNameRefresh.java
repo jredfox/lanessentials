@@ -1,12 +1,6 @@
-package com.EvilNotch.lanessentials.packets;
-
-import java.nio.ByteBuffer;
-
-import com.EvilNotch.lib.Api.MCPMappings;
-import com.EvilNotch.lib.Api.ReflectionUtil;
+package com.evilnotch.lanessentials.packets;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 

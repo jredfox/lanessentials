@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.asm;
+package com.evilnotch.lanessentials.asm;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ public class FMLCorePlugin implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] {"com.EvilNotch.lanessentials.asm.Transformer"};
+        return new String[] {"com.evilnotch.lanessentials.asm.Transformer"};
     }
 
     @Override

@@ -1,11 +1,11 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.EvilNotch.lib.minecraft.EntityUtil;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -13,7 +13,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -54,7 +53,7 @@ public class CommandKick extends CommandBase {
 		if(e instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP player = (EntityPlayerMP)e;
-			EntityUtil.disconnectPlayer(player,new TextComponentString(msg));
+			PlayerUtil.disconnectPlayer(player,new TextComponentString(msg));
 		}
 	}
 	

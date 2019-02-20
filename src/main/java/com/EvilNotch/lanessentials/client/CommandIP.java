@@ -1,10 +1,11 @@
-package com.EvilNotch.lanessentials.client;
+package com.evilnotch.lanessentials.client;
 
 import java.net.UnknownHostException;
 
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.util.JavaUtil;
+import com.evilnotch.lib.minecraft.util.EntityUtil;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -41,11 +42,11 @@ public class CommandIP extends CommandBase implements IClientCommand{
 		try 
 		{
 			String ip = JavaUtil.getIpv4();
-			EntityUtil.sendClipBoard(EnumChatFormatting.WHITE,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE,(EntityPlayer)sender, "Your Ipv4 Adress is:", ip);
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.WHITE,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "Your Ipv4 Adress is:", ip);
 		} 
 		catch (UnknownHostException e) 
 		{
-			EntityUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch ipv4 adress");
+			PlayerUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch ipv4 adress");
 		}
 		
 	}

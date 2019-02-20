@@ -1,12 +1,9 @@
-package com.EvilNotch.lanessentials.commands.network;
+package com.evilnotch.lanessentials.commands.network;
 
-import com.EvilNotch.lanessentials.api.LanUtil;
-import com.EvilNotch.lanessentials.proxy.ClientProxy;
-import com.EvilNotch.lanessentials.proxy.ServerProxy;
-import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.util.JavaUtil;
+import com.evilnotch.lanessentials.api.LanUtil;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -40,7 +37,7 @@ public class CommandServerIP extends CommandBase{
 		{
 			String ip = JavaUtil.getPublicIp();
 			String port = LanUtil.getMCPort(server);
-			EntityUtil.sendClipBoard(EnumChatFormatting.DARK_AQUA, EnumChatFormatting.YELLOW + EnumChatFormatting.UNDERLINE, (EntityPlayerMP)sender, "ServerIP:", ip + ":" + port);
+			PlayerUtil.sendClipBoard((EntityPlayerMP)sender, EnumChatFormatting.DARK_AQUA, EnumChatFormatting.YELLOW + EnumChatFormatting.UNDERLINE, "ServerIP:", ip + ":" + port);
 		}
 		catch(Exception e)
 		{

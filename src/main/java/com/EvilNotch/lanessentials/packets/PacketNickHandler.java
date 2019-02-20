@@ -1,16 +1,11 @@
-package com.EvilNotch.lanessentials.packets;
+package com.evilnotch.lanessentials.packets;
 
-import java.util.Collection;
-
-import com.EvilNotch.lib.Api.MCPMappings;
-import com.EvilNotch.lib.Api.ReflectionUtil;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.api.mcp.MCPMappings;
+import com.evilnotch.lib.minecraft.network.MessegeBase;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PacketNickHandler extends MessegeBase<PacketDisplayNameRefresh>{
 	

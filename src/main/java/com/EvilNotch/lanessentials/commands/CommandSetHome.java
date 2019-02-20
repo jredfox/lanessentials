@@ -1,31 +1,29 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.Line.LineBase;
-import com.EvilNotch.lanessentials.capabilities.CapHome;
-import com.EvilNotch.lanessentials.capabilities.CapHomePoint;
-import com.EvilNotch.lanessentials.capabilities.Pos;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.capabilities.CapHome;
+import com.evilnotch.lanessentials.capabilities.CapHomePoint;
+import com.evilnotch.lanessentials.capabilities.Pos;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
 
 public class CommandSetHome  extends CommandBase
 {	
@@ -55,29 +53,29 @@ public class CommandSetHome  extends CommandBase
 		}
 		String point = args.length >= 1 ? args[0].trim() : reservedHome;
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
-		CapHome ch = (CapHome) CapabilityReg.getCapabilityConatainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+		CapHome ch = (CapHome) CapRegHandler.getCapContainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
 		
 		if(point.equals("clear"))
 		{
 			ch.capPoints.clear();
-			EntityUtil.printChat(epmp, EnumChatFormatting.RED, EnumChatFormatting.RED, "cleared homes");
+			PlayerUtil.printChat(epmp, EnumChatFormatting.RED, EnumChatFormatting.RED, "cleared homes");
 			return;
 		}
 		else if(point.equals("remove"))
 		{
-			if(args.length != 2 || LineBase.toWhiteSpaced(args[1]).equals(""))
+			if(args.length != 2 || JavaUtil.toWhiteSpaced(args[1]).equals(""))
 				throw new WrongUsageException("must have home to remove",new Object[0]);
 			String toRemove = args[1].trim();
 			
 			boolean removed = ch.removePoint(toRemove);
 			if(!removed)
 				throw new WrongUsageException("unable to remove point: \"" + toRemove + "\"",new Object[0]);
-			EntityUtil.printChat(epmp, EnumChatFormatting.YELLOW, EnumChatFormatting.YELLOW, "removed home:" + toRemove);
+			PlayerUtil.printChat(epmp, EnumChatFormatting.YELLOW, EnumChatFormatting.YELLOW, "removed home:" + toRemove);
 			return;
 		}
 		else if(point.equals("count"))
 		{
-			if(args.length != 2 || !LineBase.isStringNum(args[1]))
+			if(args.length != 2 || !JavaUtil.isStringNum(args[1]))
 				throw new WrongUsageException(getUsage(sender),new Object[0]);
 			
 			int size = Integer.parseInt(args[1]);
@@ -127,7 +125,7 @@ public class CommandSetHome  extends CommandBase
     	if(!(sender instanceof EntityPlayerMP))
     			return super.getTabCompletions(server, sender, args, targetPos);
     	
-    	CapHome cap = (CapHome) CapabilityReg.getCapabilityConatainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+    	CapHome cap = (CapHome) CapRegHandler.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
     	List<String> list = new ArrayList();
     	if(args.length <= 1)
     	{

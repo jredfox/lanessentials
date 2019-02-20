@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.events;
+package com.evilnotch.lanessentials.events;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,20 +6,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.EvilNotch.lanessentials.CfgLanEssentials;
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lanessentials.api.CapUtil;
-import com.EvilNotch.lanessentials.api.SkinUpdater;
-import com.EvilNotch.lanessentials.capabilities.CapAbility;
-import com.EvilNotch.lanessentials.capabilities.CapCape;
-import com.EvilNotch.lanessentials.capabilities.CapHome;
-import com.EvilNotch.lanessentials.capabilities.CapNick;
-import com.EvilNotch.lanessentials.capabilities.CapSkin;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.JavaUtil;
-import com.EvilNotch.lib.util.primitive.IntObj;
+import com.evilnotch.lanessentials.CfgLanEssentials;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.api.CapUtil;
+import com.evilnotch.lanessentials.api.SkinUpdater;
+import com.evilnotch.lanessentials.capabilities.CapAbility;
+import com.evilnotch.lanessentials.capabilities.CapCape;
+import com.evilnotch.lanessentials.capabilities.CapHome;
+import com.evilnotch.lanessentials.capabilities.CapNick;
+import com.evilnotch.lanessentials.capabilities.CapSkin;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
+import com.evilnotch.lib.util.primitive.IntObj;
 
 import joptsimple.internal.Strings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +57,7 @@ public class EventHandler {
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapContainer c = CapabilityReg.getCapabilityConatainer(player);
+	   	CapContainer c = CapRegHandler.getCapContainer(player);
 	   	CapUtil.updateCaps(player,c,true);//update capability like fly and god
 	   	CapUtil.updateClientNicks(player);//grab all other people's nick names to you for tab
     	CapUtil.updateNickName(player);//your nick to other players
@@ -77,7 +77,7 @@ public class EventHandler {
 	   	if(!(e.player instanceof EntityPlayerMP))
     		return;
 	   	EntityPlayerMP player = (EntityPlayerMP) e.player;
-	   	CapContainer c = CapabilityReg.getCapabilityConatainer(player);
+	   	CapContainer c = CapRegHandler.getCapContainer(player);
 	   	CapUtil.updateCaps(player,c,false);
     	CapUtil.updateNickName(player);
     }
@@ -90,7 +90,7 @@ public class EventHandler {
 		EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
 		if(player.capabilities.disableDamage)
 			return;//no need to continue if the job is already done
-		CapAbility cap = (CapAbility) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+		CapAbility cap = (CapAbility) CapRegHandler.getCapContainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
 		if(cap.godEnabled)
 		{
 			player.capabilities.disableDamage = true;
@@ -107,7 +107,7 @@ public class EventHandler {
         EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
         if(player.connection == null)
         	return;
-        CapNick name = (CapNick) CapabilityReg.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
+        CapNick name = (CapNick) CapRegHandler.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
         if(name == null)
         {
         	System.out.println("event is firing before player has loaded from file :(");
@@ -134,7 +134,7 @@ public class EventHandler {
 	@SubscribeEvent
     public void capeCap(CapeFixEvent e)
     {
-		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(e.getEntityPlayer()).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
+		CapCape cape = (CapCape) CapRegHandler.getCapContainer(e.getEntityPlayer()).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
 		e.url = cape.url;
 		if(CfgLanEssentials.overrideCape)
 			e.overrideCape = true;
@@ -143,7 +143,7 @@ public class EventHandler {
     public void skinCap(SkinFixEvent e)
     {
 		EntityPlayerMP player = (EntityPlayerMP) e.getEntityPlayer();
-		CapContainer container = CapabilityReg.getCapabilityConatainer(player);
+		CapContainer container = CapRegHandler.getCapContainer(player);
 		CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
 		
 		e.newSkin = skin.skin;
@@ -193,7 +193,7 @@ public class EventHandler {
 					}
 				}
 				 String name = pair.getKey();
-				 EntityPlayerMP player = (EntityPlayerMP) EntityUtil.getPlayer(name);
+				 EntityPlayerMP player = (EntityPlayerMP) PlayerUtil.getPlayer(name);
 				 SkinUpdater.fireSkinEvent(player);
 				 //if not reset add to the remove list
 				 if(i.integer != 0)

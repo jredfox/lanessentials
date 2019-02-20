@@ -1,8 +1,9 @@
-package com.EvilNotch.lanessentials.api;
+package com.evilnotch.lanessentials.api;
 
-import org.json.simple.JSONObject;
-import com.EvilNotch.lib.util.JavaUtil;
 import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONObject;
+
+import com.evilnotch.lib.util.JavaUtil;
 
 public class SkinData {
 	

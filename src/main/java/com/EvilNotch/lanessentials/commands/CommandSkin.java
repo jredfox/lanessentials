@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,15 +8,15 @@ import javax.annotation.Nullable;
 
 import org.json.simple.JSONObject;
 
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lanessentials.api.SkinData;
-import com.EvilNotch.lanessentials.api.SkinUpdater;
-import com.EvilNotch.lanessentials.capabilities.CapSkin;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.JavaUtil;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.api.SkinData;
+import com.evilnotch.lanessentials.api.SkinUpdater;
+import com.evilnotch.lanessentials.capabilities.CapSkin;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 import com.mojang.authlib.properties.Property;
 
 import net.minecraft.command.CommandBase;
@@ -61,9 +61,9 @@ public class CommandSkin  extends CommandBase
      				SkinData data = SkinUpdater.getSkinData(args[1]);
      				String url = SkinUpdater.getSkinURL(data, args[1]);
      				if(JavaUtil.isURL(url))
-     					EntityUtil.sendClipBoard(EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", url);
+     					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", url);
      				else
-     					EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", url);
+     					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", url);
      				return;
      			}
      			else if(args[0].equals("getCapability"))
@@ -74,20 +74,20 @@ public class CommandSkin  extends CommandBase
      				if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
      					throw new WrongUsageException("player isn't currently logged in:" + args[1]);
      				
-     				CapSkin cap = (CapSkin) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "skin") );
+     				CapSkin cap = (CapSkin) CapRegHandler.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "skin") );
      				if(cap == null)
      					throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
      				if(JavaUtil.isURL(cap.skin))
-     					EntityUtil.sendURL((EntityPlayer) sender, "skinCapability:", cap.skin);
+     					PlayerUtil.sendURL((EntityPlayer) sender, "skinCapability:", cap.skin);
      				else
-     					EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE,(EntityPlayer) sender, "skinCapability:", cap.skin);
+     					PlayerUtil.sendClipBoard((EntityPlayer) sender, EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE, "skinCapability:", cap.skin);
      				return;
      			}
      			else if(JavaUtil.isURL(args[0]) && args.length != 2)
      				throw new WrongUsageException("/skin [url, isSteve]",new Object[0]);
      			long time = System.currentTimeMillis();
      			EntityPlayerMP player = (EntityPlayerMP)sender;
-     			CapContainer container = CapabilityReg.getCapabilityConatainer(player);
+     			CapContainer container = CapRegHandler.getCapContainer(player);
      			CapSkin skin = (CapSkin) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "skin"));
      			String username = args[0];
      			if(args.length == 2)
@@ -101,7 +101,7 @@ public class CommandSkin  extends CommandBase
      	      }
      		  catch(Exception e)
      		  {
-     			  EntityUtil.printChat((EntityPlayerMP) sender, EnumChatFormatting.RED, "", "Ussage:" + e.getMessage());
+     			 PlayerUtil.printChat((EntityPlayerMP) sender, EnumChatFormatting.RED, "", "Ussage:" + e.getMessage());
      		  }
      	   }
         });

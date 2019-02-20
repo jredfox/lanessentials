@@ -1,32 +1,19 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.codec.binary.Base64;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lanessentials.api.SkinData;
-import com.EvilNotch.lanessentials.api.SkinUpdater;
-import com.EvilNotch.lanessentials.capabilities.CapCape;
-import com.EvilNotch.lanessentials.capabilities.CapSkin;
-import com.EvilNotch.lib.Api.MCPMappings;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.TestProps;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.JavaUtil;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.api.SkinData;
+import com.evilnotch.lanessentials.api.SkinUpdater;
+import com.evilnotch.lanessentials.capabilities.CapCape;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.util.EntityUtil;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -68,7 +55,7 @@ public class CommandCape extends CommandBase{
      				{
      					SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
      					String url = SkinUpdater.getCapeURL(skin,args[1]);
-         				EntityUtil.sendClipBoard(EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", url);
+         				PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", url);
      					return;
      				}
      				else if(args[0].equals("getCapability"))
@@ -76,20 +63,20 @@ public class CommandCape extends CommandBase{
      					if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
      						throw new WrongUsageException("player isn't currently logged in:" + args[1]);
      					
-     					CapCape cap = (CapCape) CapabilityReg.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
+     					CapCape cap = (CapCape) CapRegHandler.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
      					if(cap == null)
      					{
      						throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
      					}
      					else if(cap.url.equals(""))
      					{
-     						EntityUtil.printChat(player, EnumChatFormatting.RED, "", "cape is blank for user:" + args[1]);
+     						PlayerUtil.printChat(player, EnumChatFormatting.RED, "", "cape is blank for user:" + args[1]);
      						return;
      					}
          				if(JavaUtil.isURL(cap.url))
-         					EntityUtil.sendClipBoard(EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", cap.url);
+         					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", cap.url);
          				else
-         					EntityUtil.sendClipBoard(EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, (EntityPlayer)sender, "skin url: " + args[1] + ":", cap.url);
+         					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", cap.url);
      					return;
      				}
      				else
@@ -101,7 +88,7 @@ public class CommandCape extends CommandBase{
      		 }
      		 catch(Exception e)
      		 {
-     			EntityUtil.printChat((EntityPlayerMP) sender, EnumChatFormatting.RED, "", "Ussage:" + e.getMessage());
+     			PlayerUtil.printChat((EntityPlayerMP) sender, EnumChatFormatting.RED, "", "Ussage:" + e.getMessage());
      		 }
      	   }
         });

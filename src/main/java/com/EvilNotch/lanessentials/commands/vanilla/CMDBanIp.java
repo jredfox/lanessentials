@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.commands.vanilla;
+package com.evilnotch.lanessentials.commands.vanilla;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.server.CommandBanIp;

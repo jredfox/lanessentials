@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.client;
+package com.evilnotch.lanessentials.client;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;

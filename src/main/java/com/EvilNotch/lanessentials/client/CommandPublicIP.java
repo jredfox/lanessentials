@@ -1,17 +1,13 @@
-package com.EvilNotch.lanessentials.client;
+package com.evilnotch.lanessentials.client;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.util.JavaUtil;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.client.IClientCommand;
 
@@ -43,11 +39,11 @@ public class CommandPublicIP extends CommandBase implements IClientCommand{
 		try 
 		{
 			String ip = JavaUtil.getPublicIp();
-			EntityUtil.sendClipBoard(EnumChatFormatting.WHITE,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE,(EntityPlayer)sender, "Your Public Ip Adress is:", ip);
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.WHITE,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "Your Public Ip Adress is:", ip);
 		} 
 		catch(Exception e) 
 		{
-			EntityUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch public ip adress");
+			PlayerUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch public ip adress");
 		}
 	}
 

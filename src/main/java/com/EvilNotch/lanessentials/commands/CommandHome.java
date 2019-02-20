@@ -1,18 +1,16 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.JavaUtil;
-import com.EvilNotch.lib.util.Line.LineBase;
-import com.EvilNotch.lanessentials.capabilities.CapHome;
-import com.EvilNotch.lanessentials.capabilities.CapHomePoint;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.capabilities.CapHome;
+import com.evilnotch.lanessentials.capabilities.CapHomePoint;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.util.TeleportUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -21,7 +19,6 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
@@ -46,14 +43,14 @@ public class CommandHome  extends CommandBase
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
 
 		String point = args.length >= 1 ? args[0].trim() : CommandSetHome.reservedHome;
-		CapHome ch = (CapHome) CapabilityReg.getCapabilityConatainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+		CapHome ch = (CapHome) CapRegHandler.getCapContainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
 		CapHomePoint chp = ch.getCapPoint(point);
 		if(chp == null)
 		{
 			String s = point.equals(CommandSetHome.reservedHome) ? "unable to find default home" : "cannot find home for \"" + point + "\"";
 			throw new WrongUsageException(s,new Object[0]);
 		}
-		EntityUtil.telePortEntitySync(epmp, server, chp.pos.getX() + 0.5, (double)chp.pos.getActualY(), chp.pos.getZ() + 0.5, chp.yaw, chp.pitch, chp.dimId);
+		TeleportUtil.telePortEntitySync(epmp, server, chp.pos.getX() + 0.5, (double)chp.pos.getActualY(), chp.pos.getZ() + 0.5, chp.yaw, chp.pitch, chp.dimId);
 	}
 	/**
 	 * list of homes per player doesn't show the default only the strings
@@ -64,7 +61,7 @@ public class CommandHome  extends CommandBase
     	if(!(sender instanceof EntityPlayerMP))
     			return super.getTabCompletions(server, sender, args, targetPos);
     	
-    	CapHome cap = (CapHome) CapabilityReg.getCapabilityConatainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+    	CapHome cap = (CapHome) CapRegHandler.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
     	List<String> list = new ArrayList();
     	for(CapHomePoint p : cap.capPoints)
     	{

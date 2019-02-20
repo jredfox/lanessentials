@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
 import java.util.Arrays;
 import java.util.List;

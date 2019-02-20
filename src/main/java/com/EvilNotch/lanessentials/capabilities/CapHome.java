@@ -1,18 +1,18 @@
-package com.EvilNotch.lanessentials.capabilities;
+package com.evilnotch.lanessentials.capabilities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.EvilNotch.lanessentials.CfgLanEssentials;
-import com.EvilNotch.lib.minecraft.content.capabilites.registry.CapContainer;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.IPCapability;
+import com.evilnotch.lanessentials.CfgLanEssentials;
+import com.evilnotch.lib.minecraft.capability.CapContainer;
+import com.evilnotch.lib.minecraft.capability.ICapability;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class CapHome implements IPCapability {
+public class CapHome implements ICapability<EntityPlayerMP> {
 
 	public ArrayList<CapHomePoint> capPoints = new ArrayList<CapHomePoint>();
 	public int maxCount = CfgLanEssentials.maxHomeCount;

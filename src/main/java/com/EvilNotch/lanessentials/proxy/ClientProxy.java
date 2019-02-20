@@ -1,23 +1,18 @@
-package com.EvilNotch.lanessentials.proxy;
+package com.evilnotch.lanessentials.proxy;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
 
-import com.EvilNotch.lanessentials.MainMod;
-import com.EvilNotch.lanessentials.api.LanFeilds;
-import com.EvilNotch.lanessentials.api.LanUtil;
-import com.EvilNotch.lanessentials.api.SkinUpdater;
-import com.EvilNotch.lanessentials.client.CommandIP;
-import com.EvilNotch.lanessentials.client.CommandPublicIP;
-import com.EvilNotch.lanessentials.client.GuiEventReceiver;
-import com.EvilNotch.lanessentials.client.LanFeildsClient;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.util.JavaUtil;
-import com.mojang.authlib.GameProfile;
+import com.evilnotch.lanessentials.api.LanFeilds;
+import com.evilnotch.lanessentials.api.LanUtil;
+import com.evilnotch.lanessentials.client.CommandIP;
+import com.evilnotch.lanessentials.client.CommandPublicIP;
+import com.evilnotch.lanessentials.client.GuiEventReceiver;
+import com.evilnotch.lanessentials.client.LanFeildsClient;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ThreadLanServerPing;
@@ -64,8 +59,8 @@ public class ClientProxy extends ServerProxy{
 	{
 		List<EntityPlayerMP> players = server.getPlayerList().getPlayers();
 		for(EntityPlayerMP p : players)
-			if(!EntityUtil.isPlayerOwner(p))
-				EntityUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting"));
+			if(!PlayerUtil.isPlayerOwner(p))
+				PlayerUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting"));
 		
 		System.out.println("Stopping ports Client!");
 		long time = System.currentTimeMillis();
@@ -95,6 +90,8 @@ public class ClientProxy extends ServerProxy{
 	        
 	        if(port <= 0)
 	     	   port = a;
+		   if(port <= 0)
+			   port = 25564;
 	        Minecraft mc = Minecraft.getMinecraft();
 	        IntegratedServer server = mc.getIntegratedServer();
 	        server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
@@ -113,7 +110,7 @@ public class ClientProxy extends ServerProxy{
 	        return null;
 	    }
 	}
-	public static String shareToLanClient(int port,WorldServer w) 
+	public static String shareToLanClient(int port, WorldServer w) 
 	{
         Minecraft mc = Minecraft.getMinecraft();
         IntegratedServer server = mc.getIntegratedServer();

@@ -1,4 +1,4 @@
-package com.EvilNotch.lanessentials.api;
+package com.evilnotch.lanessentials.api;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,24 +17,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.EvilNotch.lanessentials.CfgLanEssentials;
-import com.EvilNotch.lanessentials.MainMod;
-import com.EvilNotch.lanessentials.Reference;
-import com.EvilNotch.lanessentials.capabilities.CapCape;
-import com.EvilNotch.lanessentials.events.CapeFixEvent;
-import com.EvilNotch.lanessentials.events.EventHandler;
-import com.EvilNotch.lanessentials.events.SkinFixEvent;
-import com.EvilNotch.lib.Api.ReflectionUtil;
-import com.EvilNotch.lib.main.Config;
-import com.EvilNotch.lib.main.MainJava;
-import com.EvilNotch.lib.main.eventhandlers.LibEvents;
-import com.EvilNotch.lib.minecraft.EntityUtil;
-import com.EvilNotch.lib.minecraft.EnumChatFormatting;
-import com.EvilNotch.lib.minecraft.TestProps;
-import com.EvilNotch.lib.minecraft.content.pcapabilites.CapabilityReg;
-import com.EvilNotch.lib.util.JavaUtil;
-import com.EvilNotch.lib.util.primitive.IntObj;
-import com.dosse.upnp.UPnP;
+import com.evilnotch.lanessentials.CfgLanEssentials;
+import com.evilnotch.lanessentials.Reference;
+import com.evilnotch.lanessentials.capabilities.CapCape;
+import com.evilnotch.lanessentials.events.CapeFixEvent;
+import com.evilnotch.lanessentials.events.EventHandler;
+import com.evilnotch.lanessentials.events.SkinFixEvent;
+import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
+import com.evilnotch.lib.minecraft.util.PlayerUtil;
+import com.evilnotch.lib.util.JavaUtil;
+import com.evilnotch.lib.util.primitive.IntObj;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
@@ -43,7 +37,6 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.server.SPacketDestroyEntities;
 import net.minecraft.network.play.server.SPacketHeldItemChange;
@@ -55,7 +48,6 @@ import net.minecraft.network.play.server.SPacketSpawnPosition;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -391,7 +383,7 @@ public class SkinUpdater {
 		       con.sendPacket(addInfo);
 			       
 	      	  //gamemode packet
-	      	   EntityUtil.setGameTypeSafley(p,p.interactionManager.getGameType());
+	      	   PlayerUtil.setGameTypeSafley(p,p.interactionManager.getGameType());
 	      	   p.mcServer.getPlayerList().updatePermissionLevel(p);
 	      	   p.mcServer.getPlayerList().updateTimeAndWeatherForPlayer(p, (WorldServer) p.world);
 	      	   p.world.updateAllPlayersSleepingFlag();
@@ -434,8 +426,8 @@ public class SkinUpdater {
 	         }
 	      }
            //show && hide player to update their skin on their render
-	       EntityUtil.hidePlayer(p);
-	       EntityUtil.showPlayer(p);
+	       PlayerUtil.hidePlayer(p);
+	       PlayerUtil.showPlayer(p);
 	    }
 	    catch (Exception localException) {}
     }
@@ -498,7 +490,7 @@ public class SkinUpdater {
 				{
 					addSkinDelay(p,event.newSkin);
 					if( ((EntityPlayerMP) p).connection != null) 
-						EntityUtil.printChat(p, EnumChatFormatting.RED, "", "Couldn't grab skin for:" + EnumChatFormatting.AQUA + event.newSkin);
+						PlayerUtil.printChat(p, EnumChatFormatting.RED, "", "Couldn't grab skin for:" + EnumChatFormatting.AQUA + event.newSkin);
 				}
 			}
 		}
@@ -657,7 +649,7 @@ public class SkinUpdater {
 			byte[] bytes = org.apache.commons.codec.binary.Base64.encodeBase64(str.getBytes());
 			ReflectionUtil.setObject(p, new String(bytes,StandardCharsets.UTF_8), Property.class, "value");
 		}
-		CapCape cape = (CapCape) CapabilityReg.getCapabilityConatainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
+		CapCape cape = (CapCape) CapRegHandler.getCapContainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
 		cape.url = name;
 		if(packets)
 			SkinUpdater.updateSkinPackets((EntityPlayerMP) player);

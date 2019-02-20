@@ -1,6 +1,6 @@
-package com.EvilNotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands;
 
-import com.EvilNotch.lib.util.Line.LineBase;
+import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -27,7 +27,7 @@ public class CommandSetHunger extends CommandBase
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
-		if(!(sender instanceof EntityPlayerMP)|| args.length != 2 || !LineBase.isStringNum(args[0]) || !LineBase.isStringNum(args[1]))
+		if(!(sender instanceof EntityPlayerMP)|| args.length != 2 || !JavaUtil.isStringNum(args[0]) || !JavaUtil.isStringNum(args[1]))
 			throw new WrongUsageException(getUsage(sender),new Object[0]);
 		
 		EntityPlayerMP epmp = (EntityPlayerMP)sender;
