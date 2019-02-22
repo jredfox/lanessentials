@@ -1,0 +1,24 @@
+package com.evilnotch.lanessentials.events;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+
+public class SkinFixEvent extends PlayerEvent{
+	
+	public String newSkin = null;
+	public boolean isAlexURL = false;
+	/**
+	 * setting this to true will force update the skin regardless whether or not it detects a change
+	 */
+	public boolean forceUpdate = false;
+
+	public SkinFixEvent(EntityPlayer player) {
+		super(player);
+		this.newSkin = player.getName();
+	}
+
+}

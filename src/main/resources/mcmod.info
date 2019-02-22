@@ -1,0 +1,16 @@
+[
+{
+  "modid": "lanessentials",
+  "name": "Lan Essentials",
+  "description": "Lan Essnetials Allows for online worlds and Server Utilities",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ExampleDude"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
