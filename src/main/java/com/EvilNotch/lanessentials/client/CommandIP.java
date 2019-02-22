@@ -42,7 +42,8 @@ public class CommandIP extends CommandBase implements IClientCommand{
 		try 
 		{
 			String ip = JavaUtil.getIpv4();
-			PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.WHITE,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "Your Ipv4 Adress is:", ip);
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, "Your Ipv4 Adress is:",  EnumChatFormatting.BLUE + ip);
+			PlayerUtil.copyClipBoard((EntityPlayer)sender, ip);
 		} 
 		catch (UnknownHostException e) 
 		{

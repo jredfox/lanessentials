@@ -43,7 +43,7 @@ import com.evilnotch.lanessentials.proxy.ServerOnly;
 import com.evilnotch.lanessentials.proxy.ServerProxy;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.main.loader.LoaderMain;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.network.NetWorkHandler;
 import com.evilnotch.lib.minecraft.registry.GeneralRegistry;
 import com.evilnotch.lib.util.JavaUtil;
@@ -87,7 +87,7 @@ public class MainMod
     	proxy.preinit();
     	LanFeilds.cacheMCP();
     	proxy.dedicatedPreinit();
-    	CapRegHandler.registerRegistry(new CapabilityProvider());
+    	CapabilityRegistry.registerRegistry(new CapabilityProvider());
     	
     	GeneralRegistry.registerCommand(new CommandSetHome());
     	GeneralRegistry.registerCommand(new CommandHome());

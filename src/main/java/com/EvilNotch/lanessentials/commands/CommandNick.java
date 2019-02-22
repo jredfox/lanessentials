@@ -3,7 +3,7 @@ package com.evilnotch.lanessentials.commands;
 import com.evilnotch.lanessentials.Reference;
 import com.evilnotch.lanessentials.api.CapUtil;
 import com.evilnotch.lanessentials.capabilities.CapNick;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -29,7 +29,7 @@ public class CommandNick extends CommandBase{
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{
 		EntityPlayer player = (EntityPlayer) sender;
-		CapNick name = (CapNick) CapRegHandler.getCapContainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
+		CapNick name = (CapNick) CapabilityRegistry.getCapContainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "nick"));
 		name.nick = args.length == 1 ? args[0] : player.getName();
 		CapUtil.updateNickName((EntityPlayerMP) player);
 	}

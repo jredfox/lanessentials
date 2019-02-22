@@ -1,9 +1,8 @@
 package com.evilnotch.lanessentials.client;
 
 import com.evilnotch.lib.api.mcp.MCPMappings;
+import com.evilnotch.lib.api.mcp.MCPSidedString;
 
-import net.minecraft.client.gui.GuiShareToLan;
-import net.minecraft.client.multiplayer.ThreadLanServerPing;
 import net.minecraft.server.integrated.IntegratedServer;
 
 public class LanFeildsClient {
@@ -14,13 +13,16 @@ public class LanFeildsClient {
 	public static String isPublic = null;
 	public static String lanServerPing = null;
 	public static String address = null;
+	public static String commandsAllowedForAll = null;
 	
-	public static void cacheMCP(){
-		allowCheats = MCPMappings.getField(GuiShareToLan.class, "allowCheats");
-		gameMode = MCPMappings.getField(GuiShareToLan.class, "gameMode");
+	public static void cacheMCP()
+	{
+		allowCheats = new MCPSidedString("allowCheats", "field_146600_i").toString();
+		gameMode = new MCPSidedString("gameMode", "field_146599_h").toString();
 		
-		isPublic = MCPMappings.getField(IntegratedServer.class, "isPublic");
-		lanServerPing = MCPMappings.getField(IntegratedServer.class, "lanServerPing");
-		address = MCPMappings.getField(ThreadLanServerPing.class, "address");
+		isPublic = new MCPSidedString("isPublic", "field_71346_p").toString();
+		lanServerPing = new MCPSidedString("lanServerPing", "field_71345_q").toString();
+		address = new MCPSidedString("address", "field_77527_e").toString();
+		commandsAllowedForAll = new MCPSidedString("commandsAllowedForAll", "field_72407_n").toString();
 	}
 }

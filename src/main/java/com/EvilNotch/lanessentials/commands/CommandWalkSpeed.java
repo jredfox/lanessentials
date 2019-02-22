@@ -5,7 +5,7 @@ import com.evilnotch.lanessentials.api.LanFeilds;
 import com.evilnotch.lanessentials.capabilities.CapSpeed;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.minecraft.capability.CapContainer;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.command.CommandBase;
@@ -36,7 +36,7 @@ public class CommandWalkSpeed extends CommandBase
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			return;
-		CapContainer container = CapRegHandler.getCapContainer((EntityPlayer)sender);
+		CapContainer container = CapabilityRegistry.getCapContainer((EntityPlayer)sender);
 		CapSpeed cap = (CapSpeed) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "speed"));
 		if(args.length == 1)
 		{

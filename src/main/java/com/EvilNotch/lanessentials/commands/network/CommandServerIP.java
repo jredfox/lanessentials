@@ -37,7 +37,7 @@ public class CommandServerIP extends CommandBase{
 		{
 			String ip = JavaUtil.getPublicIp();
 			String port = LanUtil.getMCPort(server);
-			PlayerUtil.sendClipBoard((EntityPlayerMP)sender, EnumChatFormatting.DARK_AQUA, EnumChatFormatting.YELLOW + EnumChatFormatting.UNDERLINE, "ServerIP:", ip + ":" + port);
+			PlayerUtil.sendClipBoard((EntityPlayerMP)sender, EnumChatFormatting.DARK_AQUA, EnumChatFormatting.YELLOW, "", "ServerIP:", ip + ":" + port, true);
 		}
 		catch(Exception e)
 		{

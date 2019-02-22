@@ -24,7 +24,7 @@ import com.evilnotch.lanessentials.events.CapeFixEvent;
 import com.evilnotch.lanessentials.events.EventHandler;
 import com.evilnotch.lanessentials.events.SkinFixEvent;
 import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
@@ -649,7 +649,7 @@ public class SkinUpdater {
 			byte[] bytes = org.apache.commons.codec.binary.Base64.encodeBase64(str.getBytes());
 			ReflectionUtil.setObject(p, new String(bytes,StandardCharsets.UTF_8), Property.class, "value");
 		}
-		CapCape cape = (CapCape) CapRegHandler.getCapContainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
+		CapCape cape = (CapCape) CapabilityRegistry.getCapContainer(player).getCapability(new ResourceLocation(Reference.MODID + ":" + "cape"));
 		cape.url = name;
 		if(packets)
 			SkinUpdater.updateSkinPackets((EntityPlayerMP) player);

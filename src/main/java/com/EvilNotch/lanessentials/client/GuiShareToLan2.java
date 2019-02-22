@@ -68,7 +68,7 @@ public class GuiShareToLan2 extends GuiShareToLan {
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
            String s = LanUtil.shareToLanClient(this.port,GameType.getByName(getGameMode()), getCheats());           
-//           LanUtil.schedulePortForwarding(GuiShareToLan2.this.port,"TCP");
+           LanUtil.schedulePortForwarding(this.port, "TCP");
            
            ITextComponent itextcomponent;
            if (s != null)

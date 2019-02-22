@@ -39,7 +39,8 @@ public class CommandPublicIP extends CommandBase implements IClientCommand{
 		try 
 		{
 			String ip = JavaUtil.getPublicIp();
-			PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.WHITE,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "Your Public Ip Adress is:", ip);
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, "Your Public Ip Adress is:", ip);
+			PlayerUtil.copyClipBoard((EntityPlayer)sender, ip);
 		} 
 		catch(Exception e) 
 		{

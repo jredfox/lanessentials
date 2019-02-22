@@ -9,8 +9,7 @@ import com.evilnotch.lanessentials.Reference;
 import com.evilnotch.lanessentials.api.SkinData;
 import com.evilnotch.lanessentials.api.SkinUpdater;
 import com.evilnotch.lanessentials.capabilities.CapCape;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
-import com.evilnotch.lib.minecraft.util.EntityUtil;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
@@ -55,7 +54,7 @@ public class CommandCape extends CommandBase{
      				{
      					SkinData skin = SkinUpdater.getSkinData(args[1].toLowerCase());
      					String url = SkinUpdater.getCapeURL(skin,args[1]);
-         				PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", url);
+         				PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE,"", "skin url: " + args[1] + ":", url,true);
      					return;
      				}
      				else if(args[0].equals("getCapability"))
@@ -63,7 +62,7 @@ public class CommandCape extends CommandBase{
      					if(player.mcServer.getPlayerList().getPlayerByUsername(args[1]) == null)
      						throw new WrongUsageException("player isn't currently logged in:" + args[1]);
      					
-     					CapCape cap = (CapCape) CapRegHandler.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
+     					CapCape cap = (CapCape) CapabilityRegistry.getCapability(args[1],new ResourceLocation(Reference.MODID + ":" + "cape") );
      					if(cap == null)
      					{
      						throw new WrongUsageException("capability of player's skin returned null report this to lan-essentials as an issue");
@@ -74,9 +73,9 @@ public class CommandCape extends CommandBase{
      						return;
      					}
          				if(JavaUtil.isURL(cap.url))
-         					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", cap.url);
+         					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.YELLOW,EnumChatFormatting.BLUE + EnumChatFormatting.UNDERLINE,"", "skin url: " + args[1] + ":", cap.url, true);
          				else
-         					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE, "skin url: " + args[1] + ":", cap.url);
+         					PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.AQUA,EnumChatFormatting.DARK_PURPLE + EnumChatFormatting.UNDERLINE,"", "skin url: " + args[1] + ":", cap.url, true);
      					return;
      				}
      				else

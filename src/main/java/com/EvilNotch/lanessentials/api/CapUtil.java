@@ -11,7 +11,7 @@ import com.evilnotch.lanessentials.packets.PacketDisplayNameRefresh;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.api.mcp.MCPMappings;
 import com.evilnotch.lib.minecraft.capability.CapContainer;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.network.NetWorkHandler;
 
 import joptsimple.internal.Strings;
@@ -67,14 +67,14 @@ public class CapUtil {
 		{
 			if(!request.equals(newPlayer))
 			{
-		    	CapNick name = (CapNick) CapRegHandler.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
+		    	CapNick name = (CapNick) CapabilityRegistry.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
 		    	if(Strings.isNullOrEmpty(name.nick))
 		    	{
 		    		continue;
 		    	}
 		    	SPacketPlayerListItem item = new SPacketPlayerListItem();
 		        AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
-		        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
+		        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, LanFeilds.nickAction);
 		        item.getEntries().add(apd);
 		    	
 		        request.connection.sendPacket(item);
@@ -90,28 +90,29 @@ public class CapUtil {
 	 */
 	public static void updateTrackNickName(EntityPlayerMP request,EntityPlayerMP newPlayer)
 	{
-    	CapNick name = (CapNick) CapRegHandler.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	CapNick name = (CapNick) CapabilityRegistry.getCapability(newPlayer, new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(Strings.isNullOrEmpty(name.nick))
     	{
     		return;
     	}
     	SPacketPlayerListItem item = new SPacketPlayerListItem();
         AddPlayerData apd = item.new AddPlayerData(newPlayer.getGameProfile(), newPlayer.ping, newPlayer.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, LanFeilds.nickAction);
         item.getEntries().add(apd);
     	
         request.connection.sendPacket(item);
         NetWorkHandler.INSTANCE.sendTo(new PacketDisplayNameRefresh(name.nick, newPlayer.getEntityId()), request);
 	}
+	
 	public static void updateNickName(EntityPlayerMP player) 
 	{
-    	CapNick name = (CapNick) CapRegHandler.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
+    	CapNick name = (CapNick) CapabilityRegistry.getCapability(player, new ResourceLocation(Reference.MODID + ":" + "nick"));
     	if(Strings.isNullOrEmpty(name.nick))
     		return;
     	player.refreshDisplayName();
     	SPacketPlayerListItem item = new SPacketPlayerListItem();
         AddPlayerData apd = item.new AddPlayerData(player.getGameProfile(), player.ping, player.interactionManager.getGameType(), new TextComponentString(name.nick));
-        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, MCPMappings.getField(SPacketPlayerListItem.class, LanFeilds.nickAction));
+        ReflectionUtil.setObject(item, SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, SPacketPlayerListItem.class, LanFeilds.nickAction);
         item.getEntries().add(apd);
         
         Set<? extends EntityPlayer> li = player.getServerWorld().getEntityTracker().getTrackingPlayers(player);

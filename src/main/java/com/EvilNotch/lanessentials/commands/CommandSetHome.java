@@ -9,7 +9,7 @@ import com.evilnotch.lanessentials.Reference;
 import com.evilnotch.lanessentials.capabilities.CapHome;
 import com.evilnotch.lanessentials.capabilities.CapHomePoint;
 import com.evilnotch.lanessentials.capabilities.Pos;
-import com.evilnotch.lib.minecraft.capability.registry.CapRegHandler;
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
@@ -53,7 +53,7 @@ public class CommandSetHome  extends CommandBase
 		}
 		String point = args.length >= 1 ? args[0].trim() : reservedHome;
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
-		CapHome ch = (CapHome) CapRegHandler.getCapContainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+		CapHome ch = (CapHome) CapabilityRegistry.getCapContainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
 		
 		if(point.equals("clear"))
 		{
@@ -125,7 +125,7 @@ public class CommandSetHome  extends CommandBase
     	if(!(sender instanceof EntityPlayerMP))
     			return super.getTabCompletions(server, sender, args, targetPos);
     	
-    	CapHome cap = (CapHome) CapRegHandler.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+    	CapHome cap = (CapHome) CapabilityRegistry.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
     	List<String> list = new ArrayList();
     	if(args.length <= 1)
     	{

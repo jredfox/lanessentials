@@ -121,7 +121,7 @@ public class ClientProxy extends ServerProxy{
         	type = GameType.SURVIVAL;
         else
         {
-        	allowCheats = (Boolean) ReflectionUtil.getObject(list, PlayerList.class, LanFeilds.allowCheats);
+        	allowCheats = (Boolean) ReflectionUtil.getObject(list, PlayerList.class, LanFeildsClient.commandsAllowedForAll);
         }
 		return shareToLanClient(port,type,allowCheats);
 	}
