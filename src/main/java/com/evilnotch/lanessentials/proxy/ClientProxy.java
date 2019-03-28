@@ -60,7 +60,7 @@ public class ClientProxy extends ServerProxy{
 		List<EntityPlayerMP> players = server.getPlayerList().getPlayers();
 		for(EntityPlayerMP p : players)
 			if(!PlayerUtil.isPlayerOwner(p))
-				PlayerUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting"));
+				PlayerUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting...."));
 		
 		System.out.println("Stopping ports Client!");
 		long time = System.currentTimeMillis();

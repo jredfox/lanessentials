@@ -32,9 +32,9 @@ public class LanFeilds {
 	
 	public static void cacheDedicatedMCP()
 	{
-		propertyManager = MCPMappings.getSRGField(net.minecraft.server.dedicated.DedicatedServer.class, "settings");
-		rconQueryThread = MCPMappings.getSRGField(net.minecraft.server.dedicated.DedicatedServer.class, "rconQueryThread");
-		rconThread = MCPMappings.getSRGField(net.minecraft.server.dedicated.DedicatedServer.class, "rconThread");
+		propertyManager = new MCPSidedString("settings", "field_71340_o").toString();
+		rconQueryThread = new MCPSidedString("rconQueryThread", "field_71342_m").toString();
+		rconThread = new MCPSidedString("rconThread", "field_71339_n").toString();
 	}
 
 }

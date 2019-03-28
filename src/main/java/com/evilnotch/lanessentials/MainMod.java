@@ -162,9 +162,10 @@ public class MainMod
     	if(!LoaderMain.isClient && CfgLanEssentials.portForwardDedicated)
     	{
     		System.out.println("Starting port forwarding dedicated Server!");
-    		LanUtil.schedulePortForwarding(ServerOnly.getServerPort(event.getServer()),CfgLanEssentials.dedicatedPortProtocal);
+    		LanUtil.schedulePortForwarding(ServerOnly.getServerPort(event.getServer()), CfgLanEssentials.dedicatedPortProtocal);
     	}
     }
+    
     /**
      * Close ports on shutdown!
      */

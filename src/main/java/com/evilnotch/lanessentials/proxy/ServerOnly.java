@@ -27,8 +27,7 @@ public class ServerOnly {
 	{
 		List<EntityPlayerMP> players = s.getPlayerList().getPlayers();
 		for(EntityPlayerMP p : players)
-			if(!PlayerUtil.isPlayerOwner(p))
-				PlayerUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting"));
+				PlayerUtil.disconnectPlayer(p, new TextComponentString("Lan World Resetting..."));
 		
 		DedicatedServer server = (DedicatedServer)s;
 		System.out.println("Stopping ports!");
