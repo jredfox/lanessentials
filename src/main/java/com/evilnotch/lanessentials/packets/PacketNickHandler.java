@@ -1,6 +1,6 @@
 package com.evilnotch.lanessentials.packets;
 
-import com.evilnotch.lanessentials.api.LanFields;
+import com.evilnotch.lanessentials.api.LEFields;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.minecraft.network.MessegeBase;
 
@@ -24,7 +24,7 @@ public class PacketNickHandler extends MessegeBase<PacketNick> {
 				return;
 			
 			//Set the nickname
-			ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LanFields.displayname);
+			ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LEFields.displayname);
 			
 			//Sync the displayname from the server
 			NetworkPlayerInfo info = p.connection.getPlayerInfo(message.id);

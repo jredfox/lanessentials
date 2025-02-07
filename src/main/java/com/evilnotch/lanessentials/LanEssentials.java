@@ -1,6 +1,5 @@
 package com.evilnotch.lanessentials;
 
-import com.evilnotch.lanessentials.api.LanFields;
 import com.evilnotch.lanessentials.caps.CapabilityProvider;
 import com.evilnotch.lanessentials.commands.CommandButcher;
 import com.evilnotch.lanessentials.commands.CommandEnderChest;
@@ -19,7 +18,7 @@ import com.evilnotch.lanessentials.commands.CommandSetHome;
 import com.evilnotch.lanessentials.commands.CommandSetHunger;
 import com.evilnotch.lanessentials.commands.CommandSmite;
 import com.evilnotch.lanessentials.commands.CommandSpawn;
-import com.evilnotch.lanessentials.commands.CommandWalkSpeed;
+import com.evilnotch.lanessentials.commands.CommandSpeed;
 import com.evilnotch.lanessentials.commands.CommandWorkBench;
 import com.evilnotch.lanessentials.commands.network.CommandServerIP;
 import com.evilnotch.lanessentials.commands.vanilla.CMDBanIp;
@@ -86,8 +85,7 @@ public class LanEssentials
     	GeneralRegistry.registerCommand(new CommandEnderChest());
     	GeneralRegistry.registerCommand(new CommandSmite());
     	GeneralRegistry.registerCommand(new CommandNuke());
-    	GeneralRegistry.registerCommand(new CommandWalkSpeed());
-        GeneralRegistry.registerCommand(new CommandFlySpeed());
+    	GeneralRegistry.registerCommand(new CommandSpeed());
         GeneralRegistry.registerCommand(new CommandButcher());
         GeneralRegistry.registerCommand(new CommandSpawn());
     	

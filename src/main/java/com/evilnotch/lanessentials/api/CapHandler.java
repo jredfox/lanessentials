@@ -1,13 +1,12 @@
 package com.evilnotch.lanessentials.api;
 
-import com.evilnotch.lanessentials.LanEssentials;
 import com.evilnotch.lanessentials.caps.CapNick;
+import com.evilnotch.lanessentials.caps.CapPlayer;
 import com.evilnotch.lanessentials.packets.PacketNick;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.network.NetWorkHandler;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 
 public class CapHandler {
 	/**
@@ -15,11 +14,21 @@ public class CapHandler {
 	 */
 	public static void setNick(EntityPlayerMP p, String nick, boolean sync)
 	{
-		CapNick c = (CapNick) CapabilityRegistry.getCapability(p, LanFields.NICK);
+		CapNick c = (CapNick) CapabilityRegistry.getCapability(p, LEFields.NICK);
 		c.nick = nick;
 		p.refreshDisplayName();
 		if(sync)
 			NetWorkHandler.INSTANCE.sendToTrackingAndPlayer(new PacketNick(p), p);
+	}
+
+	public static String getNick(EntityPlayerMP p)
+	{
+		return ((CapNick) CapabilityRegistry.getCapability(p, LEFields.NICK)).nick;
+	}
+
+	public static CapPlayer getCapAbility(EntityPlayerMP p) 
+	{
+		return (CapPlayer) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
 	}
 
 }

@@ -1,20 +1,12 @@
 package com.evilnotch.lanessentials.commands;
 
-import com.evilnotch.lanessentials.LanEssentials;
 import com.evilnotch.lanessentials.api.CapHandler;
-import com.evilnotch.lanessentials.api.CapUtil;
-import com.evilnotch.lanessentials.caps.CapNick;
-import com.evilnotch.lanessentials.packets.PacketNick;
-import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
-import com.evilnotch.lib.minecraft.network.NetWorkHandler;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 
 public class CommandNick extends CommandBase{
 	

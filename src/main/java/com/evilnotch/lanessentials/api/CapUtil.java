@@ -1,27 +1,5 @@
 package com.evilnotch.lanessentials.api;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.evilnotch.lanessentials.LanEssentials;
-import com.evilnotch.lanessentials.caps.CapAbility;
-import com.evilnotch.lanessentials.caps.CapNick;
-import com.evilnotch.lanessentials.caps.CapSpeed;
-import com.evilnotch.lanessentials.packets.PacketNick;
-import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.minecraft.capability.CapContainer;
-import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
-import com.evilnotch.lib.minecraft.network.NetWorkHandler;
-
-import joptsimple.internal.Strings;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.PlayerCapabilities;
-import net.minecraft.network.play.server.SPacketPlayerListItem;
-import net.minecraft.network.play.server.SPacketPlayerListItem.AddPlayerData;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
-
 public class CapUtil {
 	
 //	public static void updateCaps(EntityPlayerMP player, boolean login) 

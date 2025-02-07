@@ -19,11 +19,33 @@
 
 package net.minecraftforge.client;
 
-import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.*;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.AIR;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.ALL;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.ARMOR;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.BOSSHEALTH;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.CHAT;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.CROSSHAIRS;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.DEBUG;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.EXPERIENCE;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.FOOD;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.FPS_GRAPH;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HEALTH;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HEALTHMOUNT;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HELMET;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HOTBAR;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.JUMPBAR;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.PLAYER_LIST;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.PORTAL;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.POTION_ICONS;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.SUBTITLES;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.TEXT;
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.VIGNETTE;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -58,8 +80,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiIngameForge extends GuiIngame
 {
