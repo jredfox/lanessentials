@@ -16,9 +16,9 @@ public class CommandSpeed extends CommandBase
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/speed [walk/fly] [float]";
+		return "/speed [float]";
 	}
-
+	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException 
 	{

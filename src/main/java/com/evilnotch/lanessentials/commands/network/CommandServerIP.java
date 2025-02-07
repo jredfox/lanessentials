@@ -36,6 +36,7 @@ public class CommandServerIP extends CommandBase{
 		{
 			String ip = JavaUtil.getPublicIp();
 			int port = server.getServerPort();
+			//TODO: sync actual server ip with client then copy clipboard
 			PlayerUtil.sendClipBoard((EntityPlayerMP)sender, EnumChatFormatting.DARK_AQUA, EnumChatFormatting.YELLOW, "", "ServerIP:", ip + ":" + port, true);
 		}
 		catch(Exception e)

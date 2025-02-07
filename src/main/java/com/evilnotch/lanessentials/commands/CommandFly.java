@@ -1,7 +1,7 @@
 package com.evilnotch.lanessentials.commands;
 
 import com.evilnotch.lanessentials.api.CapHandler;
-import com.evilnotch.lanessentials.caps.CapPlayer;
+import com.evilnotch.lanessentials.caps.CapAbility;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -30,7 +30,7 @@ public class CommandFly extends CommandBase
 		if(!(sender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP p = (EntityPlayerMP)sender;
-		CapPlayer cp = CapHandler.getCapAbility(p);
+		CapAbility cp = CapHandler.getCapAbility(p);
 		cp.fly = !cp.fly;
 	}
 

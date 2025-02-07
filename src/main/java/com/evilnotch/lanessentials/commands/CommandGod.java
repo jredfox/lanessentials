@@ -1,7 +1,7 @@
 package com.evilnotch.lanessentials.commands;
 
 import com.evilnotch.lanessentials.api.CapHandler;
-import com.evilnotch.lanessentials.caps.CapPlayer;
+import com.evilnotch.lanessentials.caps.CapAbility;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -31,7 +31,7 @@ public class CommandGod extends CommandBase
 		if(epmp.isCreative() || epmp.isSpectator())
 			return;
 		
-		CapPlayer c = CapHandler.getCapAbility(epmp);
+		CapAbility c = CapHandler.getCapAbility(epmp);
 		c.godMode = !c.godMode;
 	}
 

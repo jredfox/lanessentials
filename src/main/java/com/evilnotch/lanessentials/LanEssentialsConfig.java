@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-public class CfgLanEssentials {
+public class LanEssentialsConfig {
 	
 	public static int maxHomeCount = 3;
 	public static boolean overrideHomeCount = true;

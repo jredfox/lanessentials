@@ -12,7 +12,7 @@ public class CapabilityProvider implements ICapabilityRegistry<EntityPlayerMP>
 	public void register(EntityPlayerMP p, CapContainer c) 
 	{
 		c.registerCapability(LEFields.HOME, new CapHome());
-		c.registerCapability(LEFields.ABILITY, new CapPlayer());
+		c.registerCapability(LEFields.ABILITY, new CapAbility());
 		c.registerCapability(LEFields.NICK, new CapNick());
 	}
 

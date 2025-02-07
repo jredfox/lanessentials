@@ -3,7 +3,7 @@ package com.evilnotch.lanessentials.caps;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.evilnotch.lanessentials.CfgLanEssentials;
+import com.evilnotch.lanessentials.LanEssentialsConfig;
 import com.evilnotch.lib.minecraft.capability.CapContainer;
 import com.evilnotch.lib.minecraft.capability.ICapability;
 import com.evilnotch.lib.util.JavaUtil;
@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 public class CapHome implements ICapability<EntityPlayerMP> {
 
 	public ArrayList<CapHomePoint> capPoints = new ArrayList<CapHomePoint>();
-	public int maxCount = CfgLanEssentials.maxHomeCount;
+	public int maxCount = LanEssentialsConfig.maxHomeCount;
 	
 	public CapHome(){
 		

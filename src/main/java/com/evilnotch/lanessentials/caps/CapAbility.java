@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CapPlayer implements ICapabilityTick<EntityPlayerMP> {
+public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
 	
 	public boolean godMode;//lowcase g god gamemode aka you take zero damage
 	private boolean setgodMode;

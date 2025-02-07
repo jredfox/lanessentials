@@ -1,7 +1,7 @@
 package com.evilnotch.lanessentials.api;
 
+import com.evilnotch.lanessentials.caps.CapAbility;
 import com.evilnotch.lanessentials.caps.CapNick;
-import com.evilnotch.lanessentials.caps.CapPlayer;
 import com.evilnotch.lanessentials.packets.PacketNick;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.network.NetWorkHandler;
@@ -26,9 +26,9 @@ public class CapHandler {
 		return ((CapNick) CapabilityRegistry.getCapability(p, LEFields.NICK)).nick;
 	}
 
-	public static CapPlayer getCapAbility(EntityPlayerMP p) 
+	public static CapAbility getCapAbility(EntityPlayerMP p) 
 	{
-		return (CapPlayer) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
+		return (CapAbility) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
 	}
 
 }

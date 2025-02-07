@@ -5,7 +5,6 @@ import com.evilnotch.lanessentials.commands.CommandButcher;
 import com.evilnotch.lanessentials.commands.CommandEnderChest;
 import com.evilnotch.lanessentials.commands.CommandFeed;
 import com.evilnotch.lanessentials.commands.CommandFly;
-import com.evilnotch.lanessentials.commands.CommandFlySpeed;
 import com.evilnotch.lanessentials.commands.CommandGod;
 import com.evilnotch.lanessentials.commands.CommandHat;
 import com.evilnotch.lanessentials.commands.CommandHeal;
@@ -66,7 +65,7 @@ public class LanEssentials
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	CfgLanEssentials.loadConfig(event.getModConfigurationDirectory() );
+    	LanEssentialsConfig.loadConfig(event.getModConfigurationDirectory() );
     	MinecraftForge.EVENT_BUS.register(new LEEventHandler());
     	proxy.preinit();
     	CapabilityRegistry.registerRegistry(new CapabilityProvider());
