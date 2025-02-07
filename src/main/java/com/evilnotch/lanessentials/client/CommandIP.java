@@ -2,7 +2,6 @@ package com.evilnotch.lanessentials.client;
 
 import java.net.UnknownHostException;
 
-import com.evilnotch.lib.minecraft.util.EntityUtil;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
@@ -49,7 +48,6 @@ public class CommandIP extends CommandBase implements IClientCommand{
 		{
 			PlayerUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch ipv4 adress");
 		}
-		
 	}
 
 	@Override

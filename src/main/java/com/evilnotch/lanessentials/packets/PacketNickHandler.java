@@ -1,34 +1,39 @@
 package com.evilnotch.lanessentials.packets;
 
-import com.evilnotch.lanessentials.api.LanFeilds;
+import com.evilnotch.lanessentials.api.LanFields;
 import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.api.mcp.MCPMappings;
 import com.evilnotch.lib.minecraft.network.MessegeBase;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class PacketNickHandler extends MessegeBase<PacketDisplayNameRefresh>{
+public class PacketNickHandler extends MessegeBase<PacketNick> {
 	
 	public PacketNickHandler(){}
 
 	@Override
-	public void handleClientSide(PacketDisplayNameRefresh message, EntityPlayer client) 
+	public void handleClientSide(PacketNick message, EntityPlayer c) 
 	{
 		Minecraft.getMinecraft().addScheduledTask(() -> 
 		{
-			EntityPlayer player = (EntityPlayer) client.world.getEntityByID(message.id);
-			if(player == null)
-			{
-				System.out.println("Recieved Packet NickName For Invalid PlayerID:" + message.id + " debug:" + client.world.playerEntities);
+			EntityPlayerSP p = Minecraft.getMinecraft().player;
+			EntityPlayer targ = p.world.getPlayerEntityByUUID(message.id);
+			if(targ == null)
 				return;
-			}
-//			System.out.println("setting player:" + player.getName() + " > " + message.nick);
-			ReflectionUtil.setObject(player, message.nick, EntityPlayer.class, LanFeilds.displayname);
+			
+			//Set the nickname
+			ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LanFields.displayname);
+			
+			//Sync the displayname from the server
+			NetworkPlayerInfo info = p.connection.getPlayerInfo(message.id);
+			if(info != null)
+				info.setDisplayName(message.display);
 		});
 	}
 
 	@Override
-	public void handleServerSide(PacketDisplayNameRefresh message, EntityPlayer player) {}
+	public void handleServerSide(PacketNick message, EntityPlayer player) {}
 
 }

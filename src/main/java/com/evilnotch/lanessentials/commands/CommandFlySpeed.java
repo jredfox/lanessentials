@@ -1,8 +1,8 @@
 package com.evilnotch.lanessentials.commands;
 
-import com.evilnotch.lanessentials.Reference;
-import com.evilnotch.lanessentials.api.LanFeilds;
-import com.evilnotch.lanessentials.capabilities.CapSpeed;
+import com.evilnotch.lanessentials.LanEssentials;
+import com.evilnotch.lanessentials.api.LanFields;
+import com.evilnotch.lanessentials.caps.CapSpeed;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.minecraft.capability.CapContainer;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
@@ -37,7 +37,7 @@ public class CommandFlySpeed extends CommandBase
 		if(!(sender instanceof EntityPlayerMP))
 			return;
 		CapContainer container = CapabilityRegistry.getCapContainer((EntityPlayer)sender);
-		CapSpeed cap = (CapSpeed) container.getCapability(new ResourceLocation(Reference.MODID + ":" + "speed"));
+		CapSpeed cap = (CapSpeed) container.getCapability(new ResourceLocation(LanEssentials.MODID + ":" + "speed"));
 		if(args.length == 1)
 		{
 			EntityPlayerMP epmp = (EntityPlayerMP)sender;
@@ -47,7 +47,7 @@ public class CommandFlySpeed extends CommandBase
 			
 			float flyspeed = Float.parseFloat(strfloat);
 			PlayerCapabilities pc = epmp.capabilities;
-			ReflectionUtil.setObject(pc, flyspeed, PlayerCapabilities.class, LanFeilds.flySpeed);
+			ReflectionUtil.setObject(pc, flyspeed, PlayerCapabilities.class, LanFields.flySpeed);
 			cap.fly = flyspeed;
 			cap.hasFlySpeed = true;
 			epmp.sendPlayerAbilities();
@@ -57,7 +57,7 @@ public class CommandFlySpeed extends CommandBase
 			float defaultFly = 0.05F;
 			EntityPlayerMP epmp = (EntityPlayerMP)sender;
 			PlayerCapabilities pc = epmp.capabilities;
-			ReflectionUtil.setObject(pc, defaultFly, PlayerCapabilities.class, LanFeilds.flySpeed);
+			ReflectionUtil.setObject(pc, defaultFly, PlayerCapabilities.class, LanFields.flySpeed);
 			cap.fly = 0;
 			cap.hasFlySpeed = false;
 			epmp.sendPlayerAbilities();

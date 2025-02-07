@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.evilnotch.lanessentials.Reference;
-import com.evilnotch.lanessentials.capabilities.CapHome;
-import com.evilnotch.lanessentials.capabilities.CapHomePoint;
+import com.evilnotch.lanessentials.LanEssentials;
+import com.evilnotch.lanessentials.caps.CapHome;
+import com.evilnotch.lanessentials.caps.CapHomePoint;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.util.TeleportUtil;
 import com.evilnotch.lib.util.JavaUtil;
@@ -43,7 +43,7 @@ public class CommandHome  extends CommandBase
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
 
 		String point = args.length >= 1 ? args[0].trim() : CommandSetHome.reservedHome;
-		CapHome ch = (CapHome) CapabilityRegistry.getCapContainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+		CapHome ch = (CapHome) CapabilityRegistry.getCapContainer(epmp).getCapability(new ResourceLocation(LanEssentials.MODID + ":" + "home"));
 		CapHomePoint chp = ch.getCapPoint(point);
 		if(chp == null)
 		{
@@ -61,7 +61,7 @@ public class CommandHome  extends CommandBase
     	if(!(sender instanceof EntityPlayerMP))
     			return super.getTabCompletions(server, sender, args, targetPos);
     	
-    	CapHome cap = (CapHome) CapabilityRegistry.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(Reference.MODID + ":" + "home"));
+    	CapHome cap = (CapHome) CapabilityRegistry.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(LanEssentials.MODID + ":" + "home"));
     	List<String> list = new ArrayList();
     	for(CapHomePoint p : cap.capPoints)
     	{

@@ -1,7 +1,7 @@
 package com.evilnotch.lanessentials.commands;
 
-import com.evilnotch.lanessentials.Reference;
-import com.evilnotch.lanessentials.capabilities.CapAbility;
+import com.evilnotch.lanessentials.LanEssentials;
+import com.evilnotch.lanessentials.caps.CapAbility;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 
 import net.minecraft.command.CommandBase;
@@ -32,7 +32,7 @@ public class CommandGod extends CommandBase
 		EntityPlayerMP epmp = (EntityPlayerMP)sender;
 		if(epmp.isCreative() || epmp.isSpectator())
 			return;
-		CapAbility cap = (CapAbility) CapabilityRegistry.getCapContainer(epmp).getCapability(new ResourceLocation(Reference.MODID + ":" + "ability"));
+		CapAbility cap = (CapAbility) CapabilityRegistry.getCapContainer(epmp).getCapability(new ResourceLocation(LanEssentials.MODID + ":" + "ability"));
 		cap.godEnabled = !cap.godEnabled;
 		epmp.capabilities.disableDamage = cap.godEnabled;
 		epmp.sendPlayerAbilities();
