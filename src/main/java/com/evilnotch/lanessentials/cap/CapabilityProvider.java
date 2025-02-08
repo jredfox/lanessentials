@@ -1,6 +1,6 @@
 package com.evilnotch.lanessentials.cap;
 
-import com.evilnotch.lanessentials.api.LEFields;
+import com.evilnotch.lanessentials.LEFields;
 import com.evilnotch.lib.minecraft.capability.CapContainer;
 import com.evilnotch.lib.minecraft.capability.registry.ICapabilityRegistry;
 

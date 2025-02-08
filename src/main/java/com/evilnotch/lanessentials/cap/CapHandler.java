@@ -1,7 +1,6 @@
-package com.evilnotch.lanessentials.api;
+package com.evilnotch.lanessentials.cap;
 
-import com.evilnotch.lanessentials.cap.CapAbility;
-import com.evilnotch.lanessentials.cap.CapNick;
+import com.evilnotch.lanessentials.LEFields;
 import com.evilnotch.lanessentials.packets.PacketNick;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.network.NetWorkHandler;

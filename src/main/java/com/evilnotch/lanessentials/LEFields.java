@@ -1,6 +1,4 @@
-package com.evilnotch.lanessentials.api;
-
-import com.evilnotch.lanessentials.LanEssentials;
+package com.evilnotch.lanessentials;
 
 import net.minecraft.util.ResourceLocation;
 

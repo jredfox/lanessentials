@@ -1,6 +1,6 @@
 package com.evilnotch.lanessentials.packets;
 
-import com.evilnotch.lanessentials.api.LEFields;
+import com.evilnotch.lanessentials.LEFields;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.minecraft.network.MessegeBase;
 

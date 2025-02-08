@@ -1,7 +1,7 @@
 package com.evilnotch.lanessentials.commands.cap;
 
-import com.evilnotch.lanessentials.api.CapHandler;
 import com.evilnotch.lanessentials.cap.CapAbility;
+import com.evilnotch.lanessentials.cap.CapHandler;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

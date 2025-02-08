@@ -1,8 +1,8 @@
 package com.evilnotch.lanessentials.events;
 
-import com.evilnotch.lanessentials.api.CapHandler;
-import com.evilnotch.lanessentials.api.LEFields;
+import com.evilnotch.lanessentials.LEFields;
 import com.evilnotch.lanessentials.cap.CapAbility;
+import com.evilnotch.lanessentials.cap.CapHandler;
 import com.evilnotch.lanessentials.cap.CapNick;
 import com.evilnotch.lanessentials.packets.PacketNick;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
