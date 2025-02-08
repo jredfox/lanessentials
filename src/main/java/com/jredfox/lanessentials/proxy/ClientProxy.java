@@ -1,7 +1,7 @@
 package com.jredfox.lanessentials.proxy;
 
-import com.jredfox.lanessentials.client.CommandIP;
-import com.jredfox.lanessentials.client.CommandPublicIP;
+import com.jredfox.lanessentials.commands.client.CommandIP;
+import com.jredfox.lanessentials.commands.client.CommandPublicIP;
 
 import net.minecraftforge.client.ClientCommandHandler;
 

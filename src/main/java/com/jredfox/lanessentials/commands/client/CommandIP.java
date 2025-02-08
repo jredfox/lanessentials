@@ -1,4 +1,6 @@
-package com.jredfox.lanessentials.client;
+package com.jredfox.lanessentials.commands.client;
+
+import java.net.UnknownHostException;
 
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
@@ -11,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.client.IClientCommand;
 
-public class CommandPublicIP extends CommandBase implements IClientCommand{
+public class CommandIP extends CommandBase implements IClientCommand{
 	
     /**
      * Return the required permission level for this command.
@@ -20,15 +22,15 @@ public class CommandPublicIP extends CommandBase implements IClientCommand{
     {
         return 0;
     }
-	
+
 	@Override
 	public String getName() {
-		return "publicIp";
+		return "ipv4";
 	}
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/publicIp";
+		return "/ipv4";
 	}
 
 	@Override
@@ -38,13 +40,13 @@ public class CommandPublicIP extends CommandBase implements IClientCommand{
 			return;
 		try 
 		{
-			String ip = JavaUtil.getPublicIp();
-			PlayerUtil.sendClipBoard((EntityPlayer)sender, "Your Public Ip Adress is:", ip);
+			String ip = JavaUtil.getIpv4();
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, "Your Ipv4 Adress is:",  EnumChatFormatting.BLUE + ip);
 			PlayerUtil.copyClipBoard((EntityPlayer)sender, ip);
 		} 
-		catch(Exception e) 
+		catch (UnknownHostException e) 
 		{
-			PlayerUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch public ip adress");
+			PlayerUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch ipv4 adress");
 		}
 	}
 
@@ -52,5 +54,6 @@ public class CommandPublicIP extends CommandBase implements IClientCommand{
 	public boolean allowUsageWithoutPrefix(ICommandSender sender, String message) {
 		return true;
 	}
+	
 
 }
