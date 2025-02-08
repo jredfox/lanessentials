@@ -13,6 +13,7 @@ import com.jredfox.lanessentials.LanEssentials;
 import com.jredfox.lanessentials.cap.CapHome;
 import com.jredfox.lanessentials.cap.CapHomePoint;
 import com.jredfox.lanessentials.cap.Pos;
+import com.jredfox.lanessentials.commands.cap.CommandHome;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

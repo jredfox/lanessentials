@@ -1,4 +1,4 @@
-package com.jredfox.lanessentials.commands;
+package com.jredfox.lanessentials.commands.cap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.lanessentials.LanEssentials;
 import com.jredfox.lanessentials.cap.CapHome;
 import com.jredfox.lanessentials.cap.CapHomePoint;
+import com.jredfox.lanessentials.commands.CommandSetHome;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
