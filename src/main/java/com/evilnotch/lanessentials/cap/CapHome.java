@@ -1,4 +1,4 @@
-package com.evilnotch.lanessentials.caps;
+package com.evilnotch.lanessentials.cap;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,11 +1,9 @@
 package com.evilnotch.lanessentials;
 
-import com.evilnotch.lanessentials.caps.CapabilityProvider;
+import com.evilnotch.lanessentials.cap.CapabilityProvider;
 import com.evilnotch.lanessentials.commands.CommandButcher;
 import com.evilnotch.lanessentials.commands.CommandEnderChest;
 import com.evilnotch.lanessentials.commands.CommandFeed;
-import com.evilnotch.lanessentials.commands.CommandFly;
-import com.evilnotch.lanessentials.commands.CommandGod;
 import com.evilnotch.lanessentials.commands.CommandHat;
 import com.evilnotch.lanessentials.commands.CommandHeal;
 import com.evilnotch.lanessentials.commands.CommandHome;
@@ -17,8 +15,10 @@ import com.evilnotch.lanessentials.commands.CommandSetHome;
 import com.evilnotch.lanessentials.commands.CommandSetHunger;
 import com.evilnotch.lanessentials.commands.CommandSmite;
 import com.evilnotch.lanessentials.commands.CommandSpawn;
-import com.evilnotch.lanessentials.commands.CommandSpeed;
 import com.evilnotch.lanessentials.commands.CommandWorkBench;
+import com.evilnotch.lanessentials.commands.cap.CommandFly;
+import com.evilnotch.lanessentials.commands.cap.CommandGod;
+import com.evilnotch.lanessentials.commands.cap.CommandSpeed;
 import com.evilnotch.lanessentials.commands.network.CommandServerIP;
 import com.evilnotch.lanessentials.commands.vanilla.CMDBanIp;
 import com.evilnotch.lanessentials.commands.vanilla.CMDBanPlayer;

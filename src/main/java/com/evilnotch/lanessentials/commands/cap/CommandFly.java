@@ -1,7 +1,7 @@
-package com.evilnotch.lanessentials.commands;
+package com.evilnotch.lanessentials.commands.cap;
 
 import com.evilnotch.lanessentials.api.CapHandler;
-import com.evilnotch.lanessentials.caps.CapAbility;
+import com.evilnotch.lanessentials.cap.CapAbility;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -9,17 +9,19 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-public class CommandGod extends CommandBase
+public class CommandFly extends CommandBase
 {
 
 	@Override
-	public String getName() {
-		return "god";
+	public String getName() 
+	{
+		return "fly";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
-		return "/god";
+	public String getUsage(ICommandSender sender) 
+	{
+		return "/fly";
 	}
 
 	@Override
@@ -27,12 +29,9 @@ public class CommandGod extends CommandBase
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			return;
-		EntityPlayerMP epmp = (EntityPlayerMP)sender;
-		if(epmp.isCreative() || epmp.isSpectator())
-			return;
-		
-		CapAbility c = CapHandler.getCapAbility(epmp);
-		c.godMode = !c.godMode;
+		CapAbility cp = CapHandler.getCapAbility((EntityPlayerMP)sender);
+		cp.fly = !cp.fly;
+		cp.sync((EntityPlayerMP) sender);
 	}
 
 }

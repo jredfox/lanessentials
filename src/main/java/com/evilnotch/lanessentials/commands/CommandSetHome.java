@@ -6,9 +6,9 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.evilnotch.lanessentials.LanEssentials;
-import com.evilnotch.lanessentials.caps.CapHome;
-import com.evilnotch.lanessentials.caps.CapHomePoint;
-import com.evilnotch.lanessentials.caps.Pos;
+import com.evilnotch.lanessentials.cap.CapHome;
+import com.evilnotch.lanessentials.cap.CapHomePoint;
+import com.evilnotch.lanessentials.cap.Pos;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;

@@ -1,4 +1,4 @@
-package com.evilnotch.lanessentials.caps;
+package com.evilnotch.lanessentials.cap;
 
 import com.evilnotch.lib.minecraft.capability.CapContainer;
 import com.evilnotch.lib.minecraft.capability.ICapability;
