@@ -92,27 +92,31 @@ public class LanEssentials
     	GeneralRegistry.registerCommand(new CommandNuke());
         GeneralRegistry.registerCommand(new CommandButcher());
         GeneralRegistry.registerCommand(new CommandSpawn());
+        
+        //TODO: tpaaccept tpadeny tpa
+        //TODO: set max player count
+        //TODO: get playerlist working with new commands
     	
     	//server commands redone for client
     	if(LoaderMain.isClient)
     	{
-    		GeneralRegistry.registerCommand(new CMDBanIp());
-    		GeneralRegistry.registerCommand(new CMDBanPlayer());
-    		GeneralRegistry.registerCommand(new CommandBroadcast());
-    		GeneralRegistry.registerCommand(new CMDDeOp());
-    		GeneralRegistry.registerCommand(new CommandListBans());
-    		GeneralRegistry.registerCommand(new CommandListPlayers());
-     		GeneralRegistry.registerCommand(new CMDOp());
-    		GeneralRegistry.registerCommand(new CMDPardonPlayer());
-    		GeneralRegistry.registerCommand(new CMDPardonIp());
-    		GeneralRegistry.registerCommand(new CommandSaveAll());
-    		GeneralRegistry.registerCommand(new CommandSaveOff());
-    		GeneralRegistry.registerCommand(new CommandSaveOn());
-    		GeneralRegistry.registerCommand(new CommandStop());
-    		GeneralRegistry.registerCommand(new CommandWhitelist());
+    		GeneralRegistry.registerCommand(new CMDBanIp());//TODO:
+    		GeneralRegistry.registerCommand(new CMDBanPlayer());//TODO:
+    		GeneralRegistry.registerCommand(new CommandBroadcast());//TODO:
+    		GeneralRegistry.registerCommand(new CMDDeOp());//TODO:
+    		GeneralRegistry.registerCommand(new CommandListBans());//TODO:
+    		GeneralRegistry.registerCommand(new CommandListPlayers());//TODO:
+     		GeneralRegistry.registerCommand(new CMDOp());//TODO:
+    		GeneralRegistry.registerCommand(new CMDPardonPlayer());//TODO:
+    		GeneralRegistry.registerCommand(new CMDPardonIp());//TODO:
+    		GeneralRegistry.registerCommand(new CommandSaveAll());//WORKING
+    		GeneralRegistry.registerCommand(new CommandSaveOff());//WORKING
+    		GeneralRegistry.registerCommand(new CommandSaveOn());//WORKING
+    		GeneralRegistry.registerCommand(new CommandStop());//WORKING
+    		GeneralRegistry.registerCommand(new CommandWhitelist());//TODO:
     		
-    		GeneralRegistry.registerCommand(new CommandKick());
-    		GeneralRegistry.registerCommand(new CommandDebug());
+    		GeneralRegistry.registerCommand(new CommandKick());//WORKING
+    		GeneralRegistry.registerCommand(new CommandDebug());//WORKING
     	}
     	
     	//remove vanilla broken command publish
