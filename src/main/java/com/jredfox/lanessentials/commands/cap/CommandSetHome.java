@@ -1,4 +1,4 @@
-package com.jredfox.lanessentials.commands;
+package com.jredfox.lanessentials.commands.cap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,11 @@ import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.lanessentials.LEFields;
 import com.jredfox.lanessentials.LanEssentials;
 import com.jredfox.lanessentials.cap.CapHome;
 import com.jredfox.lanessentials.cap.CapHomePoint;
 import com.jredfox.lanessentials.cap.Pos;
-import com.jredfox.lanessentials.commands.cap.CommandHome;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -56,7 +56,7 @@ public class CommandSetHome  extends CommandBase
 		}
 		String point = args.length >= 1 ? args[0].trim() : reservedHome;
 		EntityPlayerMP epmp = (EntityPlayerMP) sender;
-		CapHome ch = (CapHome) CapabilityRegistry.getCapContainer(epmp).getCapability(new ResourceLocation(LanEssentials.MODID + ":" + "home"));
+		CapHome ch = (CapHome) CapabilityRegistry.getCapability(epmp, LEFields.HOME);
 		
 		if(point.equals("clear"))
 		{
@@ -92,22 +92,22 @@ public class CommandSetHome  extends CommandBase
 		if(facing == EnumFacing.NORTH)
 		{
 			yaw = 180.0F;
-			System.out.println("North:" + epmp.rotationYaw);
+//			System.out.println("North:" + epmp.rotationYaw);
 		}
 		else if(facing == EnumFacing.SOUTH)
 		{
 			yaw = 0.0F;
-			System.out.println("SOUTH:" + epmp.rotationYaw);
+//			System.out.println("SOUTH:" + epmp.rotationYaw);
 		}
 		else if(facing == EnumFacing.EAST)
 		{
 			yaw = 270.0F;
-			System.out.println("EAST:" + epmp.rotationYaw);
+//			System.out.println("EAST:" + epmp.rotationYaw);
 		}
 		else if(facing == EnumFacing.WEST)
 		{
 			yaw = 90.0F;
-			System.out.println("WEST:" + epmp.rotationYaw);
+//			System.out.println("WEST:" + epmp.rotationYaw);
 		}
 		
 		CapHomePoint chp = new CapHomePoint(new Pos(sender.getPosition(),epmp.posY), epmp.dimension, point,yaw,pitch);
@@ -128,7 +128,7 @@ public class CommandSetHome  extends CommandBase
     	if(!(sender instanceof EntityPlayerMP))
     			return super.getTabCompletions(server, sender, args, targetPos);
     	
-    	CapHome cap = (CapHome) CapabilityRegistry.getCapContainer((EntityPlayer)sender).getCapability(new ResourceLocation(LanEssentials.MODID + ":" + "home"));
+    	CapHome cap = (CapHome) CapabilityRegistry.getCapability(sender, LEFields.HOME);
     	List<String> list = new ArrayList();
     	if(args.length <= 1)
     	{

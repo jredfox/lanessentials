@@ -1,4 +1,4 @@
-package com.jredfox.lanessentials.commands;
+package com.jredfox.lanessentials.commands.cap;
 
 import com.jredfox.lanessentials.cap.CapHandler;
 
