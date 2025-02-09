@@ -19,6 +19,8 @@ public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
     public GameType gamemode = GameType.NOT_SET;
     public boolean wasgodMode;
     public boolean wasFly;
+    public float wasSpeed;
+    public float wasSpeedFly;
     
     private static final float speedDefault = 0.1F;
     private static final float speedFlyDefault = 0.05F;
@@ -33,12 +35,16 @@ public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
     		c.isFlying = false;
     	else if(this.isSurvival(this.gamemode))
     		c.isFlying = this.flySurvival;
-    	c.walkSpeed = this.speed <= 0 ? speedDefault : this.speed;
-    	c.flySpeed = this.speedFly <= 0 ? speedFlyDefault : this.speedFly;
+    	if(this.speed > 0 || this.wasSpeed != this.speed)
+    		c.walkSpeed = this.speed <= 0 ? speedDefault : this.speed;
+    	if(this.speedFly > 0 || this.wasSpeedFly != this.speedFly)
+    		c.flySpeed = this.speedFly <= 0 ? speedFlyDefault : this.speedFly;
     	p.sendPlayerAbilities();
     	
 		this.wasgodMode = this.godMode;
 		this.wasFly = this.fly;
+		this.wasSpeed = this.speed;
+		this.wasSpeedFly = this.speedFly;
     }
     
 	@Override
@@ -53,8 +59,11 @@ public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
 		
 		if(this.isSurvival(this.gamemode))
 			this.flySurvival = p.capabilities.isFlying;
+		
 		this.wasgodMode = this.godMode;
 		this.wasFly = this.fly;
+		this.wasSpeed = this.speed;
+		this.wasSpeedFly = this.speedFly;
 	}
     
 	private boolean isSurvival(GameType gm) 
