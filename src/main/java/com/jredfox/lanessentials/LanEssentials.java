@@ -23,6 +23,7 @@ import com.jredfox.lanessentials.commands.cap.CommandFly;
 import com.jredfox.lanessentials.commands.cap.CommandGod;
 import com.jredfox.lanessentials.commands.cap.CommandHome;
 import com.jredfox.lanessentials.commands.cap.CommandSpeed;
+import com.jredfox.lanessentials.commands.cap.CommandSpeedFly;
 import com.jredfox.lanessentials.commands.network.CommandServerIP;
 import com.jredfox.lanessentials.commands.vanilla.CMDBanIp;
 import com.jredfox.lanessentials.commands.vanilla.CMDBanPlayer;
@@ -59,7 +60,7 @@ public class LanEssentials
     public static final String NAME = "Lan Essentials";
     public static final String VERSION = "0.4.0";
 	
-	@SidedProxy(clientSide = "com.evilnotch.lanessentials.proxy.ClientProxy", serverSide = "com.evilnotch.lanessentials.proxy.ServerProxy")
+	@SidedProxy(clientSide = "com.jredfox.lanessentials.proxy.ClientProxy", serverSide = "com.jredfox.lanessentials.proxy.ServerProxy")
 	public static CommonProxy proxy;
 
     @EventHandler
@@ -85,6 +86,7 @@ public class LanEssentials
     	GeneralRegistry.registerCommand(new CommandSmite());
     	GeneralRegistry.registerCommand(new CommandNuke());
     	GeneralRegistry.registerCommand(new CommandSpeed());
+    	GeneralRegistry.registerCommand(new CommandSpeedFly());
         GeneralRegistry.registerCommand(new CommandButcher());
         GeneralRegistry.registerCommand(new CommandSpawn());
     	

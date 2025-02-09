@@ -39,17 +39,20 @@ public class LEEventHandler {
 	{
 		if (!(e.getEntityPlayer() instanceof EntityPlayerMP)) 
 			return;
-		EntityPlayerMP np = (EntityPlayerMP) e.getEntityPlayer();
-		CapHandler.setNick(np, CapHandler.getNick(np), true);// Re-SYNC NickName
+		EntityPlayerMP p = (EntityPlayerMP) e.getEntityPlayer();
+		CapAbility ca = (CapAbility) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
+		ca.sync(p);
+		
+		CapHandler.setNick(p, CapHandler.getNick(p), true);// Re-SYNC NickName
 	}
 	
 	@SubscribeEvent
 	public void respawn(PlayerRespawnEvent e)
 	{
 		if (!(e.player instanceof EntityPlayerMP)) return;
-		EntityPlayerMP mp = (EntityPlayerMP) e.player;
-		CapAbility ca = (CapAbility) CapabilityRegistry.getCapability(mp, LEFields.ABILITY);
-		ca.sync(mp);
+		EntityPlayerMP p = (EntityPlayerMP) e.player;
+		CapAbility ca = (CapAbility) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
+		ca.sync(p);
 	}
 
 	@SubscribeEvent

@@ -10,13 +10,14 @@ import net.minecraft.world.GameType;
 
 public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
 	
-	public boolean godMode;//lowcase g god gamemode aka you take zero damage
+	public boolean godMode;
 	public boolean fly;
-    public float speed = speedDefault;
-    public float speedFly = speedFlyDefault;
-    public boolean isFlying;//out of sync with player used as a bugfix
-    public boolean sendIsFlying;
-    private GameType lastGM = null;
+    public boolean isFlying;
+    public float speed;
+    public float speedFly;
+    
+    public boolean wasgodMode;
+    public boolean wasFly;
     
     private static final float speedDefault = 0.1F;
     private static final float speedFlyDefault = 0.05F;
@@ -24,28 +25,48 @@ public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
     public void sync(EntityPlayerMP p) 
     {
     	PlayerCapabilities c = p.capabilities;
-    	c.disableDamage = this.godMode || this.isCreative(p);
-    	c.allowFlying = this.fly || this.isCreative(p);
+    	c.disableDamage = this.godMode || this.wasgodMode ? this.isCreative(p) : c.disableDamage;
+    	c.allowFlying = this.fly || this.wasFly ? this.isCreative(p) : c.allowFlying;
     	if(!c.allowFlying)
     		c.isFlying = false;
     	else
     		c.isFlying = this.isFlying;
     	c.walkSpeed = this.speed <= 0 ? speedDefault : this.speed;
     	c.flySpeed = this.speedFly <= 0 ? speedFlyDefault : this.speedFly;
-		this.sendIsFlying = false;
     	p.sendPlayerAbilities();
     }
     
 	@Override
 	public void tick(EntityPlayerMP p, CapContainer c)
 	{
-		GameType mode = p.interactionManager.getGameType();
-		if(mode != this.lastGM || mode == null) 
-		{
-			this.lastGM = mode;
-			this.sync(p);
+		boolean send = false;
+		PlayerCapabilities pc = p.capabilities;
+		if(this.godMode && !pc.disableDamage) {
+			pc.disableDamage = true;
+			send = true;
 		}
-		this.isFlying = p.capabilities.isFlying;
+		else if(this.wasgodMode && !this.godMode) {
+			pc.disableDamage = this.isCreative(p);
+			send = true;
+		}
+		if(this.fly && !pc.allowFlying) {
+			pc.allowFlying = true;
+			pc.isFlying = this.isFlying;//sync isFlying with the last tick
+			send = true;
+		}
+		else if(this.wasFly && !this.fly) {
+			pc.allowFlying = this.isCreative(p);
+			if(!pc.allowFlying)
+				pc.isFlying = false;
+			send = true;
+		}
+		
+		this.wasgodMode = this.godMode;
+		this.wasFly = this.fly;
+		this.isFlying = pc.isFlying;
+		
+		if(send)
+			p.sendPlayerAbilities();
 	}
     
 	private boolean isCreative(EntityPlayerMP p)
@@ -68,10 +89,9 @@ public class CapAbility implements ICapabilityTick<EntityPlayerMP> {
 	{
 		this.godMode = nbt.getBoolean("godMode");
 		this.fly = nbt.getBoolean("fly");
-		this.speed = nbt.hasKey("speed") ? nbt.getFloat("speed") : speedDefault;
-		this.speedFly = nbt.hasKey("speedFly") ? nbt.getFloat("speedFly") : speedFlyDefault;
 		this.isFlying = nbt.getBoolean("isFlying");
-		this.sendIsFlying = true;
+		this.speed = nbt.getFloat("speed");
+		this.speedFly = nbt.getFloat("speedFly");
 	}
 
 }
