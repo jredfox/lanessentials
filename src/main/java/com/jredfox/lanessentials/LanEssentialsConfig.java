@@ -8,6 +8,7 @@ public class LanEssentialsConfig {
 	
 	public static int maxHomeCount = 3;
 	public static boolean overrideHomeCount = true;
+	public static boolean ipCommands;
 	
 	public static void loadConfig(File dir)
 	{
@@ -15,6 +16,7 @@ public class LanEssentialsConfig {
 		cfg.load();
 		maxHomeCount = cfg.get("general", "maxHomeCount", maxHomeCount).getInt();
 		overrideHomeCount = cfg.get("general", "overrideHomeCountMin", overrideHomeCount).getBoolean();
+		ipCommands = cfg.get("general", "ipCommands", ipCommands).getBoolean();
 		cfg.save();
 	}
 }

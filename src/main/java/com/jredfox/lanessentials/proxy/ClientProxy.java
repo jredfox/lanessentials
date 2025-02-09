@@ -1,5 +1,6 @@
 package com.jredfox.lanessentials.proxy;
 
+import com.jredfox.lanessentials.LanEssentialsConfig;
 import com.jredfox.lanessentials.commands.network.CommandIP;
 import com.jredfox.lanessentials.commands.network.CommandPublicIP;
 
@@ -11,8 +12,10 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void preinit(){
-    	ClientCommandHandler.instance.registerCommand(new CommandIP());
-    	ClientCommandHandler.instance.registerCommand(new CommandPublicIP());
+		if(LanEssentialsConfig.ipCommands) {
+	    	ClientCommandHandler.instance.registerCommand(new CommandIP());
+	    	ClientCommandHandler.instance.registerCommand(new CommandPublicIP());
+		}
 	}
 	
 	public int getServerPort(MinecraftServer server)

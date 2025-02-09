@@ -114,8 +114,10 @@ public class LanEssentials
     	
     	//remove vanilla broken command publish
     	GeneralRegistry.removeVanillaCommand("publish");
+    	
     	//network server commands
-		GeneralRegistry.registerCommand(new CommandServerIP());
+    	if(LanEssentialsConfig.ipCommands)
+    		GeneralRegistry.registerCommand(new CommandServerIP());
     }
     
     @EventHandler
