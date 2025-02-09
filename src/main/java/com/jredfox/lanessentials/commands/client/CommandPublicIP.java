@@ -41,6 +41,7 @@ public class CommandPublicIP extends CommandBase implements IClientCommand{
 			String ip = JavaUtil.getPublicIp();
 			PlayerUtil.sendClipBoard((EntityPlayer)sender, "Your Public Ip Adress is:", ip);
 			PlayerUtil.copyClipBoard((EntityPlayer)sender, ip);
+			//TODO: proxify port and send it if open to LAN
 		} 
 		catch(Exception e) 
 		{
