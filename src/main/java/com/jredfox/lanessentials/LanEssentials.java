@@ -71,22 +71,25 @@ public class LanEssentials
     	proxy.preinit();
     	CapabilityRegistry.registerRegistry(new CapabilityProvider());
     	
+    	//Register Capability Commands
+    	GeneralRegistry.registerCommand(new CommandGod());
+    	GeneralRegistry.registerCommand(new CommandFly());
+    	GeneralRegistry.registerCommand(new CommandNick());
+    	GeneralRegistry.registerCommand(new CommandSpeed());
+    	GeneralRegistry.registerCommand(new CommandSpeedFly());
     	GeneralRegistry.registerCommand(new CommandSetHome());
     	GeneralRegistry.registerCommand(new CommandHome());
+    	
+    	//Register Mod Commands
     	GeneralRegistry.registerCommand(new CommandHeal());
     	GeneralRegistry.registerCommand(new CommandSetHealth() );
     	GeneralRegistry.registerCommand(new CommandFeed());
     	GeneralRegistry.registerCommand(new CommandSetHunger());
-    	GeneralRegistry.registerCommand(new CommandFly());
-    	GeneralRegistry.registerCommand(new CommandGod());
-    	GeneralRegistry.registerCommand(new CommandNick());
     	GeneralRegistry.registerCommand(new CommandHat());
     	GeneralRegistry.registerCommand(new CommandWorkBench());
     	GeneralRegistry.registerCommand(new CommandEnderChest());
     	GeneralRegistry.registerCommand(new CommandSmite());
     	GeneralRegistry.registerCommand(new CommandNuke());
-    	GeneralRegistry.registerCommand(new CommandSpeed());
-    	GeneralRegistry.registerCommand(new CommandSpeedFly());
         GeneralRegistry.registerCommand(new CommandButcher());
         GeneralRegistry.registerCommand(new CommandSpawn());
     	

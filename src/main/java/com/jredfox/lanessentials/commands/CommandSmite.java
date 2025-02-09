@@ -19,7 +19,7 @@ public class CommandSmite extends CommandBase {
 			throw new WrongUsageException("/smite [entity]",new Object[0]);
 		
 		Entity entity = args.length == 0 ? (Entity) sender : getEntity(server, sender, args[0]);
-		boolean fire = false;
+		boolean fire = true;
 		if(args.length > 0)
 		{
 			String tst = args[args.length-1];
