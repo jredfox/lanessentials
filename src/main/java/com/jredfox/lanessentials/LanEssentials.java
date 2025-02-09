@@ -93,6 +93,12 @@ public class LanEssentials
         GeneralRegistry.registerCommand(new CommandButcher());
         GeneralRegistry.registerCommand(new CommandSpawn());
         
+        //TODO: Fix Mod Commands:
+        /* Permission Levels
+         * Tabbing
+         * Doesn't support other players / ents
+        */
+
         //TODO: tpaaccept tpadeny tpa
         //TODO: set max player count
         //TODO: get playerlist working with new commands

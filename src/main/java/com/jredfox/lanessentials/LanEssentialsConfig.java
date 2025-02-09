@@ -8,7 +8,7 @@ public class LanEssentialsConfig {
 	
 	public static int maxHomeCount = 3;
 	public static boolean overrideHomeCount = true;
-	public static boolean ipCommands;
+	public static boolean ipCommands = true;
 	
 	public static void loadConfig(File dir)
 	{
