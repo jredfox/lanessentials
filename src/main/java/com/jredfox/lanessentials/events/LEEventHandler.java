@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
@@ -46,8 +47,17 @@ public class LEEventHandler {
 		CapHandler.setNick(p, CapHandler.getNick(p), true);// Re-SYNC NickName
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void respawn(PlayerRespawnEvent e)
+	{
+		if (!(e.player instanceof EntityPlayerMP)) return;
+		EntityPlayerMP p = (EntityPlayerMP) e.player;
+		CapAbility ca = (CapAbility) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
+		ca.sync(p);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void dimchange(PlayerChangedDimensionEvent e)
 	{
 		if (!(e.player instanceof EntityPlayerMP)) return;
 		EntityPlayerMP p = (EntityPlayerMP) e.player;
