@@ -1,11 +1,13 @@
-package com.jredfox.lanessentials.commands.client;
+package com.jredfox.lanessentials.commands.network;
 
 import java.net.UnknownHostException;
 
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.lanessentials.LanEssentials;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -41,10 +43,12 @@ public class CommandIP extends CommandBase implements IClientCommand{
 		try 
 		{
 			String ip = JavaUtil.getIpv4();
-			PlayerUtil.sendClipBoard((EntityPlayer)sender, "Your Ipv4 Adress is:",  EnumChatFormatting.BLUE + ip);
+			int port = LanEssentials.proxy.getServerPort(server);
+			if(port > 0)
+				ip += ":" + port;
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.BLUE + "IPv4:", EnumChatFormatting.YELLOW + EnumChatFormatting.UNDERLINE + ip);
 			PlayerUtil.copyClipBoard((EntityPlayer)sender, ip);
-			//TODO: proxify port and send it if open to LAN
-		} 
+		}
 		catch (UnknownHostException e) 
 		{
 			PlayerUtil.printChat((EntityPlayer)sender, EnumChatFormatting.RED, "", "Unable to fetch ipv4 adress");

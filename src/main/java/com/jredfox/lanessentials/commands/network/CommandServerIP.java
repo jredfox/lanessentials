@@ -3,10 +3,12 @@ package com.jredfox.lanessentials.commands.network;
 import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.lanessentials.LanEssentials;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
@@ -35,10 +37,10 @@ public class CommandServerIP extends CommandBase{
 		try
 		{
 			String ip = JavaUtil.getPublicIp();
-			int port = server.getServerPort();
-			//TODO: proxify port
-			//TODO: sync actual server ip with client then copy clipboard
-			PlayerUtil.sendClipBoard((EntityPlayerMP)sender, EnumChatFormatting.DARK_AQUA, EnumChatFormatting.YELLOW, "", "ServerIP:", ip + ":" + port, true);
+			int port = LanEssentials.proxy.getServerPort(server);
+			String address = port > 0 ? (ip + ":" + port) : ip;
+			PlayerUtil.sendClipBoard((EntityPlayer)sender, EnumChatFormatting.DARK_AQUA + "Server IP:", EnumChatFormatting.YELLOW + EnumChatFormatting.UNDERLINE + address);
+			PlayerUtil.copyClipBoard((EntityPlayer)sender, address);
 		}
 		catch(Exception e)
 		{
