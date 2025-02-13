@@ -32,7 +32,7 @@ public class LEEventHandler {
 		
 		// NickName
 		p.refreshDisplayName();
-		NetWorkHandler.INSTANCE.sendTo(new PacketNick(p), p);
+		NetWorkHandler.INSTANCE.sendToAll(new PacketNick(p));
 	}
 	
 	@SubscribeEvent
@@ -44,7 +44,8 @@ public class LEEventHandler {
 		CapAbility ca = (CapAbility) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
 		ca.sync(p);
 		
-		CapHandler.setNick(p, CapHandler.getNick(p), true);// Re-SYNC NickName
+		p.refreshDisplayName();
+		NetWorkHandler.INSTANCE.sendToAll(new PacketNick(p));
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -63,19 +64,6 @@ public class LEEventHandler {
 		EntityPlayerMP p = (EntityPlayerMP) e.player;
 		CapAbility ca = (CapAbility) CapabilityRegistry.getCapability(p, LEFields.ABILITY);
 		ca.sync(p);
-	}
-
-	@SubscribeEvent
-	public void track(PlayerEvent.StartTracking e)
-	{
-		if (!(e.getTarget() instanceof EntityPlayer)) 
-			return;
-
-		// Handle Nickname Syncing
-		EntityPlayerMP targ = (EntityPlayerMP) e.getTarget();
-		EntityPlayerMP u = (EntityPlayerMP) e.getEntityPlayer();
-		targ.refreshDisplayName();
-		NetWorkHandler.INSTANCE.sendTo(new PacketNick(targ), u);
 	}
 
 	/**

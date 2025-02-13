@@ -34,6 +34,10 @@ import com.jredfox.lanessentials.commands.vanilla.CMDPardonPlayer;
 import com.jredfox.lanessentials.events.LEEventHandler;
 import com.jredfox.lanessentials.packets.PacketNick;
 import com.jredfox.lanessentials.packets.PacketNickHandler;
+import com.jredfox.lanessentials.packets.PacketTestHandler_1;
+import com.jredfox.lanessentials.packets.PacketTestHandler_2;
+import com.jredfox.lanessentials.packets.PacketTest_1;
+import com.jredfox.lanessentials.packets.PacketTest_2;
 import com.jredfox.lanessentials.proxy.CommonProxy;
 
 import net.minecraft.command.CommandDebug;

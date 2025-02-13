@@ -24,7 +24,10 @@ public class PacketNickHandler extends MessegeBase<PacketNick> {
 				return;
 			
 			//Set the nickname
-			ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LEFields.displayname);
+			if(message.nick.isEmpty())
+				p.refreshDisplayName();
+			else
+				ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LEFields.displayname);
 			
 			//Sync the displayname from the server
 			NetworkPlayerInfo info = p.connection.getPlayerInfo(message.id);

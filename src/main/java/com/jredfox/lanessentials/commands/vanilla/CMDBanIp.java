@@ -3,6 +3,7 @@ package com.jredfox.lanessentials.commands.vanilla;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.server.CommandBanIp;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextFormatting;
 
 public class CMDBanIp extends CommandBanIp {
 	

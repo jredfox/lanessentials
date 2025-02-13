@@ -29,7 +29,10 @@ public class CommandNick extends CommandBase{
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(!(sender instanceof EntityPlayerMP)) return;
 		EntityPlayerMP player = (EntityPlayerMP) sender;
-		String nick = args.length == 0 ? player.getName() : args[0];
+		String nick = "";
+		for(int i=0;i<args.length;i++)
+			nick += (i > 0 ? " " : "") + args[i];
+		nick = nick.trim();
 		CapHandler.setNick(player, nick, true);
 	}
 }

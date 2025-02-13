@@ -16,8 +16,9 @@ public class CapHandler {
 		CapNick c = (CapNick) CapabilityRegistry.getCapability(p, LEFields.NICK);
 		c.nick = nick;
 		p.refreshDisplayName();
+		c.dn = p.getDisplayName().getFormattedText();//prevent duplicate packet
 		if(sync)
-			NetWorkHandler.INSTANCE.sendToTrackingAndPlayer(new PacketNick(p), p);
+			NetWorkHandler.INSTANCE.sendToAll(new PacketNick(p));
 	}
 
 	public static String getNick(EntityPlayerMP p)
