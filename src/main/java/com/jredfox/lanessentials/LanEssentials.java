@@ -53,7 +53,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = LanEssentials.MODID, name = LanEssentials.NAME, version = LanEssentials.VERSION, dependencies = "required-after:evilnotchlib@[1.2.3.10,]")
+@Mod(modid = LanEssentials.MODID, name = LanEssentials.NAME, version = LanEssentials.VERSION, dependencies = "required-after:evilnotchlib@[1.2.3.11,]")
 public class LanEssentials
 {
     public static final String MODID = "lanessentials";

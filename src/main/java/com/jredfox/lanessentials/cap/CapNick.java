@@ -7,7 +7,6 @@ import com.jredfox.lanessentials.packets.PacketNick;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 
 public class CapNick implements ICapabilityTick<EntityPlayerMP> {
