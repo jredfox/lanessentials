@@ -10,7 +10,6 @@ import com.evilnotch.lib.minecraft.util.EnumChatFormatting;
 import com.evilnotch.lib.minecraft.util.PlayerUtil;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.lanessentials.LEFields;
-import com.jredfox.lanessentials.LanEssentials;
 import com.jredfox.lanessentials.cap.CapHome;
 import com.jredfox.lanessentials.cap.CapHomePoint;
 import com.jredfox.lanessentials.cap.Pos;
@@ -19,11 +18,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class CommandSetHome  extends CommandBase

@@ -4,11 +4,9 @@ import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.network.NetWorkHandler;
 import com.jredfox.lanessentials.LEFields;
 import com.jredfox.lanessentials.cap.CapAbility;
-import com.jredfox.lanessentials.cap.CapHandler;
 import com.jredfox.lanessentials.cap.CapNick;
 import com.jredfox.lanessentials.packets.PacketNick;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -77,7 +75,7 @@ public class LEEventHandler {
 			EntityPlayerMP mp = (EntityPlayerMP) e.getEntityPlayer();
 			CapNick capNick = (CapNick) CapabilityRegistry.getCapability(mp, LEFields.NICK);
 			if (capNick != null && !capNick.nick.isEmpty())
-				e.setDisplayname(capNick.nick);
+				e.setDisplayname(capNick.nick.equals("<@empty>") ? "" : capNick.nick);
 		}
 	}
 

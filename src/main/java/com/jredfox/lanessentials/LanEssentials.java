@@ -34,10 +34,6 @@ import com.jredfox.lanessentials.commands.vanilla.CMDPardonPlayer;
 import com.jredfox.lanessentials.events.LEEventHandler;
 import com.jredfox.lanessentials.packets.PacketNick;
 import com.jredfox.lanessentials.packets.PacketNickHandler;
-import com.jredfox.lanessentials.packets.PacketTestHandler_1;
-import com.jredfox.lanessentials.packets.PacketTestHandler_2;
-import com.jredfox.lanessentials.packets.PacketTest_1;
-import com.jredfox.lanessentials.packets.PacketTest_2;
 import com.jredfox.lanessentials.proxy.CommonProxy;
 
 import net.minecraft.command.CommandDebug;
@@ -57,12 +53,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = LanEssentials.MODID, name = LanEssentials.NAME, version = LanEssentials.VERSION, dependencies = "required-after:evilnotchlib")
+@Mod(modid = LanEssentials.MODID, name = LanEssentials.NAME, version = LanEssentials.VERSION, dependencies = "required-after:evilnotchlib@[1.2.3.10,]")
 public class LanEssentials
 {
     public static final String MODID = "lanessentials";
     public static final String NAME = "Lan Essentials";
-    public static final String VERSION = "0.4.0";
+    public static final String VERSION = "0.4.1";
 	
 	@SidedProxy(clientSide = "com.jredfox.lanessentials.proxy.ClientProxy", serverSide = "com.jredfox.lanessentials.proxy.ServerProxy")
 	public static CommonProxy proxy;
