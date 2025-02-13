@@ -34,6 +34,19 @@ public class LEEventHandler {
 	}
 	
 	@SubscribeEvent
+	public void track(PlayerEvent.StartTracking e)
+	{
+		if (!(e.getTarget() instanceof EntityPlayerMP)) 
+			return;
+		
+		// Nickname is also stored inside of the EntityPlayer class so we need to refresh when the player is within range
+		EntityPlayerMP targ = (EntityPlayerMP) e.getTarget();
+		EntityPlayerMP u = (EntityPlayerMP) e.getEntityPlayer();
+		targ.refreshDisplayName();
+		NetWorkHandler.INSTANCE.sendTo(new PacketNick(targ), u);
+	}
+	
+	@SubscribeEvent
 	public void clone(PlayerEvent.Clone e)
 	{
 		if (!(e.getEntityPlayer() instanceof EntityPlayerMP)) 

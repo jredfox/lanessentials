@@ -20,11 +20,9 @@ public class PacketNickHandler extends MessegeBase<PacketNick> {
 		{
 			EntityPlayerSP p = Minecraft.getMinecraft().player;
 			EntityPlayer targ = p.world.getPlayerEntityByUUID(message.id);
-			if(targ == null)
-				return;
-			
-			//Set the nickname
-			ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LEFields.displayname);
+			//Sync the nickname if the client knows the other player
+			if(targ != null)
+				ReflectionUtil.setObject(targ, message.nick, EntityPlayer.class, LEFields.displayname);
 			
 			//Sync the displayname from the server
 			NetworkPlayerInfo info = p.connection.getPlayerInfo(message.id);
