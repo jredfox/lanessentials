@@ -40,13 +40,13 @@ public class CapNick implements ICapabilityTick<EntityPlayerMP> {
 		//Detect team change and handle it
 		if(t != this.ct)
 		{
-			System.out.println("TeamChange Detected:" + t + " prev:" + this.ct);
+//			System.out.println("TeamChange Detected:" + t + " prev:" + this.ct);
 			NetWorkHandler.INSTANCE.sendToAll(new PacketNick(p));
 		}
 		//Detect Color Changes
 		else if(t != null && d != null && !d.equals(this.dn))
 		{
-			System.out.println("Color Change Detected:" + d + " prev:" + this.dn);
+//			System.out.println("Color Change Detected:" + d + " prev:" + this.dn);
 			NetWorkHandler.INSTANCE.sendToAll(new PacketNick(p));
 		}
 		this.ct = t;
