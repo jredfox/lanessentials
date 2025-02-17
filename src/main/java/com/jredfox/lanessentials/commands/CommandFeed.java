@@ -35,7 +35,7 @@ public class CommandFeed extends CommandBase
 		if(fs.getSaturationLevel() < 5.0F)
 			fs.setFoodSaturationLevel(5.0F);
 		
-		sender.sendMessage(new TextComponentString(epmp.getName() + " ate a full pork"));
+		sender.sendMessage(new TextComponentString(epmp.getName() + " is full"));
 	}
     /**
      * get selectors working
