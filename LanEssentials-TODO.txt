@@ -37,4 +37,3 @@ Maybe:
 - configruable guis that the player can transport to another gamemode
 - more gamemodes like bedwars
 - economy integration
-
