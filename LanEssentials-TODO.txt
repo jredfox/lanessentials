@@ -1,0 +1,40 @@
+Lan-Essentials Missing Commands:
+
+Custom LAN Mod - LAN At Your Fingertips, Now Updated to 1.7.2 and 1.6.4!
+/Back (Teleports you to latest deathpoint
+/Broadcast (Broadcasts a purple colored message to everyone on the server.)
+/Fireball
+/GetTime
+/msg /message /pm /dm /dmaccept /dmdeny "including offline players"
+/Warp [set, remove, list, @player]
+/Spawn [set, @player]
+/maxPlayerCount [set, get]
+/MOTD [get, set]
+
+Plugins:
+/tpaaccept /tpadeny /tpa /tphere
+/sit (also allow keybind)
+/laydown (also allow keybind)
+/disguise player mob
+/undisguise player
+/mute @p(you cannot see x player's chat)
+/unmute @p
+/mutePlayer @p (player cannot chat)
+/unmutePlayer @p
+/kit
+/warp
+/i (give but directly to the inventory)
+
+TODO:
+- nuke shouldn't explode blocks
+- Permission Levels
+- Tabbing
+- Doesn't support other players / ents
+- make every command configurable [enabled, name, alias]
+
+Maybe:
+- multi-world / bungee and uis to interact with
+- configruable guis that the player can transport to another gamemode
+- more gamemodes like bedwars
+- economy integration
+
